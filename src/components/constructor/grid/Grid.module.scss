@@ -1,14 +1,71 @@
 .grid {
-  display: grid !important;
-  width: 100% !important;
+  display: grid;
+  width: 100%;
+  position: relative;
+  padding: 1rem;
+  transition: all 0.3s ease-in-out;
+  background: linear-gradient(145deg, #f9fafb, #edf2f7);
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
 
-  @media (max-width: 1024px) {
-    grid-template-columns: repeat(2, 1fr) !important;
-    gap: 8px !important;
+  /* плавна поява елементів */
+  animation: fadeInUp 0.6s ease forwards;
+}
+
+.grid > * {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 1rem;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+  transform: translateY(20px);
+  opacity: 0;
+  animation: slideUp 0.5s ease forwards;
+  animation-delay: calc(var(--i) * 0.05s);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.grid > *:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+}
+
+@keyframes slideUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
+}
 
-  @media (max-width: 768px) {
-    grid-template-columns: repeat(1, 1fr) !important;
-    gap: 8px !important;
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* адаптив */
+@media (max-width: 1200px) {
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+}
+
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+}
+
+@media (max-width: 600px) {
+  .grid {
+    grid-template-columns: repeat(1, 1fr);
+    gap: 12px;
   }
 }

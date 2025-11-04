@@ -8,7 +8,7 @@ export interface CVOrderDocument extends Document {
     phone: string;
     photo?: string;
 
-    cvStyle: "Classic" | "Modern" | "Creative";
+    cvStyle: "Classic" | "Modern" | "Creative" | "Executive" | "Portfolio" | "One-page" | "Infographic" | "Technical";
     fontStyle: string;
     themeColor: string;
 
@@ -19,7 +19,7 @@ export interface CVOrderDocument extends Document {
     education: string;
     skills: string;
 
-    reviewType: "default" | "manager";
+    reviewType: "instant" | "manager" | "hr_plus" | "priority" | "expert";
     extras: string[];
 
     response: string;
@@ -39,7 +39,7 @@ const cvOrderSchema = new Schema<CVOrderDocument>(
         phone: { type: String, required: true },
         photo: { type: String },
 
-        cvStyle: { type: String, enum: ["Classic", "Modern", "Creative"], default: "Classic" },
+    cvStyle: { type: String, enum: ["Classic", "Modern", "Creative", "Executive", "Portfolio", "One-page", "Infographic", "Technical"], default: "Classic" },
         fontStyle: { type: String, default: "Default" },
         themeColor: { type: String, default: "Default" },
 
@@ -50,7 +50,7 @@ const cvOrderSchema = new Schema<CVOrderDocument>(
         education: { type: String, required: true },
         skills: { type: String, required: true },
 
-        reviewType: { type: String, enum: ["default", "manager"], default: "default" },
+    reviewType: { type: String, enum: ["instant", "manager", "hr_plus", "priority", "expert"], default: "instant" },
         extras: [{ type: String }],
         response: { type: String, required: false, default: "" },
         extrasData: { type: Map, of: String, default: {} },

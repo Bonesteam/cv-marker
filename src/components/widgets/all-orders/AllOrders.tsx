@@ -43,6 +43,7 @@ const OrdersSection: React.FC = () => {
             // 🔹 Інакше підвантажимо повну версію
             const res = await fetch(`/api/cv/get-order?id=${order._id}`, {
                 method: "GET",
+                credentials: "include",
                 headers: { "Content-Type": "application/json" },
             });
             const data = await res.json();
@@ -88,7 +89,17 @@ const OrdersSection: React.FC = () => {
                             <div className={styles.orderHeader}>
                                 <span className={styles.orderId}>#{formatId(order._id.toString())}</span>
                                 <span className={styles.charge}>
-                                    {order.reviewType === "manager" ? "-60 tokens" : "-30 tokens"}
+                                    {(() => {
+                                        const mapping: Record<string, number> = {
+                                            instant: 25,
+                                            manager: 60,
+                                            hr_plus: 90,
+                                            priority: 120,
+                                            expert: 180,
+                                        };
+                                        const cost = mapping[order.reviewType as string] ?? 30;
+                                        return `-${cost} tokens`;
+                                    })()}
                                 </span>
                             </div>
                             <p className={styles.email}>{order.email}</p>

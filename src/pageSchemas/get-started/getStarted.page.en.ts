@@ -38,11 +38,11 @@ const schema: PageSchema = {
             type: "custom",
             component: "HighlightStrip",
             messages: [
-                "⚡ Instant CV download",
-                "🎨 50+ professional templates",
-                "👩‍💼 Optional HR review (24h)",
-                "📑 ATS-optimized resumes",
-                "✅ Trusted by job seekers worldwide",
+                "Instant CV download",
+                "50+ professional templates",
+                "Optional HR review (24h)",
+                "ATS-optimized resumes",
+                "Trusted by job seekers worldwide",
             ],
         },
 

@@ -5,9 +5,9 @@ export const formSchemaCV = {
         { name: "photo", label: "Photo (optional)", type: "file" },
     ],
     selectors: [
-        { name: "cvStyle", label: "CV Style", type: "select", options: ["Classic", "Modern", "Creative"], required: true },
-        { name: "industry", label: "Industry", type: "select", options: ["IT","Marketing","Finance","Design","Education","Healthcare","Other"], required: true },
-        { name: "experienceLevel", label: "Experience Level", type: "select", options: ["Junior","Mid-level","Senior","Lead"], required: true },
+        { name: "cvStyle", label: "CV Style", type: "select", options: ["Executive","Portfolio","One-page","Infographic","Technical"], required: true },
+        { name: "industry", label: "Industry", type: "select", options: ["Technology","Creative","Finance","Healthcare","Education","Consulting","Freelance","Other"], required: true },
+        { name: "experienceLevel", label: "Experience Level", type: "select", options: ["Entry","Associate","Mid","Senior","Lead","Director","Executive"], required: true },
     ],
     content: [
         { name: "summary", label: "Professional Summary", type: "textarea", required: true },

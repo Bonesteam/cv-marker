@@ -18,13 +18,12 @@ const schema: PageSchema = {
         ogImage: {
             title: COMPANY_NAME,
             description: `Get your CV instantly — or let our experts polish it within 24 hours.`,
-            bg: "#0a2540",
+            bg: "#000000ff",
             color: "#ffffff",
         },
     },
 
     blocks: [
-        // 🟢 Hero
         {
             type: "custom",
             component: "HeroSection",
@@ -38,19 +37,17 @@ const schema: PageSchema = {
             image: "image1",
         },
 
-        // 🟢 Highlight strip
         {
             type: "custom",
             component: "HighlightStrip",
             messages: [
-                "⚡ Instant CV in seconds",
-                "🎨 50+ modern templates",
-                "📑 ATS & recruiter-approved",
-                "🕒 Optional 24h manager review",
+                "Instant CV in seconds",
+                "50+ modern templates",
+                "ATS & recruiter-approved",
+                "Optional 24h manager review",
             ],
         },
 
-        // 🟢 Why us
         {
             type: "custom",
             component: "ValuesIcons",
@@ -113,11 +110,10 @@ const schema: PageSchema = {
             video: "CVMakerDemo"
         },
 
-
         {
             type: "grid",
             columns: 2,
-            gap: "2rem",
+            gap: "3rem",
             cards: [
                 {
                     type: "pricing",
@@ -126,13 +122,13 @@ const schema: PageSchema = {
                     price: "€9",
                     tokens: 900,
                     badgeTop: "Starter Plan",
-                    description: "Create your first professional CV instantly with our templates.",
+                    description: "Quickly create your first professional CV using our ready-made templates.",
                     features: [
                         "1 instant ATS-ready CV",
-                        "Access to modern templates",
-                        "Basic formatting options"
+                        "Access to up-to-date templates",
+                        "Basic formatting options included"
                     ],
-                    buttonText: "Start Now",
+                    buttonText: "Get Started",
                     buttonLink: "/checkout?plan=starter",
                 },
                 {
@@ -142,14 +138,14 @@ const schema: PageSchema = {
                     price: "€49",
                     tokens: 4900,
                     badgeTop: "Pro Plan",
-                    description: "Perfect for job seekers who apply frequently and need flexibility.",
+                    description: "Ideal for active job seekers who need more flexibility and options.",
                     features: [
-                        "Unlimited CV generations per month",
-                        "Multiple export formats (PDF, DOCX)",
-                        "Custom design options",
+                        "Unlimited CV creations per month",
+                        "Export in PDF or DOCX",
+                        "Customizable design templates",
                         "Priority email support"
                     ],
-                    buttonText: "Go Pro",
+                    buttonText: "Upgrade to Pro",
                     buttonLink: "/checkout?plan=pro",
                 },
                 {
@@ -158,11 +154,11 @@ const schema: PageSchema = {
                     title: "Premium",
                     price: "€99",
                     tokens: 9900,
-                    badgeTop: "Recommended",
-                    description: "Get expert-level CVs and stand out in competitive job markets.",
+                    badgeTop: "Most Popular",
+                    description: "Stand out with expert-level CVs and personalized guidance.",
                     features: [
                         "Unlimited CVs with all templates",
-                        "1-on-1 HR expert review (24h)",
+                        "1-on-1 HR expert review within 24h",
                         "Advanced personalization & styling",
                         "Cover letter builder included",
                         "Dedicated priority support"
@@ -177,11 +173,11 @@ const schema: PageSchema = {
                     price: "dynamic",
                     tokens: 0,
                     badgeTop: "Custom Plan",
-                    description: "Flexible pricing — pay only for what you use.",
+                    description: "Flexible pay-as-you-go option — only pay for what you need.",
                     features: [
-                        "Choose your CV amount",
-                        "Instant calculation of tokens",
-                        "No expiration on credits"
+                        "Select your desired CV quantity",
+                        "Instant token calculation",
+                        "Credits never expire"
                     ],
                     buttonText: "Buy Custom",
                     buttonLink: "/checkout?plan=custom",
@@ -189,8 +185,6 @@ const schema: PageSchema = {
             ],
         },
 
-
-        // 🟢 Final CTA
         {
             type: "section",
             align: "center",
@@ -209,22 +203,22 @@ const schema: PageSchema = {
             component: "TestimonialsSlider",
             testimonials: [
                 {
-                    name: "Yaroslav Krupa",
-                    role: "Marketing Specialist",
+                    name: "Dmytro Koval",
+                    role: "UX Designer",
                     image: "review1",
-                    text: "I got an instant CV and landed interviews the same week!",
+                    text: "Used the instant option and was impressed — clean layout and great structure!",
                 },
                 {
-                    name: "John Smith",
-                    role: "Software Engineer",
+                    name: "Emma Johansson",
+                    role: "HR Consultant",
                     image: "review2",
-                    text: "The instant CV worked, but the manager review made it perfect.",
+                    text: "The manager review really elevated my CV. It finally looks like me — just more professional.",
                 },
                 {
-                    name: "Maria Lopez",
-                    role: "Project Manager",
+                    name: "Marco Rivera",
+                    role: "Business Analyst",
                     image: "review3",
-                    text: "Loved the option to get expert feedback — worth the wait!",
+                    text: "Loved how fast and easy it was. Totally worth upgrading to Premium.",
                 },
             ],
         },
@@ -233,29 +227,29 @@ const schema: PageSchema = {
             type: "faq",
             items: [
                 {
-                    question: "What is the difference between Instant CV and Manager Review?",
+                    question: "What’s the main difference between Instant CV and Manager Review?",
                     answer:
-                        "Instant CV is generated instantly based on your data using a modern template. Manager Review is an expert HR check that takes up to 24 hours to make your CV fully professional."
+                        "Instant CV gives you a polished, ready-to-use document right away. Manager Review adds a human touch — our HR experts refine it to highlight your strengths and make it truly stand out."
                 },
                 {
-                    question: "Are your templates ATS-friendly?",
+                    question: "Are all your templates ATS-friendly?",
                     answer:
-                        "Yes, all our templates are optimized for Applicant Tracking Systems (ATS) to ensure your resume passes recruiter filters."
+                        "Yes. Every template is designed and tested to pass Applicant Tracking Systems, ensuring recruiters actually see your CV."
                 },
                 {
-                    question: "Can I download my CV in PDF format?",
+                    question: "Can I edit or update my CV after downloading?",
                     answer:
-                        "Yes, you can export your CV in PDF format — the universal standard accepted by most employers."
+                        "Of course. You can re-enter your dashboard anytime to make changes, generate new versions, or try different templates."
                 },
                 {
-                    question: "Is my data stored securely?",
+                    question: "How secure is my personal data?",
                     answer:
-                        "We take security seriously. All your information is protected and stored in compliance with GDPR standards."
+                        "All information you share is stored safely with encryption and full GDPR compliance — your privacy always comes first."
                 },
                 {
-                    question: "Do you also provide help with cover letters?",
+                    question: "Do you offer help with cover letters or LinkedIn profiles?",
                     answer:
-                        "Yes, with our Premium plan you can build a professional cover letter to match your CV."
+                        "Yes. Our Premium users get access to a cover letter builder, and we also offer LinkedIn optimization as an add-on service."
                 }
             ]
         },
@@ -263,9 +257,10 @@ const schema: PageSchema = {
             type: "custom",
             component: "ContactForm",
             title: "Need Help?",
-            description: "Contact our support team for assistance.",
+            description: "Contact our support team for assistance or guidance.",
         },
     ],
 };
 
 export default schema;
+

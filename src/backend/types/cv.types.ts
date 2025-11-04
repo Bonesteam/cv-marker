@@ -8,7 +8,7 @@ export interface CVOrderType {
     fullName: string;
     phone: string;
     photo?: string;
-    cvStyle: "Classic" | "Modern" | "Creative";
+    cvStyle: "Classic" | "Modern" | "Creative" | "Executive" | "Portfolio" | "One-page" | "Infographic" | "Technical";
     fontStyle: string; // 🆕
     themeColor: string; // 🆕
     industry: string;
@@ -19,7 +19,7 @@ export interface CVOrderType {
     education: string;
     skills: string;
 
-    reviewType: "default" | "manager";
+    reviewType: "instant" | "manager" | "hr_plus" | "priority" | "expert";
     extras: string[];
 
     response: string;
@@ -34,7 +34,7 @@ export interface CreateCVOrderRequest {
     fullName: string;
     phone: string;
     photo?: string;
-    cvStyle: "Classic" | "Modern" | "Creative";
+    cvStyle: "Classic" | "Modern" | "Creative" | "Executive" | "Portfolio" | "One-page" | "Infographic" | "Technical";
     fontStyle: string; // 🆕
     themeColor: string; // 🆕
     industry: string;
@@ -43,7 +43,7 @@ export interface CreateCVOrderRequest {
     workExperience: string;
     education: string;
     skills: string;
-    reviewType: "default" | "manager";
+    reviewType: "instant" | "manager" | "hr_plus" | "priority" | "expert";
     extras: string[];
     email: string;
     totalTokens?: number;

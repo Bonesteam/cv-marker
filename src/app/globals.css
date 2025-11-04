@@ -1,59 +1,42 @@
-* {
-    box-sizing: border-box;
-    padding: 0;
-    margin: 0;
-}
-
-html,
-body {
-    max-width: 100vw;
-    font-family: var(--font-family);
-    background-color: var(--background-light);
-}
-
-a {
-    text-decoration: none;
-    color: inherit;
-}
-
 :root {
     /* Основні */
-    --primary-color: #1E3A8A;       /* головний синій */
-    --secondary-color: #2563EB;     /* яскравий синій (акцент) */
-    --tertiary-color: #3B82F6;      /* світліший відтінок secondary */
-    --quaternary-color: #EFF6FF;    /* дуже світлий синюватий для фонів */
+    --primary-color: #2E2E2E;        
+    --secondary-color: #A3A380;      
+    --tertiary-color: #D8CFC4;       
+    --quaternary-color: #F7F6F3;     
 
     /* Фон та поверхні */
-    --background-light: #FFFFFF;    /* базовий світлий фон */
-    --background-dark: #1E3A8A;     /* темний синій для інверсій */
-    --surface-color: #FFFFFF;       /* поверхні (карточки, блоки) */
-    --surface-muted: #F3F4F6;       /* приглушений фон секцій */
+    --background-light: #FAFAF8;     
+    --background-dark: #1C1C1C;      
+    --surface-color: #FFFFFF;        
+    --surface-muted: #F0EFEB;        
 
     /* Тексти */
-    --text-primary: #111827;        /* майже чорний */
-    --text-secondary: #374151;      /* темно-сірий */
-    --text-muted: #6B7280;          /* сірий */
-    --text-inverse: #2563EB;        /* білий текст на синьому фоні */
-    --text-accent: #FFFFFF;         /* акцентований синій текст */
-
+    --text-primary: #1F1F1F;         
+    --text-secondary: #4B4B4B;       
+    --text-muted: #777777;           
+    --text-inverse: #fd9449;         /* змінив з білого на світло-сірий */
+    --text-accent: #A3A380;          
 
     /* Статуси */
-    --success-color: #22C55E;       /* зелений */
-    --warning-color: #FBBF24;       /* жовтий */
-    --error-color: #EF4444;         /* червоний */
-    --info-color: #3B82F6;          /* синій як додатковий акцент */
+    --success-color: #000000;        
+    --warning-color: #000000;        
+    --error-color: #000000;          
+    --info-color: #000000;           
 
     /* Інтерактивні */
-    --button-hover: #1E40AF;        /* темніший синій */
-    --link-color: #2563EB;          /* сині посилання */
-    --link-hover: #1D4ED8;          /* темніший синій при hover */
+    --button-hover: #8C8C6A;         
+    --link-color: #A3A380;           
+    --link-hover: #8C8C6A;           
 
     /* Система */
-    --border-color: #E5E7EB;        /* світло-сірі бордери */
-    --shadow-color: rgba(0, 0, 0, 0.08);
+    --border-color: #E0E0DC;         
+    --shadow-color: rgba(0, 0, 0, 0.06);
 
-    --font-family: 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+    --font-family: 'Inter', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
 }
+
+
 
 
 

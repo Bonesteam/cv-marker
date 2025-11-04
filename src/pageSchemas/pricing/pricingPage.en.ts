@@ -1,5 +1,5 @@
 import { PageSchema } from "@/components/constructor/page-render/types";
-import {COMPANY_NAME} from "@/resources/constants";
+import { COMPANY_NAME } from "@/resources/constants";
 
 const schema: PageSchema = {
     meta: {
@@ -21,24 +21,22 @@ const schema: PageSchema = {
         },
     },
     blocks: [
-        // 🔹 Hero / Intro
         {
             type: "custom",
             component: "HeroSection",
             title: "Choose Your Plan",
             highlight: "Flexible Pricing",
             description:
-                "Whether you need a quick CV today or a polished version tomorrow, we’ve got a plan tailored to your needs.",
+                "Whether you need a quick CV today or a perfected version tomorrow, we’ve got the right plan for you.",
             image: "image10",
         },
 
-        // 🔹 InfoBlock перед тарифами
         {
             type: "custom",
             component: "InfoBlock",
             title: "Simple & Transparent",
             description:
-                "Pick the plan that matches your career goals — all with clear pricing and no hidden fees.",
+                "Pick the plan that fits your career goals — no hidden fees, just clear and fair pricing.",
             icon: "💡",
             align: "center",
         },
@@ -55,13 +53,13 @@ const schema: PageSchema = {
                     price: "€9",
                     tokens: 900,
                     badgeTop: "Starter Plan",
-                    description: "Create your first professional CV instantly with our templates.",
+                    description: "Quickly create your first professional CV using our ready-made templates.",
                     features: [
                         "1 instant ATS-ready CV",
-                        "Access to modern templates",
-                        "Basic formatting options"
+                        "Access to up-to-date templates",
+                        "Basic formatting options included"
                     ],
-                    buttonText: "Start Now",
+                    buttonText: "Get Started",
                     buttonLink: "/checkout?plan=starter",
                 },
                 {
@@ -71,14 +69,14 @@ const schema: PageSchema = {
                     price: "€49",
                     tokens: 4900,
                     badgeTop: "Pro Plan",
-                    description: "Perfect for job seekers who apply frequently and need flexibility.",
+                    description: "Ideal for active job seekers who need more flexibility and options.",
                     features: [
-                        "Unlimited CV generations per month",
-                        "Multiple export formats (PDF, DOCX)",
-                        "Custom design options",
+                        "Unlimited CV creations per month",
+                        "Export in PDF or DOCX",
+                        "Customizable design templates",
                         "Priority email support"
                     ],
-                    buttonText: "Go Pro",
+                    buttonText: "Upgrade to Pro",
                     buttonLink: "/checkout?plan=pro",
                 },
                 {
@@ -87,11 +85,11 @@ const schema: PageSchema = {
                     title: "Premium",
                     price: "€99",
                     tokens: 9900,
-                    badgeTop: "Recommended",
-                    description: "Get expert-level CVs and stand out in competitive job markets.",
+                    badgeTop: "Most Popular",
+                    description: "Stand out with expert-level CVs and personalized guidance.",
                     features: [
                         "Unlimited CVs with all templates",
-                        "1-on-1 HR expert review (24h)",
+                        "1-on-1 HR expert review within 24h",
                         "Advanced personalization & styling",
                         "Cover letter builder included",
                         "Dedicated priority support"
@@ -106,11 +104,11 @@ const schema: PageSchema = {
                     price: "dynamic",
                     tokens: 0,
                     badgeTop: "Custom Plan",
-                    description: "Flexible pricing — pay only for what you use.",
+                    description: "Flexible pay-as-you-go option — only pay for what you need.",
                     features: [
-                        "Choose your CV amount",
-                        "Instant calculation of tokens",
-                        "No expiration on credits"
+                        "Select your desired CV quantity",
+                        "Instant token calculation",
+                        "Credits never expire"
                     ],
                     buttonText: "Buy Custom",
                     buttonLink: "/checkout?plan=custom",
@@ -118,7 +116,6 @@ const schema: PageSchema = {
             ],
         },
 
-        // 🔹 Section з текстом і фото
         {
             type: "section",
             left: {
@@ -126,10 +123,10 @@ const schema: PageSchema = {
                 component: "InfoBlock",
                 title: "Why Upgrade?",
                 description:
-                    "An expertly reviewed CV increases your chances of landing interviews by highlighting the right skills and structure recruiters expect.",
+                    "An expertly reviewed CV can dramatically improve your chances of landing interviews by showcasing your experience the right way.",
                 bullets: [
                     "Instant download in multiple formats",
-                    "Reviewed by HR professionals",
+                    "Reviewed by experienced HR specialists",
                     "Guaranteed ATS optimization",
                 ],
             },
@@ -141,24 +138,33 @@ const schema: PageSchema = {
             },
         },
 
-        // 🔹 FAQ в кінці
         {
             type: "faq",
             items: [
                 {
-                    question: "Can I really get my CV instantly?",
+                    question: "What’s the difference between Instant CV and Manager Review?",
                     answer:
-                        "Yes, with our AI-powered generator you can download your CV immediately after filling in your details.",
+                        "Instant CV gives you a professional resume right away. Manager Review adds a personalized HR touch — our experts enhance your wording, structure, and formatting for maximum recruiter appeal.",
                 },
                 {
-                    question: "What’s included in the HR review?",
+                    question: "Can I edit or regenerate my CV later?",
                     answer:
-                        "Our HR experts check your structure, keywords, and formatting to maximize your chances of passing ATS and impressing recruiters.",
+                        "Yes. You can always return to your dashboard, update details, or generate new versions using different templates.",
                 },
                 {
-                    question: "Can I upgrade later?",
+                    question: "Is my personal data protected?",
                     answer:
-                        "Of course! You can start with the Basic plan and upgrade to Pro or Premium whenever you want.",
+                        "Absolutely. We follow strict GDPR-compliant standards and use encryption to ensure your data stays private and secure.",
+                },
+                {
+                    question: "Do you offer help with cover letters?",
+                    answer:
+                        "Yes! Our Premium plan includes a professional cover letter builder so your application looks complete and polished.",
+                },
+                {
+                    question: "Can I start small and upgrade later?",
+                    answer:
+                        "Of course. You can begin with the Starter plan and switch to Pro or Premium anytime without losing your existing data.",
                 },
             ],
         },
@@ -166,3 +172,4 @@ const schema: PageSchema = {
 };
 
 export default schema;
+

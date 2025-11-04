@@ -5,10 +5,14 @@ import TransactionHistory from "@/components/widgets/all-transactions/AllTransac
 import styles from "./Dashboard.module.scss";
 
 export default function Dashboard() {
-    return (
-        <div className={styles.dashboard}>
-            <AllOrders />
-            <TransactionHistory />
-        </div>
-    );
+  return (
+    <section className={styles.dashboard}>
+      <div>
+        <AllOrders />
+      </div>
+      <aside>
+        <TransactionHistory />
+      </aside>
+    </section>
+  );
 }

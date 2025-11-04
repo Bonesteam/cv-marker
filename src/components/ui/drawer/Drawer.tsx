@@ -63,6 +63,7 @@ const DrawerMenu: FC<DrawerMenuProps> = ({ open, onClose }) => {
                             >
                                 <option value="GBP">£ GBP</option>
                                 <option value="EUR">€ EUR</option>
+                                <option value="USD">$ USD</option>
                             </select>
                         </div>
                 </div>

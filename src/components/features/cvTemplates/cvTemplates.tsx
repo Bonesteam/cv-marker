@@ -65,7 +65,9 @@ const renderExtrasPages = (o: CVOrderType, theme: ReturnType<typeof getTheme>) =
             >
                 <View
                     style={{
-                        borderBottom: `3pt solid ${theme.primary}`,
+                        borderBottomWidth: 3,
+                        borderBottomColor: theme.primary,
+                        borderBottomStyle: "solid",
                         marginBottom: 16,
                         paddingBottom: 6,
                     }}
@@ -107,14 +109,18 @@ export const ClassicCV = (o: CVOrderType) => {
             flexDirection: "row",
             alignItems: "center",
             marginBottom: 18,
-            borderBottom: `2pt solid ${theme.primary}`,
+            borderBottomWidth: 2,
+            borderBottomColor: theme.primary,
+            borderBottomStyle: "solid",
             paddingBottom: 10,
         },
         avatar: {
             width: 75,
             height: 75,
             borderRadius: 38,
-            border: `2pt solid ${theme.primary}`,
+            borderWidth: 2,
+            borderColor: theme.primary,
+            borderStyle: "solid",
             marginRight: 18,
         },
         h1: {
@@ -128,7 +134,9 @@ export const ClassicCV = (o: CVOrderType) => {
             color: theme.primary,
             marginTop: 18,
             marginBottom: 8,
-            borderBottom: `1.5pt solid ${theme.primary}`,
+            borderBottomWidth: 1.5,
+            borderBottomColor: theme.primary,
+            borderBottomStyle: "solid",
             paddingBottom: 4,
             textTransform: "uppercase",
         },
@@ -196,7 +204,9 @@ export const ModernCV = (o: CVOrderType) => {
             height: 95,
             borderRadius: 48,
             marginBottom: 18,
-            border: `3pt solid ${theme.primary}`,
+            borderWidth: 3,
+            borderColor: theme.primary,
+            borderStyle: "solid",
             alignSelf: "center",
         },
         chip: {
@@ -265,129 +275,115 @@ export const ModernCV = (o: CVOrderType) => {
 // 🎨 CREATIVE
 //
 export const CreativeCV = (o: CVOrderType) => {
+    // A completely different, visually distinct creative template
     const theme = getTheme(o);
+    const accent = theme.primary;
+
     const s = StyleSheet.create({
         page: {
-            fontFamily: theme.font,
-            color: theme.text,
-            backgroundColor: theme.bg,
             padding: 0,
+            fontFamily: theme.font,
+            backgroundColor: "#F7F7FB",
+            color: theme.text,
         },
-        header: {
-            backgroundColor: theme.primary,
+        hero: {
+            height: 200,
+            backgroundColor: accent,
             color: "white",
-            padding: 35,
-            flexDirection: "row",
-            alignItems: "center",
-        },
-        avatar: {
-            width: 100,
-            height: 100,
-            borderRadius: 50,
-            border: "3pt solid white",
-            marginRight: 25,
-        },
-        nameBlock: { flexGrow: 1 },
-        name: { fontSize: 26, fontWeight: "bold", color: "white", marginBottom: 4 },
-        subtitle: { fontSize: 12, color: "#E5E7EB" },
-        contact: { fontSize: 10.5, color: "#F3F4F6", marginTop: 6 },
-        content: { flexDirection: "row", padding: 30 },
-        sidebar: {
-            width: "34%",
-            backgroundColor: theme.accent,
             padding: 22,
-            borderRadius: 10,
-            marginRight: 25,
-            minHeight: "90%",
+            flexDirection: "row",
+            alignItems: "flex-end",
+            justifyContent: "space-between",
         },
-        main: { width: "66%", paddingRight: 15 },
-        h2: {
-            fontSize: 15,
-            color: theme.primary,
-            fontWeight: "bold",
+        heroLeft: { flexDirection: "column" },
+        heroName: { fontSize: 34, fontWeight: "900", color: "#fff" },
+        heroRole: { fontSize: 12, color: "#F0F9FF", marginTop: 6 },
+        heroRight: { alignItems: "flex-end" as any },
+        heroContact: { fontSize: 10, color: "#EAF2FF" },
+
+    layout: { flexDirection: "row", padding: 28 },
+        leftCol: { width: "36%", paddingRight: 10 },
+        rightCol: { width: "64%" },
+
+        card: {
+            backgroundColor: "#fff",
+            borderRadius: 10,
+            padding: 12,
+            marginBottom: 12,
+        },
+        sectionTitle: {
+            fontSize: 11,
+            fontWeight: "700",
+            color: accent,
             marginBottom: 8,
             textTransform: "uppercase",
-            borderBottom: `1.5pt solid ${theme.primary}`,
-            paddingBottom: 4,
         },
-        p: {
-            fontSize: 12,
-            marginBottom: 10,
-            textAlign: "justify",
-            lineHeight: 1.8,
-        },
-        skillTag: {
-            backgroundColor: theme.primary,
-            color: "white",
+        paragraph: { fontSize: 11, lineHeight: 1.6, color: "#111827", marginBottom: 6 },
+        skillPill: {
             fontSize: 10,
-            padding: "5 8",
-            borderRadius: 4,
-            marginRight: 5,
+            paddingVertical: 4,
+            paddingHorizontal: 8,
+            borderRadius: 999,
+            backgroundColor: accent,
+            color: "white",
+            marginRight: 6,
             marginBottom: 6,
         },
-        skillContainer: { flexDirection: "row", flexWrap: "wrap", marginTop: 6 },
-        block: { marginBottom: 18 },
+        timelineItem: { marginBottom: 8 },
+        bigStat: { fontSize: 20, fontWeight: "800", color: accent },
     });
 
     return (
         <Document>
             <Page size="A4" style={s.page}>
-                <View style={s.header}>
-                    {o.photo && <Image src={o.photo} style={s.avatar} />}
-                    <View style={s.nameBlock}>
-                        <Text style={s.name}>{o.fullName}</Text>
-                        <Text style={s.subtitle}>
-                            {o.industry} • {o.experienceLevel}
-                        </Text>
-                        <Text style={s.contact}>
-                            {o.email} • {o.phone}
-                        </Text>
+                {/* Hero with large name and vertical accent */}
+                <View style={s.hero}>
+                    <View style={s.heroLeft}>
+                        <Text style={s.heroName}>{o.fullName}</Text>
+                        <Text style={s.heroRole}>{o.industry} • {o.experienceLevel}</Text>
+                    </View>
+                    <View style={s.heroRight}>
+                        <Text style={s.heroContact}>{o.email}</Text>
+                        <Text style={s.heroContact}>{o.phone}</Text>
                     </View>
                 </View>
 
-                <View style={s.content}>
-                    <View style={s.sidebar}>
-                        <Text style={[s.h2, { color: theme.primary }]}>Skills</Text>
-                        <View style={s.skillContainer}>
-                            {o.skills
-                                ?.split(/[,;\n]/)
-                                .filter((s) => s.trim())
-                                .map((skill, i) => (
-                                    <Text key={i} style={s.skillTag}>
-                                        {skill.trim()}
-                                    </Text>
+                <View style={s.layout}>
+                    <View style={s.leftCol}>
+                        <View style={s.card}>
+                            <Text style={s.sectionTitle}>Skills & Tools</Text>
+                            <View>
+                                {o.skills?.split(/[;,\n]/).filter(Boolean).map((sk, i) => (
+                                    <Text key={i} style={s.skillPill}>{sk.trim()}</Text>
                                 ))}
+                            </View>
                         </View>
 
-                        <View style={[s.block, { marginTop: 25 }]}>
-                            <Text style={[s.h2, { color: theme.primary }]}>Education</Text>
-                            {renderParagraphs(o.education, s.p)}
+                        <View style={s.card}>
+                            <Text style={s.sectionTitle}>Education</Text>
+                            {renderParagraphs(o.education, s.paragraph)}
                         </View>
 
-                        <View style={s.block}>
-                            <Text style={[s.h2, { color: theme.primary }]}>Highlights</Text>
-                            <Text style={[s.p, { fontStyle: "italic" }]}>
-                                Innovative • Team Player • Fast Learner
-                            </Text>
+                        <View style={s.card}>
+                            <Text style={s.sectionTitle}>Quick Stats</Text>
+                            <Text style={s.bigStat}>{o.workExperience ? (o.workExperience.split(/\n+/).length) : 0} entries</Text>
                         </View>
                     </View>
 
-                    <View style={s.main}>
-                        <View style={s.block}>
-                            <Text style={s.h2}>Summary</Text>
-                            {renderParagraphs(o.summary, s.p)}
+                    <View style={s.rightCol}>
+                        <View style={s.card}>
+                            <Text style={s.sectionTitle}>Profile Summary</Text>
+                            {renderParagraphs(o.summary, s.paragraph)}
                         </View>
 
-                        <View style={s.block}>
-                            <Text style={s.h2}>Experience</Text>
-                            {renderParagraphs(o.workExperience, s.p)}
+                        <View style={s.card}>
+                            <Text style={s.sectionTitle}>Experience</Text>
+                            {renderParagraphs(o.workExperience, s.paragraph)}
                         </View>
 
-                        <View style={s.block}>
-                            <Text style={s.h2}>Achievements</Text>
-                            <Text style={s.p}>
-                                - Improved project delivery efficiency by 30%.{"\n"}- Mentored junior developers.{"\n"}- Implemented scalable UI components with AI tools.
-                            </Text>
+                        <View style={s.card}>
+                            <Text style={s.sectionTitle}>Achievements & Highlights</Text>
+                            {renderParagraphs(o.response || "", s.paragraph)}
                         </View>
                     </View>
                 </View>
@@ -462,7 +458,9 @@ export const ManagerReviewedCV = (o: CVOrderType) => {
             width: 95,
             height: 95,
             borderRadius: 48,
-            border: "2pt solid white",
+            borderWidth: 2,
+            borderColor: "white",
+            borderStyle: "solid",
             alignSelf: "center",
             marginBottom: 20,
         },
@@ -480,7 +478,9 @@ export const ManagerReviewedCV = (o: CVOrderType) => {
             fontSize: 10.5,
             fontWeight: "bold",
             textTransform: "uppercase",
-            borderBottom: "1pt solid #FFFFFF55",
+            borderBottomWidth: 1,
+            borderBottomColor: "#FFFFFF55",
+            borderBottomStyle: "solid",
             paddingBottom: 4,
         },
         sidebarText: {
@@ -501,19 +501,25 @@ export const ManagerReviewedCV = (o: CVOrderType) => {
             color: themeColor,
             marginTop: 14,
             marginBottom: 8,
-            borderBottom: `1.5pt solid ${themeColor}`,
+            borderBottomWidth: 1.5,
+            borderBottomColor: themeColor,
+            borderBottomStyle: "solid",
             paddingBottom: 3,
             textTransform: "uppercase",
         },
         paragraph: {fontSize: 11, marginBottom: 6, textAlign: "justify", lineHeight: 1.7},
         divider: {
-            borderBottom: `1.5pt solid ${themeColor}`,
+            borderBottomWidth: 1.5,
+            borderBottomColor: themeColor,
+            borderBottomStyle: "solid",
             marginVertical: 12,
             opacity: 0.8,
         },
         infoBox: {
             backgroundColor: accent,
-            borderLeft: `4pt solid ${themeColor}`,
+            borderLeftWidth: 4,
+            borderLeftColor: themeColor,
+            borderLeftStyle: "solid",
             padding: 10,
             borderRadius: 6,
             marginVertical: 10,
@@ -527,7 +533,9 @@ export const ManagerReviewedCV = (o: CVOrderType) => {
         },
         signatureLine: {
             width: 160,
-            borderBottom: `1pt solid ${themeColor}`,
+            borderBottomWidth: 1,
+            borderBottomColor: themeColor,
+            borderBottomStyle: "solid",
             alignSelf: "center",
             marginTop: 6,
             marginBottom: 4,
@@ -566,7 +574,7 @@ export const ManagerReviewedCV = (o: CVOrderType) => {
                     {renderSkills(o.skills)}
 
                     <Text style={s.sectionLabel}>Languages</Text>
-                    <Text style={s.sidebarText}>{o.languages || "English (Fluent)"}</Text>
+                    <Text style={s.sidebarText}>{(o as any).languages || "English (Fluent)"}</Text>
                 </View>
 
                 <View style={s.main}>
@@ -624,13 +632,17 @@ export const ManagerReviewedCV = (o: CVOrderType) => {
                                 color: "#111827",
                                 padding: 45,
                                 lineHeight: 1.7,
-                                border: "1pt solid #E5E7EB",
+                                borderWidth: 1,
+                                borderColor: "#E5E7EB",
+                                borderStyle: "solid",
                                 borderRadius: 6,
                             }}
                         >
                             <View
                                 style={{
-                                    borderBottom: `1.8pt solid ${themeColor}`,
+                                    borderBottomWidth: 1.8,
+                                    borderBottomColor: themeColor,
+                                    borderBottomStyle: "solid",
                                     paddingBottom: 6,
                                     marginBottom: 12,
                                 }}
@@ -661,8 +673,10 @@ export const ManagerReviewedCV = (o: CVOrderType) => {
                 backgroundColor: accent,
                 borderRadius: 14,
                 padding: 32,
-                margin: "38px 0 0 0",
-                border: `2pt solid ${themeColor}`,
+                marginTop: 38,
+                borderWidth: 2,
+                borderColor: themeColor,
+                borderStyle: "solid",
             }}>
                 <Text style={{
                     fontSize: 18,
@@ -678,7 +692,9 @@ export const ManagerReviewedCV = (o: CVOrderType) => {
 
                 <View style={{
                     backgroundColor: "#fff",
-                    borderLeft: `6pt solid ${themeColor}`,
+                    borderLeftWidth: 6,
+                    borderLeftColor: themeColor,
+                    borderLeftStyle: "solid",
                     padding: 18,
                     borderRadius: 10,
                     marginBottom: 18,
@@ -726,7 +742,9 @@ export const ManagerReviewedCV = (o: CVOrderType) => {
 
                 <View style={{
                     marginTop: 32,
-                    borderTop: `1.5pt solid ${themeColor}`,
+                    borderTopWidth: 1.5,
+                    borderTopColor: themeColor,
+                    borderTopStyle: "solid",
                     paddingTop: 14,
                     textAlign: "center",
                 }}>
@@ -739,7 +757,9 @@ export const ManagerReviewedCV = (o: CVOrderType) => {
                     </Text>
                     <View style={{
                         width: 160,
-                        borderBottom: `1.5pt solid ${themeColor}`,
+                        borderBottomWidth: 1.5,
+                        borderBottomColor: themeColor,
+                        borderBottomStyle: "solid",
                         alignSelf: "center",
                         marginTop: 10,
                     }}/>

@@ -1,14 +1,12 @@
-import { FormValues } from "./ManualGenerator";
-
-export const mockCVData: FormValues = {
+export const mockCVData: any = {
     fullName: "John Doe",
     phone: "+1 234 567 890",
     photo: "",
-    cvStyle: "Modern",
+    cvStyle: "Portfolio",
     fontStyle: "Default", // 🆕 додано
     themeColor: "Default", // 🆕 додано
-    industry: "IT",
-    experienceLevel: "Senior",
+    industry: "Technology",
+    experienceLevel: "Mid",
     summary:
         "Experienced software developer with 6+ years in building scalable apps. Passion for AI and user-centric design.",
     workExperience: `Frontend Developer at TechCorp (2020–2023)
@@ -21,6 +19,6 @@ Junior Developer at WebStudio (2017–2020)
 - SEO & accessibility support`,
     education: `B.Sc. Computer Science — MIT (2013–2017)`,
     skills: "JavaScript, TypeScript, React, Next.js, Node.js, MongoDB, Git, Agile",
-    reviewType: "default",
-    extras: ["coverLetter"],
+    reviewType: "instant",
+    extras: ["coverLetter", "personalBranding"],
 };

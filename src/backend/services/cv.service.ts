@@ -99,6 +99,36 @@ Write a short "Skills Gap Analysis" report for a ${b.experienceLevel} ${b.indust
 Identify 5 missing but valuable skills and recommend 3 courses or learning paths to close these gaps. 
 Output only the report text.
 `,
+    customFont: (b: any) => `
+You are an assistant that prepares a short note describing how to apply a custom font to a CV PDF. The user selected font: ${b.customFont || 'default'}. 
+Return a 2-3 sentence instruction or note that can be embedded in the PDF metadata to indicate the chosen font and any fallback recommendations. Output only the note.
+`,
+
+    customColor: (b: any) => `
+You are an assistant that prepares a short note describing the chosen color scheme for a CV. The user selected color: ${b.customColor || 'default'}. 
+Return a 2-3 sentence description of the color usage (heading color, accent, and body text contrast) suitable for inclusion in the PDF metadata. Output only the description.
+`,
+
+    portfolioLayout: (b: any) => `
+You are a UX-savvy portfolio designer. Produce a short, structured "Portfolio layout guide" for ${b.fullName} (max 6 bullet points) describing which projects to highlight, suggested order, and brief layout hints (use of images, captions, project outcomes). Keep it concise and ready-to-use by a PDF designer.
+`,
+
+    personalBranding: (b: any) => `
+Write a concise personal branding blurb (2-3 short paragraphs) for ${b.fullName} aimed at a ${b.experienceLevel} ${b.industry} professional. Focus on unique value proposition, tone, and visual/phrasing cues that should appear on the CV or portfolio.
+`,
+
+    prioritySupport: (b: any) => `
+You are a customer-support assistant. Produce a short confirmation message (1-2 sentences) describing the priority support level the user purchased and the expected SLA (e.g., response within 24 hours). Return only the message.
+`,
+
+    multiLocale: (b: any) => `
+Translate the complete CV content into the target locale(s). The user requested locales: ${b.locales || 'not specified'}. 
+For each locale listed (comma-separated), produce a short translated Summary section suitable for that locale (1-2 paragraphs each). If no locales provided, return a short note explaining that no locales were requested.
+`,
+
+    jobMatch: (b: any) => `
+You are a senior recruiter creating a job-matching summary. Given the CV content for ${b.fullName}, write a concise (3-5 bullet) "Match summary" that maps the candidate's top strengths to common job requirements in ${b.industry}. Output only the bullet list.
+`,
 };
 
 // ---------- SERVICE ----------
@@ -109,17 +139,22 @@ export const cvService = {
         const user = await User.findById(userId);
         if (!user) throw new Error("UserNotFound");
 
-        const BASE_COST: Record<string, number> = { default: 30, manager: 60 };
+        const BASE_COST: Record<string, number> = { instant: 25, manager: 60, hr_plus: 90, priority: 120, expert: 180 };
         const EXTRA_COST: Record<string, number> = {
-            coverLetter: 10,
-            linkedin: 15,
-            keywords: 12,
-            atsCheck: 12,
-            jobAdaptation: 20,
-            achievements: 10,
-            skillsGap: 15,
+            coverLetter: 12,
+            linkedin: 18,
+            keywords: 15,
+            atsCheck: 14,
+            jobAdaptation: 25,
+            achievements: 12,
+            skillsGap: 16,
             customFont: 5,
             customColor: 5,
+            portfolioLayout: 20,
+            personalBranding: 10,
+            prioritySupport: 8,
+            multiLocale: 30,
+            jobMatch: 22,
         };
 
         const baseCost = BASE_COST[body.reviewType] ?? 30;
@@ -150,10 +185,9 @@ export const cvService = {
         });
 
         // 🧠 Генерація CV
-        const isManager = body.reviewType === "manager";
-        const mainPrompt = isManager
-            ? buildDetailedPrompt(body, email)
-            : buildSimplePrompt(body, email);
+        const requiresManualReview = ["manager", "hr_plus", "priority", "expert"];
+        const isManager = requiresManualReview.includes(body.reviewType);
+        const mainPrompt = isManager ? buildDetailedPrompt(body, email) : buildSimplePrompt(body, email);
 
         const mainRes = await openai.chat.completions.create({
             model: "gpt-4o-mini",
@@ -193,7 +227,7 @@ export const cvService = {
         }
 
         const readyAt = isManager
-            ? new Date(Date.now() + 60 * 1000) // тест — 1 хв
+            ? new Date(Date.now() + 60 * 1000) // simulate manual review delay (1 min for test)
             : new Date();
 
         // 💾 Створюємо CVOrder

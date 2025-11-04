@@ -1,149 +1,126 @@
 .card {
+  background: #ffffff;
+  border: 1px solid #e4e4e4;
+  border-radius: 1rem;
+  padding: 2rem 1.75rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  text-align: center;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  border: 2px solid var(--border-color);
-  border-radius: 1rem;
-  background: var(--surface-color);
-  padding: 2rem;
-  text-align: center;
-  transition: all 0.3s ease;
-  height: 100%;
+  transition: all 0.35s ease;
   position: relative;
+  overflow: hidden;
 
   &:hover {
     transform: translateY(-6px);
-    border-color: var(--secondary-color);
-    box-shadow: 0 12px 28px var(--shadow-color);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
   }
-}
 
-.badgeTop {
-  position: absolute;
-  top: -12px;
-  left: 50%;
-  transform: translateX(-50%);
-  padding: 0.35rem 1.1rem;
-  border-radius: 999px;
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: var(--text-accent);
-  background: var(--secondary-color);
-  box-shadow: 0 4px 12px var(--shadow-color);
-  text-transform: uppercase;
-}
+  &.starter {
+    border-color: #d9e2ec;
+  }
 
-.badgeBottom {
-  margin-top: 1rem;
-  align-self: center;
-  padding: 0.3rem 1rem;
-  border-radius: 999px;
-  font-size: 0.8rem;
-  font-weight: 600;
-  background: var(--quaternary-color);
-  color: var(--secondary-color);
-  border: 1px solid var(--tertiary-color);
+  &.pro {
+    border-color: #cbd5e0;
+  }
+
+  &.premium {
+    border-color: #b6c2d1;
+  }
+
+  &.custom {
+    border-color: #bdbdbd;
+  }
 }
 
 .title {
   font-size: 1.4rem;
   font-weight: 700;
-  margin-top: 1.5rem;
-  margin-bottom: 0.75rem;
-  color: var(--text-primary);
+  color: #1a1a1a;
+  margin-bottom: 0.5rem;
 }
 
 .price {
-  font-size: 2rem;
-  font-weight: 800;
-  margin-bottom: 0.5rem;
-  color: var(--text-primary);
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #222;
+  margin-bottom: 1rem;
 
   .tokens {
-    display: block;
-    font-size: 0.85rem;
-    color: var(--text-muted);
-    margin-top: 0.2rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #777;
   }
 }
 
 .dynamicPrice {
-  display: block;
   font-size: 1rem;
-  color: var(--text-muted);
-  margin: 0.2rem;
-  font-weight: 800;
+  color: #333;
+  margin-bottom: 0.75rem;
 }
 
 .description {
-  font-size: 0.95rem;
+  font-size: 1rem;
+  color: #444;
+  margin-bottom: 1.25rem;
   line-height: 1.6;
-  color: var(--text-secondary);
-  margin-bottom: 1rem;
+  text-align: left;
 }
 
 .features {
   list-style: none;
   padding: 0;
-  margin: 0 0 1.5rem;
-  text-align: left;
+  margin: 0 0 1.5rem 0;
 
   li {
-    font-size: 0.9rem;
-    margin: 0.4rem 0;
-    padding-left: 1.25rem;
-    position: relative;
-    color: var(--text-secondary);
+    font-size: 0.95rem;
+    color: #333;
+    padding: 0.5rem 0;
+    border-bottom: 1px dashed #eaeaea;
+    transition: color 0.2s ease;
 
-    &::before {
-      content: "✔";
-      position: absolute;
-      left: 0;
-      color: var(--secondary-color);
-      font-size: 0.9rem;
+    &:last-child {
+      border-bottom: none;
+    }
+
+    &:hover {
+      color: #000;
     }
   }
 }
 
-.card button {
-  margin-top: auto;
-  font-size: 0.95rem;
+.badgeTop,
+.badgeBottom {
+  position: absolute;
+  font-size: 0.8rem;
   font-weight: 600;
+  color: #555;
+  background: #f3f3f3;
+  border-radius: 0.5rem;
+  padding: 0.3rem 0.7rem;
+  letter-spacing: 0.3px;
 }
 
-.starter {
-  color: var(--primary-color);
+.badgeTop {
+  top: 1rem;
+  right: 1rem;
 }
 
-.pro {
-  color: var(--primary-color);
-  border-width: 3px;
-  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.15);
+.badgeBottom {
+  bottom: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #f9f9f9;
 }
 
-.premium {
-  color: var(--primary-color);
-  border-width: 3px;
-  box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.15);
+/* ✅ Використовуємо :global() щоб уникнути помилки Next.js */
+:global(input),
+:global(select) {
+  border-radius: 0.5rem;
+  font-size: 1rem;
 }
 
-.custom {
-  --primary-color: var(--info-color);
-  border-width: 3px;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
-}
-
-/* 📱 Адаптив */
-@media (max-width: 768px) {
-  .card {
-    padding: 1.5rem;
-  }
-
-  .title {
-    font-size: 1.2rem;
-  }
-
-  .price {
-    font-size: 1.6rem;
-  }
+:global(button) {
+  margin-top: 1.5rem;
 }

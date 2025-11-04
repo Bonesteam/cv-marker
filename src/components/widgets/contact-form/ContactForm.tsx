@@ -61,17 +61,7 @@ const ContactUsForm = () => {
                     <p>
                         Have questions or want to collaborate? Our team will respond within <strong>24 hours</strong>.
                     </p>
-                    <ul>
-                        <li>
-                            <FaMapMarkerAlt /> {COMPANY_ADDRESS}
-                        </li>
-                        <li>
-                            <FaEnvelope /> {COMPANY_EMAIL}
-                        </li>
-                        <li>
-                            <FaPhone /> {COMPANY_PHONE}
-                        </li>
-                    </ul>
+                    
                 </motion.div>
 
                 {/* Right side with form */}

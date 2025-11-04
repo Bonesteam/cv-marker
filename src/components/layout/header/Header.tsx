@@ -85,6 +85,7 @@ const Header: React.FC = () => {
                                 >
                                     <option value="GBP">£ GBP</option>
                                     <option value="EUR">€ EUR</option>
+                                    <option value="USD">$ USD</option>
                                 </select>
                             </div>
 

@@ -8,7 +8,7 @@ type CVOrder = {
     _id: string;
     email: string;
     fullName: string;
-    cvStyle: "Classic" | "Modern" | "Creative";
+    cvStyle: "Classic" | "Modern" | "Creative" | "Executive" | "Portfolio" | "One-page" | "Infographic" | "Technical";
     readyAt: string;
     createdAt: string;
 };
@@ -40,7 +40,7 @@ const CVOrders: React.FC<{ orders: CVOrder[] }> = ({ orders }) => {
                                 <button
                                     className={ready ? styles.actionButton : `${styles.actionButton} ${styles.actionButtonDisabled}`}
                                     disabled={!ready}
-                                    onClick={() => fetch(`/api/cv/get-order?id=${o._id}`).then(r=>r.json()).then(d=>downloadCVPDF(d.order))}
+                                    onClick={() => fetch(`/api/cv/get-order?id=${o._id}`, { credentials: "include" }).then(r=>r.json()).then(d=>downloadCVPDF(d.order))}
                                 >
                                     Download PDF
                                 </button>

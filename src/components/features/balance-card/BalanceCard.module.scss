@@ -1,34 +1,43 @@
 .balanceCard {
-  background: #fff;
+  background: #fdfdfd;
+  border: 1px solid #e5e7eb;
   border-radius: 1rem;
-  padding: 1.5rem 2rem;
+  padding: 1.75rem 2rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+
+  &:hover {
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+    transform: translateY(-2px);
+  }
 
   @media (max-width: 600px) {
     flex-direction: column;
     align-items: flex-start;
-    gap: 1rem;
+    gap: 1.2rem;
   }
 
   &__info {
     p {
-      font-size: 0.95rem;
-      color: #6b7280;
+      font-size: 0.9rem;
+      color: #9ca3af;
       margin: 0;
+      letter-spacing: 0.2px;
     }
 
     h2 {
-      font-size: 1.8rem;
+      font-size: 1.9rem;
       font-weight: 700;
-      margin: 0.25rem 0 0;
-      color: var(--primary-color);
+      margin: 0.3rem 0 0;
+      color: #1f2937;
 
       span {
-        font-size: 1.2rem;
+        font-size: 1.1rem;
         font-weight: 600;
+        color: #6b7280;
       }
     }
   }
@@ -40,16 +49,23 @@
   }
 
   &__topUpBtn {
-    background: linear-gradient(135deg, #4f46e5, #6366f1);
+    background: #1f2937;
     color: #fff;
-    padding: 0.6rem 1.4rem;
-    border-radius: 8px;
+    padding: 0.65rem 1.6rem;
+    border-radius: 0.5rem;
     font-weight: 600;
-    transition: 0.2s;
     text-decoration: none;
+    border: none;
+    transition: background 0.2s ease, transform 0.2s ease;
 
     &:hover {
-      background: linear-gradient(135deg, #4338ca, #4f46e5);
+      background: #111827;
+      transform: translateY(-1px);
+    }
+
+    &:active {
+      background: #374151;
+      transform: translateY(0);
     }
   }
 }

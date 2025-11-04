@@ -3,7 +3,9 @@ import { requireAuth } from "@/backend/middlewares/auth.middleware";
 import { userController } from "@/backend/controllers/user.controller";
 
 const TOKENS_PER_GBP = 100;
-const RATES_TO_GBP = { GBP: 1, EUR: 1.17 };
+// Rates expressed as: 1 GBP = X <currency>
+// To get GBP equivalent of an amount in currency X: gbp = amount / RATES_TO_GBP[X]
+const RATES_TO_GBP: Record<string, number> = { GBP: 1, EUR: 1.17, USD: 1.27 };
 
 export async function POST(req: NextRequest) {
     try {
@@ -12,11 +14,11 @@ export async function POST(req: NextRequest) {
 
         if (body.currency && body.amount) {
             const { currency, amount } = body;
-            if (!["GBP", "EUR"].includes(currency)) {
+            if (!["GBP", "EUR", "USD"].includes(currency)) {
                 return NextResponse.json({ message: "Unsupported currency" }, { status: 400 });
             }
 
-            const gbpEquivalent = amount / RATES_TO_GBP[currency as "GBP" | "EUR"];
+            const gbpEquivalent = amount / RATES_TO_GBP[currency as "GBP" | "EUR" | "USD"];
             if (gbpEquivalent < 0.01) {
                 return NextResponse.json({ message: "Minimum is 0.01" }, { status: 400 });
             }
@@ -40,3 +42,4 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ message: err.message }, { status: 400 });
     }
 }
+

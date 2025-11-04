@@ -14,21 +14,32 @@ import { useAlert } from "@/context/AlertContext";
 import { mockCVData } from "./MOC";
 import { useUser } from "@/context/UserContext";
 
-type ReviewType = "default" | "manager";
+type ReviewType = "instant" | "manager" | "hr_plus" | "priority" | "expert";
 
+// Expanded set of additional services (more options, varied costs)
 const EXTRA_OPTIONS = [
-    { name: "coverLetter", label: "Cover Letter", cost: 10 },
-    { name: "linkedin", label: "LinkedIn Summary", cost: 15 },
-    { name: "keywords", label: "Keyword Optimization", cost: 12 },
-    { name: "atsCheck", label: "ATS Compatibility Report", cost: 12 },
-    { name: "jobAdaptation", label: "Adapt CV to Job Description", cost: 20 },
-    { name: "achievements", label: "Achievements Booster", cost: 10 },
-    { name: "skillsGap", label: "Skills Gap Analysis", cost: 15 },
+    { name: "coverLetter", label: "Cover Letter", cost: 12 },
+    { name: "linkedin", label: "LinkedIn Summary", cost: 18 },
+    { name: "keywords", label: "Keyword Optimization", cost: 15 },
+    { name: "atsCheck", label: "ATS Compatibility Report", cost: 14 },
+    { name: "jobAdaptation", label: "Adapt CV to Job Description", cost: 25 },
+    { name: "achievements", label: "Achievements Booster", cost: 12 },
+    { name: "skillsGap", label: "Skills Gap Analysis", cost: 16 },
+    { name: "portfolioLayout", label: "Portfolio Layout Review", cost: 20 },
+    { name: "personalBranding", label: "Personal Branding Notes", cost: 10 },
+    { name: "prioritySupport", label: "Priority Email Support", cost: 8 },
+    { name: "multiLocale", label: "Multi-language CV (translation)", cost: 30 },
+    { name: "jobMatch", label: "Job Matching & Keywords", cost: 22 },
+    { name: "customFont", label: "Custom Font Embedding", cost: 5 },
+    { name: "customColor", label: "Custom Color Theme", cost: 5 },
 ];
 
 const BASE_COST: Record<ReviewType, number> = {
-    default: 30,
+    instant: 25,
     manager: 60,
+    hr_plus: 90,
+    priority: 120,
+    expert: 180,
 };
 
 const schema = Yup.object().shape({
@@ -42,7 +53,7 @@ const schema = Yup.object().shape({
     education: Yup.string().required("Required"),
     skills: Yup.string().required("Required"),
     reviewType: Yup.mixed<ReviewType>()
-        .oneOf(["default", "manager"])
+        .oneOf(["instant", "manager", "hr_plus", "priority", "expert"])
         .required("Required"),
 });
 
@@ -80,16 +91,16 @@ const ManualGeneratorCV = () => {
         fullName: "",
         phone: "",
         photo: "",
-        cvStyle: "Classic",
+        cvStyle: "Executive",
         fontStyle: "Default",
         themeColor: "Default",
-        industry: "IT",
-        experienceLevel: "Mid-level",
+        industry: "Technology",
+        experienceLevel: "Mid",
         summary: "",
         workExperience: "",
         education: "",
         skills: "",
-        reviewType: "default",
+        reviewType: "instant",
         extras: [],
     };
 
@@ -115,7 +126,17 @@ const ManualGeneratorCV = () => {
                         }, 0);
 
                     // ✅ 2. Формуємо payload після обчислення totalTokens
-                    const payload = { ...values, email: user?.email, totalTokens };
+                    // Ensure we send the computed `extras` (including automatic appearance extras)
+                    // and also include explicit appearance fields expected by backend (customFont/customColor)
+                    const payload = {
+                        ...values,
+                        email: user?.email,
+                        totalTokens,
+                        extras,
+                        // backend uses `customFont`/`customColor` in prompt builders
+                        customFont: values.fontStyle !== "Default" ? values.fontStyle : undefined,
+                        customColor: values.themeColor !== "Default" ? values.themeColor : undefined,
+                    };
 
                     // ✅ 3. Відправляємо запит
                     const res = await fetch("/api/cv/create-order", {
@@ -126,15 +147,19 @@ const ManualGeneratorCV = () => {
                     });
 
                     const data = await res.json();
+                    console.log("📤 create-order response:", data);
                     if (res.ok) {
+                        const order = data?.order;
+                        const extrasKeys = order?.extrasData ? Object.keys(order.extrasData) : [];
                         showAlert(
                             "Success",
                             values.reviewType === "manager"
-                                ? "Your request was accepted. A specialist will prepare your CV and deliver it in 24 hours."
-                                : "Your CV was generated successfully and is ready to download.",
+                                ? `Your request was accepted. A specialist will prepare your CV and deliver it in 24 hours. Extras generated: ${extrasKeys.join(", ")}`
+                                : `Your CV was generated successfully and is ready to download. Extras generated: ${extrasKeys.join(", ")}`,
                             "success"
                         );
                     } else {
+                        console.error("create-order error payload:", data);
                         showAlert("Error", data.message || "Failed to create CV order", "error");
                     }
                 } catch (e) {
@@ -218,7 +243,7 @@ const ManualGeneratorCV = () => {
                                     <div key={f.name} className={styles.formGroup}>
                                         <label className={styles.label}>{f.label}</label>
                                         <Select
-                                            value={values[f.name]}
+                                            value={(values as any)[f.name]}
                                             onChange={(_, v) => setFieldValue(f.name, v)}
                                             className={styles.inputBase}
                                         >
@@ -241,10 +266,11 @@ const ManualGeneratorCV = () => {
                                 onChange={(_, v) => setFieldValue("reviewType", v as ReviewType)}
                                 className={styles.inputBase}
                             >
-                                <Option value="default">Instant CV (30 tokens)</Option>
-                                <Option value="manager">
-                                    Manager Review – 24h (60 tokens)
-                                </Option>
+                                <Option value="instant">Instant — AI Generated (25 tokens)</Option>
+                                <Option value="manager">Manager Review — 24h (60 tokens)</Option>
+                                <Option value="hr_plus">HR+ Review — 24h + ATS (90 tokens)</Option>
+                                <Option value="priority">Priority Review — 6h turnaround (120 tokens)</Option>
+                                <Option value="expert">Expert Package — HR + Design (180 tokens)</Option>
                             </Select>
                             <p
                                 style={{
@@ -253,9 +279,11 @@ const ManualGeneratorCV = () => {
                                     marginTop: "0.4rem",
                                 }}
                             >
-                                {values.reviewType === "manager"
-                                    ? "🧠 A professional will review and enhance your CV for 24-hour delivery."
-                                    : "⚡ Instant AI CV generation with no manual review."}
+                                {values.reviewType === "instant" && "⚡ Instant AI CV generation with no manual review."}
+                                {values.reviewType === "manager" && "🧠 A professional will review and enhance your CV for 24-hour delivery."}
+                                {values.reviewType === "hr_plus" && "📋 HR+ includes ATS checks and recruiter phrasing guidance."}
+                                {values.reviewType === "priority" && "🚀 Priority delivery within 6 hours by our fast-track team."}
+                                {values.reviewType === "expert" && "🏆 Expert package: senior HR + visual design polish and 2 revisions."}
                             </p>
                         </div>
 
@@ -263,54 +291,58 @@ const ManualGeneratorCV = () => {
                         <div className={styles.section}>
                             <h3 className={styles.sectionTitle}>✨ Additional Services</h3>
                             <div className={styles.extrasList}>
-                                {EXTRA_OPTIONS.slice(0, 8).map((opt) => {
-                                    const managerOnly = [
-                                        "keywords",
-                                        "atsCheck",
-                                        "jobAdaptation",
-                                        "achievements",
-                                        "skillsGap",
-                                    ].includes(opt.name);
+                                {EXTRA_OPTIONS.map((opt) => {
+                                        // some services require manager or higher
+                                        const managerOnly = [
+                                            "keywords",
+                                            "atsCheck",
+                                            "jobAdaptation",
+                                            "achievements",
+                                            "skillsGap",
+                                            "multiLocale",
+                                            "portfolioLayout",
+                                        ].includes(opt.name);
 
-                                    const isDisabled =
-                                        managerOnly && values.reviewType !== "manager";
+                                        // priority or expert unlock additional services
+                                        const isDisabled =
+                                            managerOnly && !["manager", "hr_plus", "priority", "expert"].includes(values.reviewType);
 
-                                    return (
-                                        <label
-                                            key={opt.name}
-                                            className={`${styles.extraItem} ${
-                                                isDisabled ? styles.disabled : ""
-                                            }`}
-                                        >
-                                            <input
-                                                type="checkbox"
-                                                disabled={isDisabled}
-                                                checked={values.extras.includes(opt.name)}
-                                                onChange={(e) => {
-                                                    if (e.target.checked)
-                                                        setFieldValue("extras", [
-                                                            ...values.extras,
-                                                            opt.name,
-                                                        ]);
-                                                    else
-                                                        setFieldValue(
-                                                            "extras",
-                                                            values.extras.filter(
-                                                                (x) => x !== opt.name
-                                                            )
-                                                        );
-                                                }}
-                                            />
-                                            <span>{opt.label}</span>
-                                            <span className={styles.badge}>+{opt.cost}</span>
-                                            {isDisabled && (
-                                                <span className={styles.lockHint}>
-                                                🔒 Available for Manager Review
-                                            </span>
-                                            )}
-                                        </label>
-                                    );
-                                })}
+                                        return (
+                                            <label
+                                                key={opt.name}
+                                                className={`${styles.extraItem} ${
+                                                    isDisabled ? styles.disabled : ""
+                                                }`}
+                                            >
+                                                <input
+                                                    type="checkbox"
+                                                    disabled={isDisabled}
+                                                    checked={values.extras.includes(opt.name)}
+                                                    onChange={(e) => {
+                                                        if (e.target.checked)
+                                                            setFieldValue("extras", [
+                                                                ...values.extras,
+                                                                opt.name,
+                                                            ]);
+                                                        else
+                                                            setFieldValue(
+                                                                "extras",
+                                                                values.extras.filter(
+                                                                    (x) => x !== opt.name
+                                                                )
+                                                            );
+                                                    }}
+                                                />
+                                                <span>{opt.label}</span>
+                                                <span className={styles.badge}>+{opt.cost}</span>
+                                                {isDisabled && (
+                                                    <span className={styles.lockHint}>
+                                                    🔒 Available with Manager/HR+ or higher
+                                                </span>
+                                                )}
+                                            </label>
+                                        );
+                                    })}
                             </div>
                         </div>
 
@@ -330,8 +362,14 @@ const ManualGeneratorCV = () => {
                                         className={styles.inputBase}
                                     >
                                         <Option value="Default">Default (Helvetica)</Option>
-                                        <Option value="Times-Roman">Times New Roman</Option>
+                                        <Option value="Roboto">Roboto</Option>
+                                        <Option value="Lora">Lora (Serif)</Option>
+                                        <Option value="Merriweather">Merriweather (Serif)</Option>
+                                        <Option value="Inter">Inter</Option>
+                                        <Option value="Montserrat">Montserrat</Option>
+                                        <Option value="Source Sans 3">Source Sans 3</Option>
                                         <Option value="Courier">Courier</Option>
+                                        <Option value="Times-Roman">Times New Roman</Option>
                                     </Select>
                                 </div>
                                 <div className={styles.formGroup}>
@@ -341,11 +379,18 @@ const ManualGeneratorCV = () => {
                                         onChange={(_, v) => setFieldValue("themeColor", v)}
                                         className={styles.inputBase}
                                     >
-                                        <Option value="Default">Default Blue</Option>
-                                        <Option value="#DC2626">Red</Option>
-                                        <Option value="#059669">Green</Option>
-                                        <Option value="#7C3AED">Purple</Option>
-                                        <Option value="#F59E0B">Gold</Option>
+                                        <Option value="Default">Default Indigo</Option>
+                                        <Option value="#111827">Charcoal</Option>
+                                        <Option value="#0ea5a4">Teal</Option>
+                                        <Option value="#ef4444">Vibrant Red</Option>
+                                        <Option value="#f97316">Orange</Option>
+                                        <Option value="#f59e0b">Amber</Option>
+                                        <Option value="#84cc16">Lime</Option>
+                                        <Option value="#06b6d4">Cyan</Option>
+                                        <Option value="#7c3aed">Electric Purple</Option>
+                                        <Option value="#e11d48">Pink</Option>
+                                        <Option value="#0ea5a4">Mint Teal</Option>
+                                        <Option value="#2563eb">Blue Classic</Option>
                                     </Select>
                                 </div>
                             </div>
