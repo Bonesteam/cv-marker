@@ -18,7 +18,8 @@ export const headerContent = {
         {label: "Pricing", href: "/pricing"},
         {label: "Contact", href: "/contact-us"},
         {label: "Faq", href: "/faq"},
-        {label: "Templates", href: "/templates"}
+    // Temporarily hide Templates from header (kept here for future use)
+    // {label: "Templates", href: "/templates"}
 
     ]
 };
@@ -47,14 +48,14 @@ export const footerContent = {
     ],
     contact: {
         email: "info@cv-makers.co.uk",
-        phone: "+1 234 567 890",
-        address: "Academy House, 11 Dunraven Place, Bridgend, Mid Glamorgan, United Kingdom, CF31 1JF",
+        phone: "+44 7418 601001",
+        address: "31 Auctioneers Way, Northampton, United Kingdom, NN1 1HF",
     },
 
     legal: {
-        companyName: "PREMIUM SERVICE PROVIDERS LTD",
-        companyNumber: "15885598",
-        address: "1 Brook St, Nottingham, United Kingdom, NG1 1AR",
+        companyName: "WORKING AGENT LTD",
+        companyNumber: "15957326",
+        address: "31 Auctioneers Way, Northampton, United Kingdom, NN1 1HF",
     },
     socials: [],
 };

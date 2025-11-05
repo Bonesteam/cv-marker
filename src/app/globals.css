@@ -15,7 +15,7 @@
     --text-primary: #1F1F1F;         
     --text-secondary: #4B4B4B;       
     --text-muted: #777777;           
-    --text-inverse: #fd9449;         /* змінив з білого на світло-сірий */
+    --text-inverse: #000000;         /* змінив з білого на світло-сірий */
     --text-accent: #A3A380;          
 
     /* Статуси */

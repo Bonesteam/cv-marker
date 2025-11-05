@@ -3,18 +3,19 @@ import { COMPANY_NAME, COMPANY_EMAIL, COMPANY_ADDRESS, COMPANY_NUMBER } from "@/
 
 const contactPage: PageSchema = {
     meta: {
-        title: `Contact Us — ${COMPANY_NAME}`,
-        description: `Reach out to ${COMPANY_NAME}. Whether you have questions, need support, or want to collaborate — we’re here to help.`,
+        title: `Contact — ${COMPANY_NAME}`,
+        description: `Connect with ${COMPANY_NAME}. Have a question, need help, or want to discuss collaboration? Our team is always ready to assist.`,
         keywords: [
             `${COMPANY_NAME} contact`,
-            "support",
+            "support center",
             "get in touch",
+            "help desk",
             "customer service",
         ],
         canonical: "/contact-us",
         ogImage: {
             title: `Contact ${COMPANY_NAME}`,
-            description: "Your message matters — let’s talk.",
+            description: "Let’s connect — we’re here for you.",
             bg: "#f9fafb",
             color: "#111827",
         },
@@ -24,12 +25,11 @@ const contactPage: PageSchema = {
         {
             type: "custom",
             component: "HeroSection",
-            title: "Get in Touch",
-            highlight: "We’d Love to Hear from You",
-            description: `Have questions about ${COMPANY_NAME}? Our team is here to help with support, partnerships, or general inquiries.`,
+            title: "Contact Us",
+            highlight: "We’re Here to Help",
+            description: `Got questions about ${COMPANY_NAME}? Whether it’s support, partnerships, or general inquiries — we’d love to hear from you.`,
             image: "image9",
         },
-
 
         // 🔹 Contact Form
         {
@@ -37,24 +37,24 @@ const contactPage: PageSchema = {
             component: "ContactForm",
         },
 
-        // 🔹 FAQ для довіри
+        // 🔹 FAQ Section for Trust
         {
             type: "faq",
             items: [
                 {
-                    question: "How soon will I get a reply?",
+                    question: "When can I expect a response?",
                     answer:
-                        "We usually respond within 24 hours on business days.",
+                        "Our team usually replies within 24 hours during business days.",
                 },
                 {
-                    question: "Can I schedule a meeting?",
+                    question: "Is it possible to arrange a meeting?",
                     answer:
-                        "Yes, send us your request via the form and we’ll arrange a call.",
+                        "Yes, simply send us a message through the contact form, and we’ll schedule a convenient time for a call.",
                 },
                 {
-                    question: "Do you offer customer support on weekends?",
+                    question: "Do you offer support over the weekend?",
                     answer:
-                        "Currently, our support is available Monday to Friday, but we’ll get back to you the next business day.",
+                        "Our support team is available Monday through Friday. If you reach out on the weekend, we’ll get back to you as soon as possible on the next business day.",
                 },
             ],
         },
@@ -62,3 +62,4 @@ const contactPage: PageSchema = {
 };
 
 export default contactPage;
+

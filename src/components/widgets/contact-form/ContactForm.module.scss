@@ -63,26 +63,65 @@
   }
 }
 
+/* Основна форма */
 .form {
   display: flex;
   flex-direction: column;
   gap: 1.2rem;
 
-  input, textarea {
-    background: #f7f5f3;
-    border: 1px solid #ddd;
-    border-radius: 12px;
-    padding: 1rem 1rem;
+  /* Загальний вигляд */
+  input,
+  textarea {
+    background: #f7f5f3 !important;
+    border: 1px solid #ddd !important;
+    border-radius: 12px !important;
+    padding: 1rem 1rem !important;
     font-size: 1rem;
     color: #333;
     transition: all 0.25s ease;
+    box-shadow: none !important;
+  }
 
-    &:focus {
-      outline: none;
-      border-color: #bca27b;
-      background: #fff;
-      box-shadow: 0 0 0 3px rgba(188, 162, 123, 0.2);
-    }
+  /* Прибираємо рамки та фони MUI Joy Input */
+  :global(.MuiInput-root),
+  :global(.MuiInputBase-root),
+  :global(.MuiOutlinedInput-root),
+  :global(.MuiFormControl-root),
+  :global(.MuiInput-variantOutlined),
+  :global(.MuiJoyInput-root) {
+    border: none !important;
+    box-shadow: none !important;
+    background: transparent !important;
+  }
+
+  :global(.MuiOutlinedInput-notchedOutline),
+  :global(.MuiJoyInput-decoratorBefore),
+  :global(.MuiJoyInput-decoratorAfter),
+  :global(.MuiJoyInput-input::before),
+  :global(.MuiJoyInput-input::after) {
+    display: none !important;
+    border: none !important;
+  }
+
+  :global(.MuiInputBase-input),
+  :global(.MuiJoyInput-input) {
+    background: #f7f5f3 !important;
+    border: 1px solid #ddd !important;
+    border-radius: 12px !important;
+    padding: 1rem 1rem !important;
+    color: #333 !important;
+    box-shadow: none !important;
+  }
+
+  /* Ефект фокусу */
+  input:focus,
+  textarea:focus,
+  :global(.Mui-focused .MuiInputBase-input),
+  :global(.Mui-focused .MuiJoyInput-input) {
+    border: 1px solid #bca27b !important;
+    box-shadow: 0 0 0 3px rgba(188, 162, 123, 0.2) !important;
+    background: #fff !important;
+    outline: none !important;
   }
 }
 

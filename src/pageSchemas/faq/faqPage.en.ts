@@ -4,19 +4,19 @@ import { COMPANY_NAME, COMPANY_EMAIL } from "@/resources/constants";
 const faqSchema: PageSchema = {
     meta: {
         title: `FAQ — ${COMPANY_NAME}`,
-        description: `Frequently Asked Questions about ${COMPANY_NAME}: instant CV builder, optional expert review in 24h, revisions, and professional career support.`,
+        description: `Common questions about ${COMPANY_NAME}: quick CV generation, optional 24h expert review, revisions, and personalized career help.`,
         keywords: [
-            `${COMPANY_NAME} FAQ`,
-            "resume builder",
-            "instant cv",
-            "ATS resume",
-            "career support",
-            "HR experts",
+            `${COMPANY_NAME} help`,
+            "ai cv builder",
+            "instant resume",
+            "ats optimized",
+            "career service",
+            "hr professionals",
         ],
         canonical: "/faq",
         ogImage: {
-            title: `${COMPANY_NAME} FAQ`,
-            description: `Answers to the most common questions about creating your CV with ${COMPANY_NAME}.`,
+            title: `${COMPANY_NAME} — FAQ`,
+            description: `Find clear answers about how ${COMPANY_NAME} helps you build a professional, job-ready CV in minutes.`,
             bg: "#0a2540",
             color: "#ffffff",
         },
@@ -26,44 +26,44 @@ const faqSchema: PageSchema = {
             type: "faq",
             items: [
                 {
-                    question: `What is ${COMPANY_NAME}?`,
-                    answer: `${COMPANY_NAME} is a CV builder that lets you instantly generate an ATS-friendly resume. You can also choose our optional Manager Review service, where HR experts refine your CV and send it within 24 hours.`,
+                    question: `What does ${COMPANY_NAME} do?`,
+                    answer: `${COMPANY_NAME} is an AI-powered platform for creating professional, ATS-friendly resumes in seconds. You can also choose the optional Manager Review — where certified HR experts enhance your CV and deliver it within 24 hours.`,
                 },
                 {
-                    question: "How long does it take to receive my resume?",
-                    answer: `If you use the instant builder, you can download your CV immediately. If you select the Manager Review option, your polished CV will be delivered within 24 hours.`,
+                    question: "How fast will I get my CV?",
+                    answer: `Instantly — if you use our automated builder. If you select the Manager Review upgrade, your refined and finalized version will be ready within one business day.`,
                 },
                 {
-                    question: "Who creates the resumes?",
-                    answer: `Instant CVs are generated automatically using our templates. Manager-reviewed CVs are crafted and refined by certified HR specialists and career consultants.`,
+                    question: "Who works on the resumes?",
+                    answer: `Instant resumes are generated automatically using optimized templates. Reviewed CVs are carefully edited by experienced HR professionals and career advisors.`,
                 },
                 {
-                    question: "Can I request revisions?",
-                    answer: `Yes. If you select the Manager Review option, you can request revisions to make sure your CV perfectly matches your career goals.`,
+                    question: "Can I ask for edits after delivery?",
+                    answer: `Yes, absolutely. The Manager Review option includes follow-up revisions to ensure your CV fully reflects your background and goals.`,
                 },
                 {
-                    question: "Will my resume be tailored to specific jobs?",
-                    answer: `Yes. The instant builder provides a general professional CV, while the Manager Review option ensures it’s tailored to your target role, industry, and career objectives.`,
+                    question: "Do you customize resumes for specific roles?",
+                    answer: `Yes. The instant version provides a strong general CV, while our reviewed CVs are fine-tuned for your target position, industry, and skill set.`,
                 },
                 {
-                    question: "Do you also design the resume layout?",
-                    answer: `Yes. All CVs use modern, professional layouts. Manager-reviewed resumes also get an additional polish to maximize visual impact.`,
+                    question: "Is the design also handled by you?",
+                    answer: `Yes. Every CV uses a modern and professional design. With the Manager Review, layouts are also refined for maximum readability and impact.`,
                 },
                 {
-                    question: "Is my data safe?",
-                    answer: `Absolutely. Your personal information is processed securely and never shared with third parties.`,
+                    question: "Is my personal information secure?",
+                    answer: `Completely. All data is processed with strict confidentiality and never shared outside our platform.`,
                 },
                 {
-                    question: "Can you help if I’m changing careers?",
-                    answer: `Of course. Our HR experts (through the Manager Review option) specialize in highlighting transferable skills for a smooth career transition.`,
+                    question: "Can you assist with career changes?",
+                    answer: `Definitely. Our HR experts know how to emphasize transferable skills to make your transition into a new field smooth and confident.`,
                 },
                 {
-                    question: "Do you offer cover letters too?",
-                    answer: `Yes. Along with resumes, we also create personalized cover letters that complement your CV.`,
+                    question: "Do you also write cover letters?",
+                    answer: `Yes. Alongside resumes, our team can create tailored cover letters designed to complement and strengthen your CV.`,
                 },
                 {
-                    question: "How can I contact support?",
-                    answer: `Our support team is always available at ${COMPANY_EMAIL}.`,
+                    question: "How can I reach your support team?",
+                    answer: `You can contact us anytime at ${COMPANY_EMAIL}. We're happy to help.`,
                 },
             ],
         },
@@ -71,3 +71,4 @@ const faqSchema: PageSchema = {
 };
 
 export default faqSchema;
+

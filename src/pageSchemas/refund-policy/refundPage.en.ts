@@ -10,132 +10,136 @@ import {
 const refundPolicySchema: PageSchema = {
     meta: {
         title: `Refund & Cancellation Policy – ${COMPANY_NAME}`,
-        description: `Refund & Cancellation Policy of ${COMPANY_NAME}: refunds for token packages, used and unused tokens, defective outputs, promotional credits, and cancellation rules.`,
+        description: `Learn how ${COMPANY_NAME} handles refunds and cancellations for token packages, used and unused credits, defective outputs, and promotional offers.`,
         keywords: [
             "refund policy",
-            "cancellation policy",
-            "refunds",
-            "tokens",
-            "defective CV",
-            "consumer rights"
+            "cancellation terms",
+            "refund conditions",
+            "unused tokens",
+            "defective resume",
+            "consumer rights",
         ],
         canonical: "/refund-policy",
         ogImage: {
             title: `${COMPANY_NAME} – Refund & Cancellation Policy`,
-            description: "Clear and transparent refund and cancellation conditions for CV services.",
+            description: "Clear and transparent refund rules for resume services.",
             bg: "#ffffff",
-            color: "#000000"
-        }
+            color: "#000000",
+        },
     },
     blocks: [
         {
             type: "text",
             title: "Refund & Cancellation Policy",
-            description: "Effective date: 10 September 2025"
+            description: "Effective from: 10 September 2025",
         },
         {
             type: "text",
-            title: "1. Customer Summary",
+            title: "1. Customer Overview",
             bullets: [
-                "Refunds are handled according to this Policy and applicable consumer law.",
-                "Standard refund processing time is 5–10 business days after approval; the actual posting time may vary depending on banks or payment providers.",
-                "Refunds will never exceed the amount you originally paid (minus any non-refundable payment processing fees).",
-                "Tokens already spent on Services (draft generation, export, AI improvement, or manager review) are generally non-refundable.",
-                "Token packages may be refunded only if completely unused; once tokens are deducted, refunds are not available except in cases of technical fault.",
-                "Promotional credits, discounts, or bonus tokens are normally non-refundable, unless required by law or explicitly stated otherwise.",
-                `Refund requests must be submitted by email to ${COMPANY_EMAIL}, including full order details.`,
-                "This Policy may be updated from time to time; significant changes will be communicated as described in Section 8.",
-                "By requesting immediate access to Services (e.g., downloading or generating a CV), you may lose your statutory cancellation right — see Section 4.6."
-            ]
+                "Refunds are issued according to this Policy and relevant consumer laws.",
+                "Once approved, refunds are usually processed within 5–10 business days. Bank or payment provider processing times may vary.",
+                "Refunds cannot exceed the amount originally paid (excluding non-refundable processing fees).",
+                "Tokens already used for Services such as generation, export, or review are typically non-refundable.",
+                "Unused token packages may qualify for a refund if no tokens were spent.",
+                "Bonus tokens, discounts, and promotional credits are generally non-refundable unless otherwise required by law.",
+                `To request a refund, please email ${COMPANY_EMAIL} with your order details.`,
+                "This Policy may be updated periodically. Significant changes will be communicated as outlined in Section 8.",
+                "By using Services immediately (e.g., generating or downloading a CV), you acknowledge that your statutory cancellation rights may no longer apply — see Section 4.6.",
+            ],
         },
         {
             type: "text",
-            title: "2. Scope and Legal Note",
-            description: `This Policy applies to refunds and cancellations related to CV/resume creation, export, AI-assisted improvement, and related services offered by ${COMPANY_LEGAL_NAME}. Nothing in this Policy affects your statutory rights (including those under the Consumer Contracts Regulations 2013 and the Consumer Rights Act 2015, where applicable).`
+            title: "2. Scope & Legal Disclaimer",
+            description: `This Policy governs all refunds and cancellations related to CV/resume generation, export, AI enhancement, and related features provided by ${COMPANY_LEGAL_NAME}. It does not restrict your legal rights under the Consumer Contracts Regulations 2013 or the Consumer Rights Act 2015 (where applicable).`,
         },
         {
             type: "text",
-            title: "3. Definitions",
+            title: "3. Key Definitions",
             bullets: [
-                "Order / Service Fee — the amount you paid for token packages.",
-                "Token Package — prepaid credits purchased to access Services.",
-                "Used Tokens — tokens deducted for generating drafts, exporting files, or using AI/manager support.",
-                "Unused Tokens — tokens still available in your account balance.",
-                "Promotional Credits — bonus tokens or discounts granted under promotions."
-            ]
+                "Order / Service Fee — the total payment made for token packages.",
+                "Token Package — prepaid credits granting access to Services.",
+                "Used Tokens — tokens deducted for generating drafts, downloads, or HR reviews.",
+                "Unused Tokens — credits remaining in your account.",
+                "Promotional Credits — complimentary tokens or discounts from special offers.",
+            ],
         },
         {
             type: "text",
-            title: "4. Core Refund Rules",
+            title: "4. Refund Conditions",
             description:
-                "4.1 Refund cap. Refunds will not exceed the amount actually paid (less any non-refundable payment provider fees). Refunds are issued in the original payment currency where possible.\n\n" +
-                "4.2 Used tokens. Tokens already used for Services are not eligible for refund, except where the Service was materially defective and could not be remedied.\n\n" +
-                "4.3 Cancellation before use. If you cancel before spending any tokens, the unused balance may be refunded, minus any reasonable costs incurred.\n\n" +
-                "4.4 Defective or non-conforming output. If a generated CV/resume is materially defective, we will first attempt to fix it through revisions or regeneration. If the issue cannot be resolved within a reasonable timeframe, a partial or full refund may be issued.\n\n" +
-                "4.5 Promotions. Promotional credits, bonus tokens, or discounts are normally non-refundable unless required by law.\n\n" +
-                "4.6 Immediate use / loss of cancellation right. If you request immediate access to Services and confirm you waive the statutory cancellation right (for example, by generating or downloading a CV), that right may no longer apply.\n\n" +
-                "4.7 Custom services. For services involving a personal manager, once the review has started, refunds are not available unless otherwise agreed in writing."
+                "4.1 Refund limit — Refunds cannot exceed the amount originally paid (less payment provider fees). Refunds are made in the same currency when possible.\n\n" +
+                "4.2 Used tokens — Tokens spent on Services are non-refundable unless the Service output was faulty and could not be corrected.\n\n" +
+                "4.3 Cancellation before use — If you cancel before using any tokens, your unused balance may be refunded after deducting reasonable administrative costs.\n\n" +
+                "4.4 Defective outputs — If a generated CV/resume contains significant errors, we will first attempt to fix or regenerate it. If the issue persists, a partial or full refund may be provided.\n\n" +
+                "4.5 Promotional items — Free credits or bonus tokens are typically non-refundable unless required by applicable law.\n\n" +
+                "4.6 Immediate access waiver — Once you request instant use of Services (e.g., by generating or downloading a file), your right to cancel may no longer apply.\n\n" +
+                "4.7 Custom HR services — For personalized HR or manager reviews, refunds are unavailable once work has begun unless agreed otherwise in writing.",
         },
         {
             type: "text",
             title: "5. How to Request a Refund",
-            description: `Send an email to ${COMPANY_EMAIL} including:`,
+            description: `Please send your request via email to ${COMPANY_EMAIL} and include:`,
             bullets: [
                 "Your order reference number.",
-                "The account email used for purchase.",
+                "The account email used for the purchase.",
                 "Whether the request concerns unused tokens, cancellation, or defective outputs.",
-                "For defective files: a description of the issue and supporting evidence (screenshots, filenames, timestamps).",
-                "Your preferred refund method (normally the original payment method).",
-                "We will: acknowledge your request within 5 business days, investigate and request additional details if needed, provide a decision and, if approved, issue the refund within 5–10 business days of approval (posting time depends on your payment provider)."
-            ]
+                "If defective: a short description of the issue and supporting evidence (screenshots, filenames, timestamps).",
+                "Preferred refund method (typically the original payment method).",
+                "We will acknowledge your request within 5 business days, investigate if needed, and issue a decision. Approved refunds are processed within 5–10 business days after confirmation (bank posting times may vary).",
+            ],
         },
         {
             type: "text",
-            title: "6. Investigation, Evidence and Decisions",
+            title: "6. Review & Decision Process",
             description:
-                "6.1 We review order history, payment logs, token usage, and file generation records.\n\n" +
-                "6.2 Approved refunds are normally returned to the original payment method; if not possible, an alternative (such as bank transfer) may be offered.\n\n" +
-                "6.3 If your claim is refused, we will explain the reasons and outline possible next steps."
+                "6.1 We examine payment records, token usage, and file generation logs to verify claims.\n\n" +
+                "6.2 Approved refunds are returned to the original payment method. If unavailable, we may propose an alternative (e.g., bank transfer).\n\n" +
+                "6.3 If a refund request is denied, you will receive a clear explanation and details on how to appeal.",
         },
         {
             type: "text",
-            title: "7. Chargebacks, Fraud and Abuse",
-            description: "If you initiate a chargeback while a refund request is pending, the case will be treated as a dispute. We will provide full evidence (order records, confirmations, timestamps, downloads) to the payment provider. Refunds may be refused and accounts suspended in cases of fraud, abuse, or repeated unwarranted chargebacks."
+            title: "7. Chargebacks, Fraud & Misuse",
+            description:
+                "If a chargeback is initiated while a refund request is under review, it will be treated as a dispute. ${COMPANY_NAME} will provide full transaction evidence to the payment processor. Repeated or fraudulent chargebacks may lead to account suspension or refusal of future refunds.",
         },
         {
             type: "text",
-            title: "8. Changes to this Policy",
-            description: "We may update this Policy periodically. Material changes will be announced on our website or sent via email. Updates apply only to future transactions and do not affect completed purchases."
+            title: "8. Policy Updates",
+            description:
+                "We may revise this Policy periodically. Major changes will be announced on our website or via email. Updates apply prospectively and do not affect previous transactions.",
         },
         {
             type: "text",
-            title: "9. Record Retention",
-            description: "We retain necessary records (including order details, payment logs, and token usage) for at least 24 months, and up to 6 years in cases of disputes or corporate requirements, in line with our Privacy Policy and applicable law."
+            title: "9. Data & Record Retention",
+            description:
+                "We retain order, payment, and token usage records for at least 24 months, or up to 6 years in cases involving disputes, in line with our Privacy Policy and legal obligations.",
         },
         {
             type: "text",
-            title: "10. Escalation and Disputes",
-            description: `If you disagree with our decision, you may appeal by sending full details to ${COMPANY_EMAIL}. Appeals are normally reviewed within 10 business days. This does not affect your statutory right to seek dispute resolution or legal remedies.`
+            title: "10. Disputes & Escalation",
+            description: `If you disagree with our decision, please email your full appeal to ${COMPANY_EMAIL}. Appeals are typically reviewed within 10 business days. This does not affect your legal rights to pursue external resolution or other remedies.`,
         },
         {
             type: "text",
-            title: "11. Examples",
+            title: "11. Practical Examples",
             bullets: [
-                "Unused tokens: You purchased £20 = 2000 tokens, used 300 tokens → 1700 tokens remain. Refund possible for 1700 tokens (minus fees).",
-                "Used tokens: If tokens were spent to generate/download a CV, a refund is only possible if the file was materially defective.",
-                "Promotional tokens: 100 bonus tokens received in a promotion → non-refundable."
-            ]
+                "Unused tokens — Purchase £20 = 2000 tokens, use 300 → 1700 remain → refund possible for 1700 tokens (minus processing fees).",
+                "Used tokens — Refunds only possible if generated output was materially defective.",
+                "Promotional tokens — Free or bonus credits cannot be refunded.",
+            ],
         },
         {
             type: "text",
-            title: "12. Contact Details",
+            title: "12. Contact Information",
             bullets: [
                 `📧 ${COMPANY_EMAIL}`,
                 `📍 ${COMPANY_LEGAL_NAME}`,
-                COMPANY_ADDRESS ?? "Address not specified"
-            ]
-        }
-    ]
+                COMPANY_ADDRESS ?? "Address not specified",
+            ],
+        },
+    ],
 };
 
 export default refundPolicySchema;
+

@@ -1,25 +1,23 @@
-import {PageSchema} from "@/components/constructor/page-render/types";
+import { PageSchema } from "@/components/constructor/page-render/types";
 import { COMPANY_NAME } from "@/resources/constants";
 
 const schema: PageSchema = {
     meta: {
         title: `About Us — ${COMPANY_NAME}`,
-        description:
-            `${COMPANY_NAME} combines instant AI-generated resumes with professional HR review. Create your CV instantly or choose the optional expert service for a polished version within 24 hours.`,
+        description: `${COMPANY_NAME} merges instant AI-powered CV creation with expert HR review. Craft your resume in seconds or opt for a professional touch-up within 24 hours.`,
         keywords: [
             `${COMPANY_NAME}`,
-            "create resume",
-            "online resume",
-            "CV templates",
-            "resume builder",
-            "professional resume",
-            "AI CV",
+            "AI resume builder",
+            "create professional CV",
+            "resume generator",
+            "career tools",
+            "ATS-friendly resume",
             "HR review",
         ],
         canonical: "/about-us",
         ogImage: {
             title: `${COMPANY_NAME}`,
-            description: "Instant CVs + optional expert review in 24h",
+            description: "AI resumes + expert review within 24h",
             bg: "#0a2540",
             color: "#ffffff",
         },
@@ -30,8 +28,8 @@ const schema: PageSchema = {
             component: "HeroSection",
             title: `About ${COMPANY_NAME}`,
             highlight: "Our Mission & Vision",
-            description: `At ${COMPANY_NAME}, we believe that every professional deserves a fair chance to showcase their skills.  
-   Our platform helps you instantly generate ATS-friendly CVs, while our HR experts ensure your application stands out with personalized reviews.`,
+            description: `At ${COMPANY_NAME}, we aim to make professional resumes accessible to everyone.  
+Our technology instantly builds modern, ATS-friendly CVs, and our HR experts refine them to perfection — so every candidate can stand out.`,
             image: "image2",
         },
 
@@ -47,11 +45,11 @@ const schema: PageSchema = {
                 type: "custom",
                 component: "InfoBlock",
                 title: `Why ${COMPANY_NAME}?`,
-                description: "We provide flexibility: instant results when you need speed, or expert refinement when you want the highest quality.",
+                description: "We blend automation and expertise — offering speed when you need it, and precision when it counts most.",
                 bullets: [
-                    "A tool for instantly creating resumes based on pre-designed templates",
-                    "Optional HR manager review in 24h",
-                    "Resumes tailored to your industry",
+                    "AI-powered resume creation in seconds",
+                    "Optional HR review completed within 24 hours",
+                    "Tailored CVs for your specific career field",
                 ],
             },
         },
@@ -63,10 +61,10 @@ const schema: PageSchema = {
                 type: "custom",
                 component: "StoryTimeline",
                 steps: [
-                    {year: "2018", title: "Founded", description: "Founded by HR experts"},
-                    {year: "2019", title: "CV Generator", description: "Launched instant CV generator"},
-                    {year: "2021", title: "HR Review", description: "Added HR review service"},
-                    {year: "2023", title: "Worldwide", description: "100k+ CVs worldwide"},
+                    { year: "2018", title: "Founded", description: "Created by HR professionals" },
+                    { year: "2019", title: "Launched CV Generator", description: "Introduced instant AI resume builder" },
+                    { year: "2021", title: "Expanded Services", description: "Added personalized HR review" },
+                    { year: "2023", title: "Global Reach", description: "100K+ resumes built across the world" },
                 ],
             },
             right: {
@@ -74,21 +72,16 @@ const schema: PageSchema = {
                 component: "InfoBlock",
                 title: "Our Story",
                 image: "image2",
-                description: `${COMPANY_NAME} was born from a simple but powerful idea: 
-Not everyone has the time, resources, or design skills to craft a professional CV.  
-Many job seekers lose opportunities not because they lack talent, but because their resumes fail 
-to pass automated filters or attract recruiters' attention.  
+                description: `${COMPANY_NAME} started with one goal:  
+to simplify the resume creation process for job seekers everywhere.  
+We realized that many talented people were missing opportunities due to poor formatting or non-ATS-friendly resumes.  
 
-To solve this, we combined automation with human expertise — creating a platform that delivers instant, 
-ATS-ready CVs while also offering optional personalized reviews from experienced HR professionals.  
-
-From day one, our mission has been to empower people from all industries and backgrounds to showcase their strengths 
-and land opportunities they truly deserve.`,
+By combining AI speed with human precision, we built a platform that empowers everyone to present their skills confidently and get noticed.`,
                 bullets: [
-                    "Founded by HR experts with 10+ years of experience in recruitment and career consulting",
-                    "Built to bridge the gap between AI automation and human insight",
-                    "Driven by a mission to help job seekers worldwide at every stage of their career",
-                    "Trusted by thousands of professionals globally across tech, healthcare, finance, and more",
+                    "Founded by seasoned HR and tech experts",
+                    "Built to close the gap between automation and human insight",
+                    "Focused on helping professionals worldwide highlight their strengths",
+                    "Trusted by thousands across industries — tech, healthcare, finance, and more",
                 ],
             },
         },
@@ -100,11 +93,12 @@ and land opportunities they truly deserve.`,
                 type: "custom",
                 component: "InfoBlock",
                 title: "Our Vision",
-                description: `We believe professional career tools should be accessible to everyone. Whether you need a quick CV today or a polished expert-reviewed version, ${COMPANY_NAME} gives you both options.`,
+                description: `We believe professional growth tools should be fast, accessible, and reliable.  
+Whether you’re applying today or refining for your dream role, ${COMPANY_NAME} helps you present your best self.`,
                 bullets: [
-                    "Accessible resumes for all candidates",
-                    "Balance between speed and quality",
-                    "Empowering people to land their dream jobs",
+                    "Equal access to professional resumes for everyone",
+                    "Balance between automation and expert refinement",
+                    "Empowering candidates to achieve career success",
                 ],
             },
             right: {
@@ -120,21 +114,22 @@ and land opportunities they truly deserve.`,
             type: "custom",
             component: "ValuesIcons",
             values: [
-                {icon: "⚡", title: "Instant Access", text: "Generate a CV immediately when speed matters most"},
-                {icon: "👩‍💼", title: "Expert Touch", text: "Optional HR manager review with 24h delivery"},
-                {icon: "📑", title: "ATS-Optimized", text: "Every CV is recruiter-friendly and passes ATS scans"},
-                {icon: "🤝", title: "Trust", text: "Thousands of job seekers already rely on us"},
+                { icon: "⚡", title: "Instant Access", text: "Generate a CV immediately when speed matters most" },
+                { icon: "👩‍💼", title: "Expert Touch", text: "Optional HR manager review with 24h delivery" },
+                { icon: "📑", title: "ATS-Optimized", text: "Every CV is recruiter-friendly and passes ATS scans" },
+                { icon: "🤝", title: "Trust", text: "Thousands of job seekers already rely on us" },
             ],
         },
 
-        // 🔹 What Sets Us Apart
+        // 🔹 What Makes Us Different
         {
             type: "section",
             align: "center",
             left: {
                 type: "text",
-                title: "What Sets Us Apart",
-                description: `Unlike pure automation tools, ${COMPANY_NAME} gives you a choice. Get an AI-generated CV instantly, or opt for a manager-reviewed version that combines automation with human expertise.`,
+                title: "What Makes Us Different",
+                description: `${COMPANY_NAME} bridges the gap between technology and expertise.  
+Choose instant AI generation or let a human professional polish your CV for maximum impact.`,
                 centerTitle: true,
                 centerDescription: true,
             },
@@ -145,12 +140,12 @@ and land opportunities they truly deserve.`,
             type: "custom",
             component: "TeamGrid",
             title: "Meet Our Team",
-            description: `Behind ${COMPANY_NAME} is a passionate team of HR experts and developers who combine technology with human insight.`,
+            description: `Behind ${COMPANY_NAME} is a dedicated team of developers, HR consultants, and designers working together to redefine modern job application tools.`,
             members: [
-                { name: "Anna Kowalski", role: "HR Manager", bio: "10+ years in recruitment & career coaching.", image: "team1" },
-                { name: "John Doe", role: "Lead Developer", bio: "Building scalable resume tech solutions.", image: "team2" },
-                { name: "Maria Lopez", role: "Designer", bio: "Crafting clean, professional CV templates.", image: "team3" }
-            ]
+                { name: "Anna Kowalski", role: "HR Manager", bio: "Over a decade in recruitment and career guidance.", image: "team1" },
+                { name: "John Doe", role: "Lead Developer", bio: "Building the future of automated resume systems.", image: "team2" },
+                { name: "Maria Lopez", role: "Designer", bio: "Designing clean, professional, and modern templates.", image: "team3" },
+            ],
         },
 
         // 🔹 How It Works
@@ -158,10 +153,10 @@ and land opportunities they truly deserve.`,
             type: "custom",
             component: "Timeline",
             steps: [
-                { title: "1. Provide Your Details", description: "Fill out the form with your work experience, education, and skills." },
-                { title: "2. Choose Your Option", description: "Download your instant CV — or select manager review for expert refinement." },
-                { title: "3. Expert Processing (Optional)", description: "Our HR consultants review and polish your CV." },
-                { title: "4. Delivery", description: "Instant download available, or polished PDF sent within 24 hours." },
+                { title: "1. Enter Your Details", description: "Add your experience, education, and skills into our smart form." },
+                { title: "2. Choose Your Option", description: "Download your instant AI CV or request expert review." },
+                { title: "3. HR Review (Optional)", description: "Our experts enhance structure, clarity, and tone for recruiters." },
+                { title: "4. Receive Your CV", description: "Get your instant file immediately or a refined PDF within 24 hours." },
             ],
         },
 
@@ -169,12 +164,12 @@ and land opportunities they truly deserve.`,
         {
             type: "faq",
             items: [
-                { question: "How fast can I get my CV?", answer: "You can download your CV instantly. If you choose expert review, it’s ready within 24 hours." },
-                { question: "Is my CV ATS-friendly?", answer: "Yes, all generated CVs are optimized to pass ATS (Applicant Tracking System) scans." },
-                { question: "Can I edit my CV after generating it?", answer: "Absolutely. You can edit, update, and regenerate your CV anytime." },
-                { question: "Do you offer refunds?", answer: "Yes, we have a satisfaction guarantee. If you’re not happy, contact support for assistance." }
-            ]
-        }
+                { question: "How fast will I get my CV?", answer: "Instantly for AI generation, or within 24 hours for expert review." },
+                { question: "Is my CV compatible with ATS?", answer: "Yes, all templates are optimized to pass standard ATS scans." },
+                { question: "Can I update my CV later?", answer: "Of course! You can edit and re-download anytime." },
+                { question: "Do you provide refunds?", answer: "Yes. We offer a satisfaction guarantee — contact support if needed." },
+            ],
+        },
     ],
 };
 

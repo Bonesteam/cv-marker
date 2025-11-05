@@ -211,13 +211,13 @@ const schema: PageSchema = {
                 {
                     name: "Emma Johansson",
                     role: "HR Consultant",
-                    image: "review2",
+                    image: "review3",
                     text: "The manager review really elevated my CV. It finally looks like me — just more professional.",
                 },
                 {
                     name: "Marco Rivera",
                     role: "Business Analyst",
-                    image: "review3",
+                    image: "review2",
                     text: "Loved how fast and easy it was. Totally worth upgrading to Premium.",
                 },
             ],

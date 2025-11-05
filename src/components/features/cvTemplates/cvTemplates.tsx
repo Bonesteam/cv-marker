@@ -17,7 +17,10 @@ const renderParagraphs = (text?: string, style?: any) =>
 // 🎨 Динамічний набір тем
 const getTheme = (o: CVOrderType) => {
     const primary = o.themeColor && o.themeColor !== "Default" ? o.themeColor : "#2563EB";
-    const font = o.fontStyle && o.fontStyle !== "Default" ? o.fontStyle : "Helvetica";
+    // Only allow safe PDF fonts; map unknown selections to Helvetica
+    const requestedFont = o.fontStyle && o.fontStyle !== "Default" ? o.fontStyle : "Helvetica";
+    const safeFonts = ["Helvetica", "Times-Roman", "Courier"];
+    const font = safeFonts.includes(requestedFont) ? requestedFont : "Helvetica";
     const accent =
         primary === "#DC2626"
             ? "#FEE2E2"
@@ -229,7 +232,9 @@ export const ModernCV = (o: CVOrderType) => {
             marginTop: 18,
             marginBottom: 8,
             color: theme.primary,
-            borderBottom: `1.5pt solid ${theme.primary}`,
+            borderBottomWidth: 1.5,
+            borderBottomColor: theme.primary,
+            borderBottomStyle: "solid",
             paddingBottom: 4,
             textTransform: "uppercase",
         },
@@ -442,7 +447,9 @@ export const ManagerReviewedCV = (o: CVOrderType) => {
             fontSize: 11.5,
             lineHeight: 1.6,
             flexDirection: "row",
-            border: "1pt solid #E5E7EB",
+            borderWidth: 1,
+            borderColor: "#E5E7EB",
+            borderStyle: "solid",
             borderRadius: 6,
         },
 
