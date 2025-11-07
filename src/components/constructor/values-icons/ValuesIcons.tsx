@@ -1,11 +1,10 @@
 "use client";
 import React from "react";
-import Grid from "../grid/Grid";
-import styles from "./ValuesIcons.module.scss";
 import { motion } from "framer-motion";
+import styles from "./ValuesIcons.module.scss";
 
 interface ValueItem {
-  icon: string;
+  icon: React.ReactNode;
   title: string;
   description?: string;
   text?: string;
@@ -18,61 +17,60 @@ interface Props {
 }
 
 const cardVariants = {
-  hidden: { opacity: 0, y: 50, scale: 0.9 },
-  visible: {
+  hidden: { opacity: 0, y: 40, scale: 0.95 },
+  visible: (i: number) => ({
     opacity: 1,
     y: 0,
     scale: 1,
-    transition: { type: "spring", stiffness: 100, damping: 15 },
-  },
-};
-
-const iconVariants = {
-  hidden: { scale: 0, rotate: -180 },
-  visible: {
-    scale: 1,
-    rotate: 0,
-    transition: { type: "spring", stiffness: 200, damping: 20 },
-  },
+    transition: {
+      delay: i * 0.15,
+      duration: 0.6,
+      ease: [0.16, 1, 0.3, 1],
+    },
+  }),
 };
 
 const ValuesIcons: React.FC<Props> = ({ title, description, values }) => {
   return (
     <section className={styles.section}>
-      <motion.div
-        className={styles.head}
-        initial={{ opacity: 0, y: -30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.6 }}
-      >
-        {title && <h2 className={styles.sectionTitle}>{title}</h2>}
-        {description && <p className={styles.sectionDesc}>{description}</p>}
-      </motion.div>
+      {(title || description) && (
+        <motion.div
+          className={styles.head}
+          initial={{ opacity: 0, y: -30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+        >
+          {title && <h2 className={styles.sectionTitle}>{title}</h2>}
+          {description && <p className={styles.sectionDesc}>{description}</p>}
+        </motion.div>
+      )}
 
-      <Grid columns={values.length > 3 ? 4 : values.length} gap="2rem">
+      <div className={styles.scrollArea}>
         {values.map((v, i) => (
           <motion.div
             key={i}
-            className={styles.valueCard}
+            className={styles.card}
+            custom={i}
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, amount: 0.3 }}
             variants={cardVariants}
-            transition={{ delay: i * 0.15 }}
+            whileHover={{ rotateX: 3, rotateY: -3, scale: 1.02 }}
+            transition={{ type: "spring", stiffness: 150, damping: 12 }}
           >
             <motion.div
-              className={styles.icon}
-              variants={iconVariants}
-              transition={{ delay: i * 0.15 + 0.2 }}
+              className={styles.iconWrap}
+              whileHover={{ scale: 1.1 }}
+              transition={{ type: "spring", stiffness: 300 }}
             >
-              {v.icon}
+              <div className={styles.icon}>{v.icon}</div>
             </motion.div>
             <h3>{v.title}</h3>
             <p>{v.description ?? v.text}</p>
           </motion.div>
         ))}
-      </Grid>
+      </div>
     </section>
   );
 };

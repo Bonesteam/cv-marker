@@ -9,7 +9,7 @@ import { footerContent } from "@/resources/content";
 import { footerStyles } from "@/resources/styles-config";
 import {SmartLinkProps} from "@/types/smart-link";
 import {media} from "@/resources/media";
-import {FaApplePay, FaCcAmex, FaCcMastercard, FaCcVisa, FaGooglePay} from "react-icons/fa";
+import {FaCcMastercard, FaCcVisa} from "react-icons/fa";
 
 const SmartLink: React.FC<SmartLinkProps> = ({
                                                  href,
@@ -54,15 +54,12 @@ const Footer: React.FC = () => {
             </address>
         ) : null;
 
-    const PaymentMethods = () => (
+    const PaymentMethods = ({ withTitle = true }: { withTitle?: boolean }) => (
         <div className={styles["footer__payments"]}>
-            <div className={styles["footer__column-title"]}>Payment Methods</div>
+            {withTitle && <div className={styles["footer__column-title"]}>Payment Methods</div>}
             <div className={styles.paymentsContent}>
                 <FaCcVisa className={styles.paymentIcon} />
                 <FaCcMastercard className={styles.paymentIcon} />
-                <FaCcAmex className={styles.paymentIcon} />
-                <FaGooglePay className={styles.paymentIcon} />
-                <FaApplePay className={styles.paymentIcon} />
             </div>
         </div>
     );
@@ -244,7 +241,6 @@ const Footer: React.FC = () => {
                                 <LegalBlock />
                             </div>
                         )}
-                        <PaymentMethods />
                     </div>
                 </div>
             )}
@@ -286,9 +282,6 @@ const Footer: React.FC = () => {
                             <div className={styles.paymentsContent}>
                                 <FaCcVisa className={styles.paymentIcon} />
                                 <FaCcMastercard className={styles.paymentIcon} />
-                                <FaCcAmex className={styles.paymentIcon} />
-                                <FaGooglePay className={styles.paymentIcon} />
-                                <FaApplePay className={styles.paymentIcon} />
                             </div>
                         </div>
                     </div>
@@ -308,6 +301,12 @@ const Footer: React.FC = () => {
 
 
 
+
+            {/* Payment logos in the bottom-right (Visa + MasterCard only) */}
+            <div className={styles["footer__payments-bottom"]} aria-hidden>
+                <FaCcVisa className={styles.paymentIcon} />
+                <FaCcMastercard className={styles.paymentIcon} />
+            </div>
 
             <div className={styles["footer__rights"]}>
                 © {new Date().getFullYear()} All rights reserved.

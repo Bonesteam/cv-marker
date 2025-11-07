@@ -33,7 +33,7 @@ const schema: PageSchema = {
                 `Fill in your details and get an ATS-ready CV instantly.  
                  Or choose our Manager Review option and receive a perfected CV crafted by our team within 24 hours.`,
             primaryCta: {text: "Create My CV Now", link: "/get-started"},
-            secondaryCta: {text: "See Templates", link: "/templates"},
+           // secondaryCta: {text: "See Templates", link: "/templates"},
             image: "image1",
         },
 

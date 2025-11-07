@@ -3,15 +3,20 @@
   top: 0;
   z-index: 100;
   width: 100%;
-  background-color: var(--quaternary-color);
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
-  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  background-color: transparent; /* start transparent for modern look */
+  box-shadow: none;
+  transition: background-color 0.28s ease, box-shadow 0.28s ease, transform 0.28s ease;
+  will-change: transform;
+
+  /* subtle glass effect by default */
+  backdrop-filter: blur(0px);
 }
 
 .scrolled {
-  background-color: rgba(255, 255, 255, 0.95);
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
-  backdrop-filter: blur(4px);
+  background-color: rgba(255, 255, 255, 0.98);
+  box-shadow: 0 6px 18px rgba(13, 38, 59, 0.06);
+  backdrop-filter: blur(6px);
+  transform: translateY(0);
 }
 
 .headerInner {
@@ -28,30 +33,30 @@
   justify-self: start;
 
   img {
-    height: 60px;
+    height: 56px;
     object-fit: contain;
   }
 }
-
 .nav {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 32px;
+  gap: 24px;
 }
-
 .link {
-  text-decoration: none; /* прибрано лінії */
+  text-decoration: none; /* remove underline */
   font-weight: 600;
   font-size: 15px;
-  color: var(--primary-color);
-  padding: 6px 10px;
-  border-radius: 6px;
-  transition: color 0.25s ease, background-color 0.25s ease;
+  color: var(--text-primary);
+  padding: 8px 14px;
+  border-radius: 9999px; /* pill */
+  transition: color 0.25s ease, background-color 0.2s ease, transform 0.12s ease;
+  background: transparent;
 
   &:hover {
-    color: var(--text-accent);
-    background-color: rgba(0, 0, 0, 0.05);
+    color: var(--text-inverse);
+    background-color: var(--primary-color);
+    transform: translateY(-2px);
   }
 }
 
@@ -59,7 +64,7 @@
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  gap: 20px;
+  gap: 18px;
 }
 
 .actionsNav {
@@ -72,46 +77,39 @@
 .authButtons {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
 }
 
 .signInBtn {
-  background: #f5f5f5;
-  border: 1px solid #d1d1d1;
-  color: #222;
-  font-weight: 600;
-  padding: 8px 18px;
-  border-radius: 8px;
+  background: transparent;
+  border: 1px solid var(--primary-color);
+  color: var(--primary-color);
+  font-weight: 700;
+  padding: 8px 16px;
+  border-radius: 9999px;
   cursor: pointer;
-  transition: all 0.25s ease;
+  transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.12s ease;
 
   &:hover {
-    background: #e5e5e5;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  }
-
-  &:active {
-    background: #d9d9d9;
+    background: rgba(59,130,246,0.08); /* subtle tinted bg */
+    transform: translateY(-2px);
   }
 }
 
 .signUpBtn {
-  background: #222;
+  background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
   color: #fff;
-  font-weight: 600;
-  padding: 8px 20px;
+  font-weight: 700;
+  padding: 8px 18px;
   border: none;
-  border-radius: 8px;
+  border-radius: 9999px;
   cursor: pointer;
-  transition: all 0.25s ease;
+  box-shadow: 0 6px 18px rgba(59,130,246,0.12);
+  transition: transform 0.12s ease, box-shadow 0.12s ease, opacity 0.12s ease;
 
   &:hover {
-    background: #333;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
-  }
-
-  &:active {
-    background: #111;
+    transform: translateY(-3px);
+    opacity: 0.98;
   }
 }
 
@@ -121,23 +119,25 @@
 
   .currencySelect {
     appearance: none;
-    background: var(--quaternary-color);
-    border: 1.5px solid var(--primary-color);
-    color: var(--primary-color);
+    background: transparent;
+    border: 1px solid rgba(16,24,40,0.06);
+    color: var(--text-primary);
     padding: 8px 36px 8px 14px;
-    border-radius: 8px;
+    border-radius: 10px;
     cursor: pointer;
     font-weight: 600;
     font-size: 0.95rem;
-    transition: all 0.25s ease;
+    transition: box-shadow 0.18s ease, transform 0.12s ease;
 
     &:hover {
-      background-color: rgba(0, 0, 0, 0.05);
+      box-shadow: 0 6px 18px rgba(2,6,23,0.06);
+      transform: translateY(-1px);
     }
 
     &:focus {
-      border-color: var(--accent-color);
-      box-shadow: 0 0 0 3px rgba(0, 140, 255, 0.15);
+      border-color: var(--primary-color);
+      box-shadow: 0 8px 24px rgba(59,130,246,0.08);
+      outline: none;
     }
   }
 
@@ -148,7 +148,7 @@
     top: 50%;
     transform: translateY(-50%);
     font-size: 0.8rem;
-    color: var(--primary-color);
+    color: var(--text-primary);
     pointer-events: none;
   }
 }
@@ -160,7 +160,7 @@
   border: none;
   font-size: 26px;
   cursor: pointer;
-  color: var(--primary-color);
+  color: var(--text-primary);
 }
 
 @media (max-width: 1024px) {

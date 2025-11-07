@@ -33,6 +33,9 @@
     --border-color: #E0E0DC;         
     --shadow-color: rgba(0, 0, 0, 0.06);
 
+    /* Accent */
+    --accent-color: #3B82F6;
+
     --font-family: 'Inter', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
 }
 

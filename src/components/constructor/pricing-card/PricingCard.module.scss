@@ -1,126 +1,290 @@
+// Pricing Card - Premium CV Paper Style
+
 .card {
-  background: #ffffff;
-  border: 1px solid #e4e4e4;
-  border-radius: 1rem;
-  padding: 2rem 1.75rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  text-align: center;
+  position: relative;
+  background: #fafafa;
+  border: 2px solid #e8e8e8;
+  padding: 48px 36px 36px;
+  transition: all 0.4s ease;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  transition: all 0.35s ease;
-  position: relative;
-  overflow: hidden;
+  
+  // Diagonal corner accent
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 0 60px 60px 0;
+    border-color: transparent #667eea transparent transparent;
+    transition: border-width 0.3s ease;
+  }
+
+  // Subtle inner shadow for depth
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    pointer-events: none;
+  }
 
   &:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+    transform: translateY(-8px);
+    border-color: #d0d0d0;
+    box-shadow: 
+      0 20px 40px rgba(0, 0, 0, 0.1),
+      inset 0 1px 0 rgba(255, 255, 255, 0.9);
+    
+    &::before {
+      border-width: 0 80px 80px 0;
+    }
   }
+}
 
-  &.starter {
-    border-color: #d9e2ec;
-  }
+.badgeTop {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background: #1a1a1a;
+  color: #ffffff;
+  padding: 4px 14px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  clip-path: polygon(0 0, 100% 0, 95% 100%, 0% 100%);
+  z-index: 1;
+}
 
-  &.pro {
-    border-color: #cbd5e0;
-  }
-
-  &.premium {
-    border-color: #b6c2d1;
-  }
-
-  &.custom {
-    border-color: #bdbdbd;
-  }
+.badgeBottom {
+  align-self: flex-start;
+  margin-top: auto;
+  padding-top: 16px;
+  border-top: 2px solid #e0e0e0;
+  color: #666;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  width: 100%;
+  text-align: center;
 }
 
 .title {
-  font-size: 1.4rem;
-  font-weight: 700;
+  font-size: 20px;
+  font-weight: 800;
   color: #1a1a1a;
-  margin-bottom: 0.5rem;
+  margin: 0 0 8px 0;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  border-bottom: 3px solid #1a1a1a;
+  padding-bottom: 12px;
+  display: inline-block;
 }
 
 .price {
-  font-size: 1.75rem;
-  font-weight: 700;
-  color: #222;
-  margin-bottom: 1rem;
+  font-size: 48px;
+  font-weight: 300;
+  color: #1a1a1a;
+  margin: 24px 0 8px 0;
+  line-height: 1;
+  font-family: 'Georgia', serif;
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
 
-  .tokens {
-    font-size: 0.9rem;
-    font-weight: 500;
-    color: #777;
-  }
+.tokens {
+  font-size: 14px;
+  font-weight: 600;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+.customInput {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px;
+  margin: 24px 0 16px 0;
+  padding: 16px;
+  background: white;
+  border: 2px solid #e0e0e0;
 }
 
 .dynamicPrice {
-  font-size: 1rem;
-  color: #333;
-  margin-bottom: 0.75rem;
+  font-size: 16px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0 0 16px 0;
+  padding: 16px;
+  background: white;
+  border-left: 6px solid #1a1a1a;
+  font-family: monospace;
+  letter-spacing: 0.5px;
 }
 
 .description {
-  font-size: 1rem;
-  color: #444;
-  margin-bottom: 1.25rem;
-  line-height: 1.6;
-  text-align: left;
+  font-size: 14px;
+  color: #555;
+  margin: 16px 0 32px 0;
+  line-height: 1.8;
+  font-style: italic;
+  border-left: 3px solid #d0d0d0;
+  padding-left: 16px;
 }
 
 .features {
   list-style: none;
   padding: 0;
-  margin: 0 0 1.5rem 0;
-
+  margin: 0 0 32px 0;
+  
   li {
-    font-size: 0.95rem;
+    position: relative;
+    padding: 16px 0 16px 32px;
+    font-size: 13px;
     color: #333;
-    padding: 0.5rem 0;
-    border-bottom: 1px dashed #eaeaea;
-    transition: color 0.2s ease;
-
-    &:last-child {
-      border-bottom: none;
-    }
-
-    &:hover {
-      color: #000;
+    line-height: 1.6;
+    font-weight: 500;
+    background: 
+      linear-gradient(to right, #f0f0f0 0%, transparent 100%);
+    margin-bottom: 8px;
+    clip-path: polygon(0 0, 98% 0, 100% 100%, 0% 100%);
+    
+    &::before {
+      content: '▸';
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #1a1a1a;
+      font-size: 16px;
+      font-weight: 900;
     }
   }
 }
 
-.badgeTop,
-.badgeBottom {
-  position: absolute;
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: #555;
-  background: #f3f3f3;
-  border-radius: 0.5rem;
-  padding: 0.3rem 0.7rem;
-  letter-spacing: 0.3px;
+// Starter variant
+.starter {
+  
+  &::before {
+    border-color: transparent #10b981 transparent transparent;
+  }
+  
+  .title {
+    border-bottom-color: #10b981;
+  }
+  
+  .badgeTop {
+    background: #10b981;
+  }
+  
+  .dynamicPrice {
+    border-left-color: #10b981;
+  }
 }
 
-.badgeTop {
-  top: 1rem;
-  right: 1rem;
+// Pro variant
+.pro {
+  
+  &::before {
+    border-color: transparent #3b82f6 transparent transparent;
+  }
+  
+  .title {
+    border-bottom-color: #3b82f6;
+  }
+  
+  .badgeTop {
+    background: #3b82f6;
+  }
+  
+  .dynamicPrice {
+    border-left-color: #3b82f6;
+  }
 }
 
-.badgeBottom {
-  bottom: 1rem;
-  left: 50%;
-  transform: translateX(-50%);
-  background: #f9f9f9;
+// Premium variant
+.premium {
+  background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+  border-color: #fbbf24;
+  
+  &::before {
+    border-color: transparent #f59e0b transparent transparent;
+  }
+  
+  &::after {
+    border-color: rgba(251, 191, 36, 0.3);
+  }
+  
+  .title {
+    border-bottom-color: #f59e0b;
+    color: #92400e;
+  }
+  
+  .badgeTop {
+    background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+    color: #78350f;
+  }
+  
+  .price {
+    color: #92400e;
+  }
+  
+  .dynamicPrice {
+    border-left-color: #f59e0b;
+    background: rgba(255, 255, 255, 0.8);
+  }
+  
+  .features li {
+    background: linear-gradient(to right, rgba(251, 191, 36, 0.15) 0%, transparent 100%);
+    
+    &::before {
+      color: #f59e0b;
+    }
+  }
 }
 
-/* ✅ Використовуємо :global() щоб уникнути помилки Next.js */
-:global(input),
-:global(select) {
-  border-radius: 0.5rem;
-  font-size: 1rem;
+// Custom variant
+.custom {
+  
+  &::before {
+    border-color: transparent #8b5cf6 transparent transparent;
+  }
+  
+  .title {
+    border-bottom-color: #8b5cf6;
+  }
+  
+  .badgeTop {
+    background: #8b5cf6;
+  }
+  
+  .dynamicPrice {
+    border-left-color: #8b5cf6;
+  }
 }
 
-:global(button) {
-  margin-top: 1.5rem;
+// Responsive
+@media (max-width: 768px) {
+  .card {
+    padding: 36px 24px 24px;
+  }
+  
+  .title {
+    font-size: 18px;
+  }
+  
+  .price {
+    font-size: 40px;
+  }
+  
+  .customInput {
+    grid-template-columns: 1fr;
+  }
 }

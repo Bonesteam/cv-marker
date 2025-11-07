@@ -102,11 +102,11 @@ const PricingCard: React.FC<PricingCardProps> = ({
   return (
     <motion.div
       className={`${styles.card} ${styles[variant]}`}
-      initial={{ opacity: 0, y: 25 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0, y: 30, scale: 0.97 }}
+      whileInView={{ opacity: 1, y: 0, scale: 1 }}
       viewport={{ once: true }}
-      whileHover={{ scale: 1.02 }}
-      transition={{ duration: 0.45, ease: "easeOut", delay: index * 0.1 }}
+      whileHover={{ scale: 1.015, y: -3 }}
+      transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1], delay: index * 0.08 }}
     >
       {badgeTop && <span className={styles.badgeTop}>{badgeTop}</span>}
 
@@ -114,7 +114,7 @@ const PricingCard: React.FC<PricingCardProps> = ({
 
       {isCustom ? (
         <>
-          <div style={{ display: "flex", gap: "0.5rem", marginBottom: "0.75rem" }}>
+          <div className={styles.customInput}>
             <Input
               type="number"
               value={customAmount}
@@ -155,9 +155,9 @@ const PricingCard: React.FC<PricingCardProps> = ({
         {features.map((f, i) => (
           <motion.li
             key={i}
-            initial={{ opacity: 0, x: -10 }}
+            initial={{ opacity: 0, x: -8 }}
             whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.3, delay: i * 0.05 }}
+            transition={{ duration: 0.25, delay: i * 0.04 }}
           >
             {f}
           </motion.li>

@@ -27,8 +27,19 @@ const AuthButtons: React.FC = () => {
                     </div>
                 </Link>
                 <Link href="/dashboard" className={styles.dashboardButton}>
-                    <ButtonUI text="Create CV" shape="rounded" hoverColor="linkHover" hoverEffect="scale"
-                              fullWidth textColor="link"/>
+                    <ButtonUI
+                        text="Create CV"
+                        shape="rounded"
+                        hoverColor="linkHover"
+                        hoverEffect="scale"
+                        fullWidth={false}
+                        textColor="inverse"
+                        sx={{
+                            background: "linear-gradient(90deg, var(--primary-color), var(--accent-color))",
+                            color: "#fff",
+                            boxShadow: "0 10px 24px rgba(59,130,246,0.12)",
+                        }}
+                    />
                 </Link>
             </div>
         );
@@ -37,13 +48,31 @@ const AuthButtons: React.FC = () => {
     return (
         <div className={styles.nonAuthedButtons}>
             <Link href="/sign-in">
-                <ButtonUI text="Sign In" shape="rounded" hoverColor="linkHover" hoverEffect="scale"
-                          fullWidth textColor="link"/>
+                <ButtonUI
+                    text="Sign In"
+                    shape="rounded"
+                    variant="outlined"
+                    color="primary"
+                    hoverEffect="scale"
+                    fullWidth={false}
+                    textColor="primary"
+                />
             </Link>
             <Link href="/sign-up">
-                <ButtonUI text="Sign Up" shape="rounded" color="backgroundDark" hoverColor="textSecondary"
-                          hoverEffect="scale"
-                          fullWidth textColor="link"/>
+                <ButtonUI
+                    text="Sign Up"
+                    shape="rounded"
+                    variant="solid"
+                    color="primary"
+                    hoverEffect="scale"
+                    fullWidth={false}
+                    textColor="inverse"
+                    sx={{
+                        background: "linear-gradient(90deg, var(--primary-color), var(--accent-color))",
+                        color: "#fff",
+                        boxShadow: "0 10px 24px rgba(59,130,246,0.12)",
+                    }}
+                />
             </Link>
         </div>
     );

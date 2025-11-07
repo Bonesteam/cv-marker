@@ -73,7 +73,7 @@ export const drawerConfig = {
 
 // Footer
 export const footerStyles = {
-    type: "corporate" as FooterType,
+    type: "mega" as FooterType,
     showTopBorder: true,
     showBottomBorder: true,
     maxWidth: 1400,

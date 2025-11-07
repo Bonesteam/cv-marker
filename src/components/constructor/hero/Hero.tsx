@@ -28,45 +28,46 @@ const HeroSection: React.FC<HeroSectionProps> = ({
     ? (media as Record<string, string | StaticImageData>)[image]
     : undefined;
 
-  const bgUrl = bgImage
-    ? typeof bgImage === "string"
-      ? bgImage
-      : (bgImage as StaticImageData).src
-    : "";
+  const bgUrl =
+    bgImage && typeof bgImage !== "string"
+      ? (bgImage as StaticImageData).src
+      : (bgImage as string) || "";
 
   return (
     <section className={styles.hero}>
       <motion.div
         className={styles.imageContainer}
         style={{ backgroundImage: bgUrl ? `url(${bgUrl})` : "none" }}
-        initial={{ opacity: 0, x: -80 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 1, ease: "easeOut" }}
+        initial={{ opacity: 0, scale: 1.1 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 1.2, ease: "easeOut" }}
       />
 
       <motion.div
         className={styles.content}
-        initial={{ opacity: 0, x: 80 }}
-        animate={{ opacity: 1, x: 0 }}
+        initial={{ opacity: 0, y: 60 }}
+        animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1, ease: "easeOut" }}
       >
-        <motion.h1
-          className={styles.title}
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, ease: "easeOut" }}
-        >
+        <h1 className={styles.title}>
           {title}{" "}
           {highlight && (
-            <span className={styles.highlight}>{highlight}</span>
+            <motion.span
+              className={styles.highlight}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.4 }}
+            >
+              {highlight}
+            </motion.span>
           )}
-        </motion.h1>
+        </h1>
 
         <motion.p
           className={styles.description}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3, duration: 0.7 }}
+          transition={{ delay: 0.3, duration: 0.8 }}
         >
           {description}
         </motion.p>
@@ -77,7 +78,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({
           animate="visible"
           variants={{
             hidden: {},
-            visible: { transition: { staggerChildren: 0.25 } },
+            visible: { transition: { staggerChildren: 0.2 } },
           }}
         >
           {primaryCta && (
@@ -102,7 +103,6 @@ const HeroSection: React.FC<HeroSectionProps> = ({
               </ButtonUI>
             </motion.a>
           )}
-
           {secondaryCta && (
             <motion.a
               href={secondaryCta.link}
@@ -131,4 +131,5 @@ const HeroSection: React.FC<HeroSectionProps> = ({
     </section>
   );
 };
+
 export default HeroSection;

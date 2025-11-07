@@ -23,15 +23,16 @@ function Layout({children}: { children: React.ReactNode }) {
         <I18nProvider>
             <AlertProvider>
                 <AllOrdersProvider>
+                    {/* Header & Footer should be visible regardless of route protection */}
+                    <Header />
                     <ProtectedRoute>
                         <CurrencyProvider>
-                            <Header/>
                             <PageWrapper>
                                 {children}
                             </PageWrapper>
-                            <Footer/>
                         </CurrencyProvider>
                     </ProtectedRoute>
+                    <Footer />
                 </AllOrdersProvider>
             </AlertProvider>
         </I18nProvider>

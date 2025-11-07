@@ -44,6 +44,7 @@
   background: var(--bg);
   color: var(--text);
   font-size: var(--fs);
+  position: relative;
 
   a {
     color: var(--text);
@@ -57,7 +58,7 @@
 }
 
 .footer--bottom-border .footer__rights {
-  border-top: 1px solid var(--text-primary);
+  border-top: none;
 }
 
 /* ====== Base inner ====== */
@@ -170,8 +171,8 @@
 
 .footer__rights {
   width: 100%;
-  text-align: center;
-  padding: 18px 0 8px 0;
+  text-align: left;
+  padding: 18px 0 8px var(--pad-x);
   color: var(--muted);
   margin-top: 28px;
 }
@@ -258,6 +259,28 @@
   }
 }
 
+/* bottom-right payments block for mega footer */
+.footer__payments-bottom {
+  position: absolute;
+  right: var(--pad-x);
+  bottom: 18px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.footer__payments-bottom .paymentIcon {
+  font-size: 48px;
+}
+
+@media (max-width: 768px) {
+  .footer__payments-bottom {
+    position: static;
+    justify-content: center;
+    margin-top: 12px;
+  }
+}
+
 .footer__inner--corporate {
   display: flex;
   flex-direction: column;
@@ -285,7 +308,7 @@
 }
 
 .footer__corporate-bottom {
-  border-top: 1px solid var(--border);
+  border-top: none;
   padding-top: 16px;
   display: flex;
   flex-direction: column;

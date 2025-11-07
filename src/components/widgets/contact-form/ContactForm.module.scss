@@ -2,159 +2,81 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 4rem 1rem;
-  background: #f4f2ef;
+  padding: 5rem 1rem;
+  background: #ffffff; // світлий фон для контрасту
 }
 
 .contactCard {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  max-width: 780px;
   width: 100%;
+  max-width: 720px;
   background: #ffffff;
-  border-radius: 28px;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
-  overflow: hidden;
+  border-radius: 18px;
   padding: 3rem 2.5rem;
+  box-shadow: 0 8px 30px rgba(15, 23, 42, 0.1);
+  border: 1px solid #e2e8f0;
+  position: relative;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      to bottom,
+      transparent,
+      transparent 25px,
+      rgba(148, 163, 184, 0.1) 26px
+    );
+    border-radius: inherit;
+    pointer-events: none;
+  }
 }
 
-.infoSide {
+.paperHeader {
   text-align: center;
-  margin-bottom: 2.5rem;
+  margin-bottom: 2rem;
 
   h2 {
-    font-size: 2.1rem;
+    font-size: 1.8rem;
     font-weight: 700;
-    color: #222;
-    margin-bottom: 0.8rem;
+    color: #0f172a;
+    margin-bottom: 0.5rem;
   }
 
   p {
-    color: #4a4a4a;
-    font-size: 1.05rem;
-    line-height: 1.6;
-    margin-bottom: 1.5rem;
-  }
-
-  ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    color: #3a3a3a;
+    color: #475569;
     font-size: 1rem;
     line-height: 1.6;
-
-    li {
-      margin-bottom: 0.5rem;
-    }
   }
 }
 
-.formSide {
-  width: 100%;
-
-  h3 {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: #222;
-    text-align: center;
-    margin-bottom: 1.5rem;
-  }
-}
-
-/* Основна форма */
 .form {
   display: flex;
   flex-direction: column;
   gap: 1.2rem;
 
-  /* Загальний вигляд */
+  .row {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.2rem;
+
+    @media (max-width: 640px) {
+      grid-template-columns: 1fr;
+    }
+  }
+
   input,
   textarea {
-    background: #f7f5f3 !important;
-    border: 1px solid #ddd !important;
     border-radius: 12px !important;
-    padding: 1rem 1rem !important;
-    font-size: 1rem;
-    color: #333;
-    transition: all 0.25s ease;
-    box-shadow: none !important;
-  }
-
-  /* Прибираємо рамки та фони MUI Joy Input */
-  :global(.MuiInput-root),
-  :global(.MuiInputBase-root),
-  :global(.MuiOutlinedInput-root),
-  :global(.MuiFormControl-root),
-  :global(.MuiInput-variantOutlined),
-  :global(.MuiJoyInput-root) {
-    border: none !important;
-    box-shadow: none !important;
-    background: transparent !important;
-  }
-
-  :global(.MuiOutlinedInput-notchedOutline),
-  :global(.MuiJoyInput-decoratorBefore),
-  :global(.MuiJoyInput-decoratorAfter),
-  :global(.MuiJoyInput-input::before),
-  :global(.MuiJoyInput-input::after) {
-    display: none !important;
-    border: none !important;
-  }
-
-  :global(.MuiInputBase-input),
-  :global(.MuiJoyInput-input) {
-    background: #f7f5f3 !important;
-    border: 1px solid #ddd !important;
-    border-radius: 12px !important;
-    padding: 1rem 1rem !important;
-    color: #333 !important;
-    box-shadow: none !important;
-  }
-
-  /* Ефект фокусу */
-  input:focus,
-  textarea:focus,
-  :global(.Mui-focused .MuiInputBase-input),
-  :global(.Mui-focused .MuiJoyInput-input) {
-    border: 1px solid #bca27b !important;
-    box-shadow: 0 0 0 3px rgba(188, 162, 123, 0.2) !important;
-    background: #fff !important;
-    outline: none !important;
-  }
-}
-
-.row {
-  display: flex;
-  gap: 1rem;
-
-  @media (max-width: 768px) {
-    flex-direction: column;
+    font-family: "Inter", sans-serif;
   }
 }
 
 .successMsg {
-  color: #2e7d32;
-  font-size: 1.3rem;
-  font-weight: 600;
   text-align: center;
-  padding: 2rem;
-}
-
-/* кнопка */
-:global(.MuiButton-root) {
-  background: linear-gradient(90deg, #b68a5c, #a47a4e) !important;
-  color: #fff !important;
-  font-weight: 600 !important;
-  font-size: 1.05rem !important;
-  border-radius: 12px !important;
-  text-transform: none !important;
-  padding: 0.9rem !important;
-  transition: transform 0.2s ease, box-shadow 0.2s ease !important;
-
-  &:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 6px 15px rgba(182, 138, 92, 0.3);
-  }
+  background: #dcfce7;
+  color: #166534;
+  padding: 1.2rem;
+  border-radius: 12px;
+  font-weight: 600;
+  box-shadow: 0 0 10px rgba(22, 101, 52, 0.1);
 }
