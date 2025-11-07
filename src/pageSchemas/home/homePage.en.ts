@@ -28,47 +28,47 @@ const schema: PageSchema = {
     {
       type: "custom",
       component: "HeroSection",
-      title: "Build Your Career the Smart Way",
-      highlight: "Instant CV or Expert Review — You Choose",
-      description: `Create a beautiful, ATS-ready CV in minutes or let our experts craft the perfect version for you within 24 hours.`,
-      primaryCta: { text: "Start My CV", link: "/get-started" },
+      title: "Instant CVs, Expertly Crafted for Success",
+      highlight: "Build Smart. Apply Confidently.",
+      description: `Get your ATS-friendly CV instantly, or choose our HR Manager Review for a personalized, polished result within 24 hours.`,
+      primaryCta: { text: "Create My CV", link: "/get-started" },
       image: "image1",
     },
 
-    // --- NEW SECTION: TRUST & BRANDS ---
-    {
-      type: "custom",
-      component: "HighlightStrip",
-      messages: [
-        "Trusted by 30,000+ professionals",
-        "Built for global job seekers",
-        "Secure & GDPR compliant",
-        "HR-reviewed templates",
-      ],
-    },
-
-    // --- WHY CHOOSE US ---
+    // --- WHY CHOOSE US --- (moved up for credibility early)
     {
       type: "custom",
       component: "ValuesIcons",
-      title: "Why Choose Us?",
-      description: `Whether you need an instant CV or expert review — ${COMPANY_NAME} has the right tool for you.`,
+      title: "Why Professionals Choose Us",
+      description: `From instant templates to expert review, ${COMPANY_NAME} adapts to your career goals.`,
       values: [
         { icon: "⚡", title: "Instant CV", text: "Get an ATS-ready CV in seconds." },
-        { icon: "🕒", title: "24h Review", text: "HR specialists refine your CV overnight." },
-        { icon: "📑", title: "ATS Approved", text: "Guaranteed to pass recruiter filters." },
-        { icon: "🎨", title: "Modern Templates", text: "Choose from clean, elegant designs." },
+        { icon: "🕒", title: "24h Review", text: "Our HR experts polish your CV overnight." },
+        { icon: "📑", title: "ATS Approved", text: "Pass recruiter filters effortlessly." },
+        { icon: "🎨", title: "Modern Templates", text: "Beautiful, professional, and editable." },
       ],
     },
 
-    // --- NEW SECTION: FEATURE HIGHLIGHT ---
+    // --- STATS STRIP (earlier for trust proof) ---
+    {
+      type: "custom",
+      component: "StatsStrip",
+      stats: [
+        { value: "30K+", label: "CVs Created" },
+        { value: "97%", label: "User Satisfaction" },
+        { value: "24h", label: "Review Turnaround" },
+        { value: "100%", label: "ATS Compatibility" },
+      ],
+    },
+
+    // --- FEATURE HIGHLIGHT ---
     {
       type: "section",
       align: "center",
       left: {
         type: "text",
-        title: "Your CV, Powered by Smart Design",
-        description: `Every template is designed with precision and optimized for recruiters and ATS software.`,
+        title: "Your CV, Designed to Impress",
+        description: `Every layout is built for recruiters — clean, clear, and optimized for ATS scanning.`,
         centerTitle: true,
         centerDescription: true,
       },
@@ -81,34 +81,34 @@ const schema: PageSchema = {
       title: "How It Works",
       steps: [
         { title: "1. Fill the Form", description: "Enter your experience, education, and skills." },
-        { title: "2. Instant CV", description: "Download your CV immediately in your chosen template." },
-        { title: "3. Manager Review (Optional)", description: "An HR expert refines your CV for maximum impact." },
-        { title: "4. Delivery in 24h", description: "Receive your polished CV in your inbox within 24 hours." },
+        { title: "2. Instant CV", description: "Download your CV immediately with your chosen template." },
+        { title: "3. Manager Review (Optional)", description: "HR experts perfect your CV for maximum impact." },
+        { title: "4. Delivery in 24h", description: "Receive your refined version directly to your inbox." },
       ],
     },
 
-    // --- NEW SECTION: VIDEO DEMO ---
+    // --- VIDEO DEMO (after process, so user visualizes it) ---
     {
       type: "custom",
       component: "VideoDemo",
-      title: "See CV Maker in Action",
-      description: "Watch how our builder works and how the Manager Review enhances your result.",
+      title: "See How It Works in Action",
+      description: "Watch how easily you can create your CV and how our experts help refine it.",
       video: "CVMakerDemo",
     },
 
-    // --- NEW SECTION: STATS / PROOF ---
+    // --- HIGHLIGHT STRIP (reused after demo for emphasis) ---
     {
       type: "custom",
-      component: "StatsStrip",
-      stats: [
-        { value: "30K+", label: "CVs Created" },
-        { value: "97%", label: "User Satisfaction" },
-        { value: "24h", label: "Expert Review Time" },
-        { value: "100%", label: "ATS Compatibility" },
+      component: "HighlightStrip",
+      messages: [
+        "50+ Modern Templates",
+        "Instant Download in Seconds",
+        "GDPR-Compliant Security",
+        "Optional Expert Review",
       ],
     },
 
-    // --- PRICING CARDS ---
+    // --- PRICING CARDS (mid-page, after trust built) ---
     {
       type: "grid",
       columns: 2,
@@ -184,31 +184,11 @@ const schema: PageSchema = {
       ],
     },
 
-    // --- NEW SECTION: CTA ---
-    {
-      type: "section",
-      align: "center",
-      left: {
-        type: "text",
-        title: `Get Your CV — Instantly or Perfected by Experts`,
-        description: `Instant download or manager-reviewed within 24 hours.  
-                       Thousands of professionals already trust ${COMPANY_NAME}.`,
-        centerTitle: true,
-        centerDescription: true,
-      },
-    },
-
-    // --- TESTIMONIALS ---
+    // --- TESTIMONIALS (after pricing for social proof) ---
     {
       type: "custom",
       component: "TestimonialsSlider",
       testimonials: [
-        {
-          name: "Dmytro Koval",
-          role: "UX Designer",
-          image: "review1",
-          text: "Used the instant option and was impressed — clean layout and great structure!",
-        },
         {
           name: "Emma Johansson",
           role: "HR Consultant",
@@ -221,7 +201,26 @@ const schema: PageSchema = {
           image: "review2",
           text: "Loved how fast and easy it was. Totally worth upgrading to Premium.",
         },
+        {
+          name: "Dmytro Koval",
+          role: "UX Designer",
+          image: "review1",
+          text: "Used the instant option and was impressed — clean layout and great structure!",
+        },
       ],
+    },
+
+    // --- CTA (moved below testimonials for conversion) ---
+    {
+      type: "section",
+      align: "center",
+      left: {
+        type: "text",
+        title: `Build Your Perfect CV — Instantly or with Expert Help`,
+        description: `Join thousands of professionals who trust ${COMPANY_NAME} to showcase their careers with confidence.`,
+        centerTitle: true,
+        centerDescription: true,
+      },
     },
 
     // --- FAQ ---
@@ -256,7 +255,7 @@ const schema: PageSchema = {
       ],
     },
 
-    // --- CONTACT ---
+    // --- CONTACT (final section) ---
     {
       type: "custom",
       component: "ContactForm",
@@ -267,5 +266,6 @@ const schema: PageSchema = {
 };
 
 export default schema;
+
 
 
