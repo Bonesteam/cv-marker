@@ -1,12 +1,13 @@
 import {AlertColor} from "@mui/material/Alert";
 
-export const signUpInitialValues = { name: "", email: "", password: "" };
+export const signUpInitialValues = { name: "", email: "", password: "", termsAccepted: false };
 
 export const signUpValidation = (values: typeof signUpInitialValues) => {
     const errors: Partial<typeof signUpInitialValues> = {};
     if (!values.name) errors.name = "Required";
     if (!values.email) errors.email = "Required";
     if (!values.password) errors.password = "Required";
+    if (!values.termsAccepted) errors.termsAccepted = "You must accept Terms & Conditions" as any;
     return errors;
 };
 
@@ -17,10 +18,12 @@ export const signUpOnSubmit = async (
     router: { replace: (url: string) => void; refresh: () => void }
 ) => {
     try {
+        // include termsAccepted flag in payload for backend auditing
+        const payload = { ...values };
         const res = await fetch("/api/auth/register", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(values),
+            body: JSON.stringify(payload),
         });
         const data = await res.json();
         if (res.ok && data?.user) {

@@ -59,8 +59,9 @@ export type CardBlock = {
     image: string;
     title: string;
     description: string;
-    buttonLink: string;
-    buttonText: string;
+    buttonLink?: string;
+    buttonText?: string;
+    layout?: "vertical" | "horizontal";
 };
 
 export type AlignInput = "left" | "right" | "center" | "start" | "end";
@@ -85,6 +86,7 @@ export type LegacyCard = {
     description: string;
     buttonLink?: string;
     buttonText?: string;
+    layout?: "vertical" | "horizontal";
 };
 
 export type GridBlock = {

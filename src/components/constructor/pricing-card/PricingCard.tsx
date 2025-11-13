@@ -35,6 +35,7 @@ const PricingCard: React.FC<PricingCardProps> = ({
   description,
   features,
   buttonText,
+  buttonLink,
   badgeTop,
   badgeBottom,
   index = 0,
@@ -42,7 +43,8 @@ const PricingCard: React.FC<PricingCardProps> = ({
   const { showAlert } = useAlert();
   const user = useUser();
   const { currency, setCurrency, sign, convertFromGBP, convertToGBP } = useCurrency();
-  const [customAmount, setCustomAmount] = useState<number>(20);
+  // allow user to enter desired tokens for custom top-up
+  const [customTokens, setCustomTokens] = useState<number>(100);
 
   const isCustom = price === "dynamic";
   const basePriceGBP = useMemo(
@@ -62,38 +64,46 @@ const PricingCard: React.FC<PricingCardProps> = ({
     }
 
     try {
-      let body: any;
+      // Prepare checkout payload and redirect to /checkout where payment flow runs
+      let checkoutData: any = {};
+
       if (isCustom) {
-        const gbpEquivalent = convertToGBP(customAmount);
-        if (gbpEquivalent < 0.01) {
-          showAlert("Minimum is 0.01", "Enter at least 0.01 GBP equivalent", "warning");
-          return;
-        }
-        body = { currency, amount: customAmount };
+        // User specified tokens to buy
+        const tokensToBuy = Math.max(1, Math.floor(customTokens));
+        const gbpEquivalent = tokensToBuy / TOKENS_PER_GBP; // tokens -> GBP
+        const amountInCurrency = convertFromGBP(gbpEquivalent);
+
+        checkoutData = {
+          amount: Number(amountInCurrency.toFixed(2)),
+          currency,
+          tokens: tokensToBuy,
+          description: `${tokensToBuy} tokens (custom top-up)`,
+          email: user?.email ?? "",
+          planId: undefined,
+        };
       } else {
-        body = { amount: tokens };
+        // Standard plan — tokens are provided by the plan
+        const amountInCurrency = convertedPrice; // already converted from GBP
+
+        checkoutData = {
+          amount: Number(amountInCurrency.toFixed(2)),
+          currency,
+          tokens: tokens,
+          description: title,
+          email: user?.email ?? "",
+          planId: buttonLink ?? undefined,
+        };
       }
 
-      const res = await fetch("/api/user/buy-tokens", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify(body),
-      });
+      // Store to localStorage and navigate to checkout page
+      try {
+        localStorage.setItem("checkoutData", JSON.stringify(checkoutData));
+      } catch (e) {
+        console.warn("Unable to persist checkoutData to localStorage", e);
+      }
 
-      if (!res.ok) throw new Error(await res.text());
-      const data = await res.json();
-
-      showAlert(
-        "Success!",
-        isCustom
-          ? `You paid ${sign}${customAmount.toFixed(2)} ${currency} (≈ ${Math.floor(
-              convertToGBP(customAmount) * TOKENS_PER_GBP
-            )} tokens)`
-          : `You purchased ${tokens} tokens.`,
-        "success"
-      );
-      console.log("Updated user:", data.user);
+      // Redirect to checkout
+      window.location.href = "/checkout";
     } catch (err: any) {
       showAlert("Error", err.message || "Something went wrong", "error");
     }
@@ -117,12 +127,11 @@ const PricingCard: React.FC<PricingCardProps> = ({
           <div className={styles.customInput}>
             <Input
               type="number"
-              value={customAmount}
-              onChange={(e) => setCustomAmount(Number(e.target.value))}
-              slotProps={{ input: { min: 0.01, step: 0.01 } }}
-              placeholder="Enter amount"
+              value={customTokens}
+              onChange={(e) => setCustomTokens(Number(e.target.value))}
+              slotProps={{ input: { min: 1, step: 1 } }}
+              placeholder="Enter tokens"
               size="md"
-              startDecorator={sign}
             />
             <Select
               value={currency}
@@ -137,8 +146,10 @@ const PricingCard: React.FC<PricingCardProps> = ({
           </div>
           <p className={styles.dynamicPrice}>
             {sign}
-            {customAmount.toFixed(2)} ≈{" "}
-            {Math.floor(convertToGBP(customAmount) * TOKENS_PER_GBP)} tokens
+            {(() => {
+              const gbp = customTokens / TOKENS_PER_GBP;
+              return convertFromGBP(gbp).toFixed(2);
+            })()} ≈ {Math.floor(customTokens)} tokens
           </p>
         </>
       ) : (

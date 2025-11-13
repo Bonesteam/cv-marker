@@ -17,6 +17,7 @@ interface FormUIProps {
     isSubmitting?: boolean;
     fields?: FieldConfig[];
     submitLabel?: string;
+    extra?: React.ReactNode;
 }
 
 const defaultFields: FieldConfig[] = [
@@ -30,6 +31,7 @@ const FormUI: React.FC<FormUIProps> = ({
                                            isSubmitting,
                                            fields = defaultFields,
                                            submitLabel = "Sign In",
+                                           extra,
                                        }) => (
     <div className={styles.wrapper}>
         <div className={styles.formContainer}>
@@ -39,6 +41,7 @@ const FormUI: React.FC<FormUIProps> = ({
                 {fields.map((field) => (
                     <InputUI key={field.name} {...field} formik />
                 ))}
+                {extra}
                 <ButtonUI
                     type="submit"
                     text={submitLabel}

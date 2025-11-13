@@ -6,9 +6,7 @@ import Header from "@/components/layout/header/Header";
 import Footer from "@/components/layout/footer/Footer";
 import ProtectedRoute from "@/components/features/protected-route/ProtectedRoute";
 import {currentFont} from "@/resources/styles-config";
-import {I18nProvider} from "@/context/i18nContext";
-import {AllOrdersProvider} from "@/context/AllOrdersContext";
-import {CurrencyProvider} from "@/context/CurrencyContext";
+import ProvidersWrapper from "@/components/providers/ProvidersWrapper";
 
 function Layout({children}: { children: React.ReactNode }) {
     return (
@@ -20,22 +18,15 @@ function Layout({children}: { children: React.ReactNode }) {
             <style>{`:root { --font-family: ${currentFont.css}; }`}</style>
         </head>
         <body>
-        <I18nProvider>
-            <AlertProvider>
-                <AllOrdersProvider>
-                    {/* Header & Footer should be visible regardless of route protection */}
-                    <Header />
-                    <ProtectedRoute>
-                        <CurrencyProvider>
-                            <PageWrapper>
-                                {children}
-                            </PageWrapper>
-                        </CurrencyProvider>
-                    </ProtectedRoute>
-                    <Footer />
-                </AllOrdersProvider>
-            </AlertProvider>
-        </I18nProvider>
+        <ProvidersWrapper>
+            <Header />
+            <ProtectedRoute>
+                <PageWrapper>
+                    {children}
+                </PageWrapper>
+            </ProtectedRoute>
+            <Footer />
+        </ProvidersWrapper>
         </body>
         </html>
     );

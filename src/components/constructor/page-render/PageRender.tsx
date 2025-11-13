@@ -189,6 +189,7 @@ function RenderCard(b: CardBlock) {
             description={b.description}
             buttonLink={b.buttonLink}
             buttonText={b.buttonText}
+            layout={(b as any).layout}
         />
     );
 }
@@ -247,6 +248,7 @@ function RenderGrid(b: GridBlock) {
                     description: c.description,
                     buttonLink: c.buttonLink,
                     buttonText: c.buttonText,
+                    layout: (c as any).layout,
                 } as CardBlock,
             };
         }) ?? [];

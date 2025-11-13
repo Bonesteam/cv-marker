@@ -12,6 +12,7 @@ interface CardProps {
     description: string;
     buttonText?: string;
     buttonLink?: string;
+    layout?: "vertical" | "horizontal";
 }
 
 const Card: React.FC<CardProps> = ({
@@ -20,14 +21,15 @@ const Card: React.FC<CardProps> = ({
                                        description,
                                        buttonText,
                                        buttonLink,
+                                       layout = "vertical",
                                    }) => (
-    <div className={styles.card}>
-        <div className={styles.imageWrapper}>
+    <div className={`${styles.card} ${layout === "horizontal" ? styles.horizontal : ""}`}>
+        <div className={styles.imageWrapper} data-layout={layout}>
             <Media
                 src={image}
                 type="image"
                 width="100%"
-                height="220px"
+                height={layout === "horizontal" ? "100%" : "220px"}
                 alt={title}
                 objectFit="cover"
             />

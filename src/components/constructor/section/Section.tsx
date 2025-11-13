@@ -16,7 +16,7 @@ const Section: React.FC<SectionProps> = ({
                                              left,
                                              right,
                                              reverse = false,
-                                             gap = "3rem",
+                                             gap = "2rem",
                                              align = "center",
                                              justify = "center",
                                          }) => {

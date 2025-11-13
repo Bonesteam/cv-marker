@@ -60,12 +60,12 @@ const schema: PageSchema = {
       columns: 2,
       gap: "2rem",
       cards: [
-        { image: "image1", title: "1. Create an Account", description: "Sign up and begin crafting your CV." },
-        { image: "image2", title: "2. Pick a Template", description: "Choose a modern, recruiter-endorsed layout." },
-        { image: "image3", title: "3. Enter Your Details", description: "Fill out your experience, education, and skills." },
-        { image: "image4", title: "4a. Get It Instantly", description: "Download your completed CV right away." },
-        { image: "image5", title: "4b. Request Expert Review", description: "Have HR professionals enhance your CV within 24h." },
-        { image: "image6", title: "5. Apply Confidently", description: "Use your optimized CV to impress employers." },
+        { image: "image1", title: "1. Create an Account", description: "Sign up and begin crafting your CV.", layout: "horizontal" },
+        { image: "image2", title: "2. Pick a Template", description: "Choose a modern, recruiter-endorsed layout.", layout: "horizontal" },
+        { image: "image3", title: "3. Enter Your Details", description: "Fill out your experience, education, and skills.", layout: "horizontal" },
+        { image: "image4", title: "4a. Get It Instantly", description: "Download your completed CV right away.", layout: "horizontal" },
+        { image: "image5", title: "4b. Request Expert Review", description: "Have HR professionals enhance your CV within 24h.", layout: "horizontal" },
+        { image: "image6", title: "5. Apply Confidently", description: "Use your optimized CV to impress employers.", layout: "horizontal" },
       ],
     },
 
