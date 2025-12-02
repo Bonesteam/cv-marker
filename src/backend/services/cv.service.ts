@@ -18,6 +18,13 @@ const buildSimplePrompt = (b: any, email: string) => `
 Create a concise, professional CV in English.
 Include sections: Summary, Work Experience, Education, Skills.
 
+Please take into account the user's visual and style preferences when producing the CV.
+
+CV Style: ${b.cvStyle || 'standard'}
+Preferred font (for PDF metadata): ${b.customFont || b.fontStyle || 'default'}
+Primary color (for PDF metadata / accents): ${b.customColor || b.themeColor || 'default'}
+Selected extras: ${Array.isArray(b.extras) && b.extras.length ? b.extras.join(", ") : 'none'}
+
 Name: ${b.fullName}
 Email: ${email}
 Phone: ${b.phone}
@@ -33,6 +40,13 @@ Skills: ${b.skills}
 const buildDetailedPrompt = (b: any, email: string) => `
 Create a detailed recruiter-friendly CV in English.
 Include sections: Summary, Key Achievements, Work Experience, Education, Skills, Languages, and Professional Impact.
+
+When creating the CV, respect the user's chosen CV style and appearance preferences.
+
+CV Style: ${b.cvStyle || 'detailed'}
+Preferred font (for PDF metadata): ${b.customFont || b.fontStyle || 'default'}
+Primary color (for PDF metadata / accents): ${b.customColor || b.themeColor || 'default'}
+Selected extras: ${Array.isArray(b.extras) && b.extras.length ? b.extras.join(", ") : 'none'}
 
 Name: ${b.fullName}
 Email: ${email}
@@ -204,9 +218,37 @@ export const cvService = {
 
         // ✨ Генерація extras
         const extrasData: Record<string, string> = {};
-        for (const extra of body.extras || []) {
+        // Robust extras handling: canonicalize incoming extras and try to match available extra prompts
+        const availableKeys = Object.keys(buildExtraPrompts);
+        const normalize = (s: string) => String(s || "").toLowerCase().replace(/[^a-z0-9]+/g, "");
+
+        const requested = (body.extras || []) as string[];
+        log("createOrder", "Requested extras", { requested });
+
+        const mappedExtras: string[] = [];
+        const unmatched: string[] = [];
+
+        for (const ex of requested) {
+            if (!ex) continue;
+            if (availableKeys.includes(ex)) {
+                mappedExtras.push(ex);
+                continue;
+            }
+
+            const norm = normalize(ex);
+            const found = availableKeys.find((k) => normalize(k) === norm);
+            if (found) mappedExtras.push(found);
+            else unmatched.push(ex);
+        }
+
+        if (unmatched.length) log("createOrder", "Unmatched extras (ignored)", { unmatched });
+
+        for (const extra of mappedExtras) {
             const fn = buildExtraPrompts[extra as keyof typeof buildExtraPrompts];
-            if (!fn) continue;
+            if (!fn) {
+                log("createOrder", "No generator fn for extra (skipping)", { extra });
+                continue;
+            }
             try {
                 const extraRes = await openai.chat.completions.create({
                     model: "gpt-4o-mini",
@@ -235,6 +277,8 @@ export const cvService = {
             userId: new mongoose.Types.ObjectId(userId),
             email,
             ...body,
+            // persist server-calculated total to avoid frontend/server mismatch
+            totalTokens: totalCost,
             response: mainText,
             extrasData,
             status: isManager ? "pending" : "ready",

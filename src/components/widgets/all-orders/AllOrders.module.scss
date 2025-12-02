@@ -13,6 +13,9 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 1.5rem;
+  /* allow orders list to scroll if it grows too large inside the main column */
+  max-height: calc(100vh - 18rem);
+  overflow: auto;
 }
 
 .orderCard {

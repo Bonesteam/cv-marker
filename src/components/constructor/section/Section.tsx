@@ -16,8 +16,8 @@ const Section: React.FC<SectionProps> = ({
                                              left,
                                              right,
                                              reverse = false,
-                                             gap = "2rem",
-                                             align = "center",
+                                            gap = "2rem",
+                                            align = "stretch",
                                              justify = "center",
                                          }) => {
     const isSingle = !left || !right;

@@ -37,4 +37,8 @@
   position: sticky;
   top: 1.5rem;
   align-self: start;
+  /* Make the sidebar independently scrollable when content exceeds viewport */
+  max-height: calc(100vh - 4rem);
+  overflow: auto;
+  padding-right: 0.5rem; /* room for scrollbar */
 }

@@ -1,6 +1,7 @@
 :root {
     /* Основні */
-    --primary-color: #2E2E2E;        
+    /* Primary button / CTA color (lighter and more visible than pure black) */
+    --primary-color: #918e91; /* blue-500 - clearer CTAs */
     --secondary-color: #A3A380;      
     --tertiary-color: #D8CFC4;       
     --quaternary-color: #F7F6F3;     
@@ -15,7 +16,7 @@
     --text-primary: #1F1F1F;         
     --text-secondary: #4B4B4B;       
     --text-muted: #777777;           
-    --text-inverse: #000000;         /* змінив з білого на світло-сірий */
+    --text-inverse: #000000;         /* inverse text on dark buttons */
     --text-accent: #A3A380;          
 
     /* Статуси */

@@ -90,16 +90,20 @@ const OrdersSection: React.FC = () => {
                                 <span className={styles.orderId}>#{formatId(order._id.toString())}</span>
                                 <span className={styles.charge}>
                                     {(() => {
-                                        const mapping: Record<string, number> = {
-                                            instant: 25,
-                                            manager: 60,
-                                            hr_plus: 90,
-                                            priority: 120,
-                                            expert: 180,
-                                        };
-                                        const cost = mapping[order.reviewType as string] ?? 30;
-                                        return `-${cost} tokens`;
-                                    })()}
+                                            // prefer server-saved totalTokens when available
+                                            const serverTotal = (order as any).totalTokens;
+                                            if (typeof serverTotal === "number") return `-${serverTotal} tokens`;
+
+                                            const mapping: Record<string, number> = {
+                                                instant: 25,
+                                                manager: 60,
+                                                hr_plus: 90,
+                                                priority: 120,
+                                                expert: 180,
+                                            };
+                                            const cost = mapping[order.reviewType as string] ?? 30;
+                                            return `-${cost} tokens`;
+                                        })()}
                                 </span>
                             </div>
                             <p className={styles.email}>{order.email}</p>

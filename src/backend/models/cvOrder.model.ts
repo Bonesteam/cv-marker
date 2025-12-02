@@ -24,6 +24,7 @@ export interface CVOrderDocument extends Document {
 
     response: string;
     extrasData: Record<string, string>;
+    totalTokens?: number;
 
     status: "pending" | "ready";
     readyAt: Date;
@@ -54,6 +55,7 @@ const cvOrderSchema = new Schema<CVOrderDocument>(
         extras: [{ type: String }],
         response: { type: String, required: false, default: "" },
         extrasData: { type: Map, of: String, default: {} },
+        totalTokens: { type: Number, required: false },
 
         status: { type: String, enum: ["pending", "ready"], default: "ready" },
         readyAt: { type: Date, required: true },

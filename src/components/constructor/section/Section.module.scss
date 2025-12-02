@@ -5,6 +5,7 @@
   color: var(--text-inverse);
   opacity: 0;
   transform: translateY(40px);
+  align-items: stretch;
 
   @media (max-width: 768px) {
     flex-direction: column !important;
@@ -17,6 +18,9 @@
 .right {
   flex: 1;
   min-width: 300px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
 
   @media screen and (max-width: 768px) {
     width: 100%;

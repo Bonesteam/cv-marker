@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Formik, Form, Field } from "formik";
+import { useFormikContext } from "formik";
 import * as Yup from "yup";
 import { formSchemaCV } from "./formSchemaCV";
 import Textarea from "@mui/joy/Textarea";
@@ -13,6 +14,7 @@ import styles from "./ManualGenerator.module.scss";
 import { useAlert } from "@/context/AlertContext";
 import { mockCVData } from "./MOC";
 import { useUser } from "@/context/UserContext";
+import { useAllOrders } from "@/context/AllOrdersContext";
 
 type ReviewType = "instant" | "manager" | "hr_plus" | "priority" | "expert";
 
@@ -85,6 +87,7 @@ interface FormValues {
 const ManualGeneratorCV = () => {
     const { showAlert } = useAlert();
     const user = useUser();
+    const { refreshOrders } = useAllOrders();
     const [loading, setLoading] = useState(false);
 
     const initialValues: FormValues = {
@@ -151,6 +154,12 @@ const ManualGeneratorCV = () => {
                     if (res.ok) {
                         const order = data?.order;
                         const extrasKeys = order?.extrasData ? Object.keys(order.extrasData) : [];
+                        // refresh orders list so UI updates without page reload
+                        try {
+                            await refreshOrders();
+                        } catch (e) {
+                            console.warn("[ManualGenerator] refreshOrders failed", e);
+                        }
                         showAlert(
                             "Success",
                             values.reviewType === "manager"
@@ -168,271 +177,232 @@ const ManualGeneratorCV = () => {
                 setLoading(false);
             }}
         >
-            {({ values, setFieldValue, setValues }) => {
-                // 🔹 автоматичне оновлення extras (Appearance)
-                let extras = [...values.extras];
-                if (values.fontStyle !== "Default" && !extras.includes("customFont"))
-                    extras.push("customFont");
-                else if (values.fontStyle === "Default")
-                    extras = extras.filter((x) => x !== "customFont");
-
-                if (values.themeColor !== "Default" && !extras.includes("customColor"))
-                    extras.push("customColor");
-                else if (values.themeColor === "Default")
-                    extras = extras.filter((x) => x !== "customColor");
-
-                const totalTokens =
-                    BASE_COST[values.reviewType] +
-                    extras.reduce((sum: number, name: string) => {
-                        const opt = EXTRA_OPTIONS.find((o) => o.name === name);
-                        return sum + (opt?.cost || 0);
-                    }, 0);
-
-                return (
-                    <Form className={styles.form}>
-                        {/* 👤 Personal Info */}
-                        <div className={styles.section}>
-                            <h3 className={styles.sectionTitle}>👤 Personal Info</h3>
-                            {formSchemaCV.personal.map((f) => (
-                                <div key={f.name} className={styles.fullWidth}>
-                                    <label className={styles.label}>{f.label}</label>
-                                    {f.type === "file" ? (
-                                        <div className={styles.fileInputWrapper}>
-                                            <label className={styles.fileInputCustom}>
-                                                📷 Select photo
-                                                <input
-                                                    type="file"
-                                                    accept="image/*"
-                                                    onChange={async (e) => {
-                                                        const file = e.target.files?.[0];
-                                                        if (file)
-                                                            setFieldValue("photo", await toBase64(file));
-                                                    }}
-                                                />
-                                            </label>
-                                            {values.photo && (
-                                                <>
-                                                    <img
-                                                        src={values.photo}
-                                                        alt="preview"
-                                                        className={styles.photoPreview}
-                                                    />
-                                                    <span className={styles.fileDisplay}>
-                                                    Photo selected
-                                                </span>
-                                                </>
-                                            )}
-                                        </div>
-                                    ) : (
-                                        <Field
-                                            name={f.name}
-                                            as={Input}
-                                            placeholder={f.label}
-                                            className={styles.inputBase}
-                                        />
-                                    )}
-                                </div>
-                            ))}
-                        </div>
-
-                        {/* ⚙️ CV Settings */}
-                        <div className={styles.section}>
-                            <h3 className={styles.sectionTitle}>⚙️ CV Settings</h3>
-                            <div className={styles.selectGrid}>
-                                {formSchemaCV.selectors.map((f) => (
-                                    <div key={f.name} className={styles.formGroup}>
-                                        <label className={styles.label}>{f.label}</label>
-                                        <Select
-                                            value={(values as any)[f.name]}
-                                            onChange={(_, v) => setFieldValue(f.name, v)}
-                                            className={styles.inputBase}
-                                        >
-                                            {f.options.map((opt: string) => (
-                                                <Option key={opt} value={opt}>
-                                                    {opt}
-                                                </Option>
-                                            ))}
-                                        </Select>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-
-                        {/* 🔍 Review Type */}
-                        <div className={styles.section}>
-                            <h3 className={styles.sectionTitle}>🔍 Review Type</h3>
-                            <Select
-                                value={values.reviewType}
-                                onChange={(_, v) => setFieldValue("reviewType", v as ReviewType)}
-                                className={styles.inputBase}
-                            >
-                                <Option value="instant">Instant — AI Generated (25 tokens)</Option>
-                                <Option value="manager">Manager Review — 24h (60 tokens)</Option>
-                                <Option value="hr_plus">HR+ Review — 24h + ATS (90 tokens)</Option>
-                                <Option value="priority">Priority Review — 6h turnaround (120 tokens)</Option>
-                                <Option value="expert">Expert Package — HR + Design (180 tokens)</Option>
-                            </Select>
-                            <p
-                                style={{
-                                    fontSize: "0.85rem",
-                                    color: "var(--text-muted)",
-                                    marginTop: "0.4rem",
-                                }}
-                            >
-                                {values.reviewType === "instant" && "⚡ Instant AI CV generation with no manual review."}
-                                {values.reviewType === "manager" && "🧠 A professional will review and enhance your CV for 24-hour delivery."}
-                                {values.reviewType === "hr_plus" && "📋 HR+ includes ATS checks and recruiter phrasing guidance."}
-                                {values.reviewType === "priority" && "🚀 Priority delivery within 6 hours by our fast-track team."}
-                                {values.reviewType === "expert" && "🏆 Expert package: senior HR + visual design polish and 2 revisions."}
-                            </p>
-                        </div>
-
-                        {/* ✨ Additional Services */}
-                        <div className={styles.section}>
-                            <h3 className={styles.sectionTitle}>✨ Additional Services</h3>
-                            <div className={styles.extrasList}>
-                                {EXTRA_OPTIONS.map((opt) => {
-                                        // some services require manager or higher
-                                        const managerOnly = [
-                                            "keywords",
-                                            "atsCheck",
-                                            "jobAdaptation",
-                                            "achievements",
-                                            "skillsGap",
-                                            "multiLocale",
-                                            "portfolioLayout",
-                                        ].includes(opt.name);
-
-                                        // priority or expert unlock additional services
-                                        const isDisabled =
-                                            managerOnly && !["manager", "hr_plus", "priority", "expert"].includes(values.reviewType);
-
-                                        return (
-                                            <label
-                                                key={opt.name}
-                                                className={`${styles.extraItem} ${
-                                                    isDisabled ? styles.disabled : ""
-                                                }`}
-                                            >
-                                                <input
-                                                    type="checkbox"
-                                                    disabled={isDisabled}
-                                                    checked={values.extras.includes(opt.name)}
-                                                    onChange={(e) => {
-                                                        if (e.target.checked)
-                                                            setFieldValue("extras", [
-                                                                ...values.extras,
-                                                                opt.name,
-                                                            ]);
-                                                        else
-                                                            setFieldValue(
-                                                                "extras",
-                                                                values.extras.filter(
-                                                                    (x) => x !== opt.name
-                                                                )
-                                                            );
-                                                    }}
-                                                />
-                                                <span>{opt.label}</span>
-                                                <span className={styles.badge}>+{opt.cost}</span>
-                                                {isDisabled && (
-                                                    <span className={styles.lockHint}>
-                                                    🔒 Available with Manager/HR+ or higher
-                                                </span>
-                                                )}
-                                            </label>
-                                        );
-                                    })}
-                            </div>
-                        </div>
-
-                        {/* 🎨 Appearance */}
-                        <div className={styles.section}>
-                            <div className={styles.premiumNotice}>
-                                💎 Selecting custom font or color adds +5 tokens each. Default
-                                choices are free.
-                            </div>
-                            <h3 className={styles.sectionTitle}>🎨 Appearance Settings</h3>
-                            <div className={styles.selectGrid}>
-                                <div className={styles.formGroup}>
-                                    <label className={styles.label}>Font Style</label>
-                                    <Select
-                                        value={values.fontStyle}
-                                        onChange={(_, v) => setFieldValue("fontStyle", v)}
-                                        className={styles.inputBase}
-                                    >
-                                        <Option value="Default">Default (Helvetica)</Option>
-                                        <Option value="Roboto">Roboto</Option>
-                                        <Option value="Lora">Lora (Serif)</Option>
-                                        <Option value="Merriweather">Merriweather (Serif)</Option>
-                                        <Option value="Inter">Inter</Option>
-                                        <Option value="Montserrat">Montserrat</Option>
-                                        <Option value="Source Sans 3">Source Sans 3</Option>
-                                        <Option value="Courier">Courier</Option>
-                                        <Option value="Times-Roman">Times New Roman</Option>
-                                    </Select>
-                                </div>
-                                <div className={styles.formGroup}>
-                                    <label className={styles.label}>Primary Color</label>
-                                    <Select
-                                        value={values.themeColor}
-                                        onChange={(_, v) => setFieldValue("themeColor", v)}
-                                        className={styles.inputBase}
-                                    >
-                                        <Option value="Default">Default Indigo</Option>
-                                        <Option value="#111827">Charcoal</Option>
-                                        <Option value="#0ea5a4">Teal</Option>
-                                        <Option value="#ef4444">Vibrant Red</Option>
-                                        <Option value="#f97316">Orange</Option>
-                                        <Option value="#f59e0b">Amber</Option>
-                                        <Option value="#84cc16">Lime</Option>
-                                        <Option value="#06b6d4">Cyan</Option>
-                                        <Option value="#7c3aed">Electric Purple</Option>
-                                        <Option value="#e11d48">Pink</Option>
-                                        <Option value="#0ea5a4">Mint Teal</Option>
-                                        <Option value="#2563eb">Blue Classic</Option>
-                                    </Select>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* 💳 Summary */}
-                        <div className={styles.section}>
-                            <h3 className={styles.sectionTitle}>💳 Summary</h3>
-                            <p className={styles.tokenSummary}>
-                                Total tokens: <strong>{totalTokens}</strong>
-                            </p>
-                        </div>
-
-                        {/* Actions */}
-                        <div className={styles.actions}>
-                            <ButtonUI
-                                type="button"
-                                color="secondary"
-                                textColor="backgroundLight"
-                                variant="soft"
-                                hoverEffect="shadow"
-                                onClick={() => setValues(mockCVData)}
-                            >
-                                Fill with Mock Data
-                            </ButtonUI>
-
-                            <ButtonUI
-                                type="submit"
-                                color="primary"
-                                textColor="backgroundLight"
-                                variant="solid"
-                                hoverEffect="glow"
-                                loading={loading}
-                            >
-                                Submit Request
-                            </ButtonUI>
-                        </div>
-                    </Form>
-                );
-            }}
+            {(props) => <GeneratorFormInner loading={loading} />}
         </Formik>
     );
 };
+
+    // Inner component to safely use hooks and keep Formik render logic clean
+    function GeneratorFormInner({ loading }: { loading: boolean }) {
+        const { values, setFieldValue, setValues } = useFormikContext<FormValues>();
+
+        // Keep extras in sync with appearance selections and review type enabling
+        useEffect(() => {
+            let extras = [...(values.extras || [])];
+
+            // sync appearance extras
+            if (values.fontStyle && values.fontStyle !== "Default") {
+                if (!extras.includes("customFont")) extras.push("customFont");
+            } else {
+                extras = extras.filter((x) => x !== "customFont");
+            }
+
+            if (values.themeColor && values.themeColor !== "Default") {
+                if (!extras.includes("customColor")) extras.push("customColor");
+            } else {
+                extras = extras.filter((x) => x !== "customColor");
+            }
+
+            // remove manager-only extras when review type is lowered
+            const managerOnly = [
+                "keywords",
+                "atsCheck",
+                "jobAdaptation",
+                "achievements",
+                "skillsGap",
+                "multiLocale",
+                "portfolioLayout",
+            ];
+            if (!["manager", "hr_plus", "priority", "expert"].includes(values.reviewType)) {
+                extras = extras.filter((x) => !managerOnly.includes(x));
+            }
+
+            // update only if changed to avoid re-renders
+            const sortedOld = [...(values.extras || [])].sort().join(",");
+            const sortedNew = [...extras].sort().join(",");
+            if (sortedOld !== sortedNew) {
+                setFieldValue("extras", extras);
+            }
+        }, [values.fontStyle, values.themeColor, values.reviewType]);
+
+        // compute extras and total tokens for display
+        const extrasLocal = [...(values.extras || [])];
+        const totalTokens =
+            BASE_COST[values.reviewType] +
+            extrasLocal.reduce((sum: number, name: string) => {
+                const opt = EXTRA_OPTIONS.find((o) => o.name === name);
+                return sum + (opt?.cost || 0);
+            }, 0);
+
+        return (
+            <Form className={styles.form}>
+                {/* 👤 Personal Info */}
+                <div className={styles.section}>
+                    <h3 className={styles.sectionTitle}>👤 Personal Info</h3>
+                    {formSchemaCV.personal.map((f) => (
+                        <div key={f.name} className={styles.fullWidth}>
+                            <label className={styles.label}>{f.label}</label>
+                            {f.type === "file" ? (
+                                <div className={styles.fileInputWrapper}>
+                                    <label className={styles.fileInputCustom}>
+                                        📷 Select photo
+                                        <input
+                                            type="file"
+                                            accept="image/*"
+                                            onChange={async (e) => {
+                                                const file = e.target.files?.[0];
+                                                if (file) setFieldValue("photo", await toBase64(file));
+                                            }}
+                                        />
+                                    </label>
+                                    {values.photo && (
+                                        <>
+                                            <img src={values.photo} alt="preview" className={styles.photoPreview} />
+                                            <span className={styles.fileDisplay}>Photo selected</span>
+                                        </>
+                                    )}
+                                </div>
+                            ) : (
+                                <Field name={f.name} as={Input} placeholder={f.label} className={styles.inputBase} />
+                            )}
+                        </div>
+                    ))}
+                </div>
+
+                {/* ⚙️ CV Settings */}
+                <div className={styles.section}>
+                    <h3 className={styles.sectionTitle}>⚙️ CV Settings</h3>
+                    <div className={styles.selectGrid}>
+                        {formSchemaCV.selectors.map((f) => (
+                            <div key={f.name} className={styles.formGroup}>
+                                <label className={styles.label}>{f.label}</label>
+                                <Select value={(values as any)[f.name]} onChange={(_, v) => setFieldValue(f.name, v)} className={styles.inputBase}>
+                                    {f.options.map((opt: string) => (
+                                        <Option key={opt} value={opt}>
+                                            {opt}
+                                        </Option>
+                                    ))}
+                                </Select>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
+                {/* 🔍 Review Type */}
+                <div className={styles.section}>
+                    <h3 className={styles.sectionTitle}>🔍 Review Type</h3>
+                    <Select value={values.reviewType} onChange={(_, v) => setFieldValue("reviewType", v as ReviewType)} className={styles.inputBase}>
+                        <Option value="instant">Instant — AI Generated (25 tokens)</Option>
+                        <Option value="manager">Manager Review — 24h (60 tokens)</Option>
+                        <Option value="hr_plus">HR+ Review — 24h + ATS (90 tokens)</Option>
+                        <Option value="priority">Priority Review — 6h turnaround (120 tokens)</Option>
+                        <Option value="expert">Expert Package — HR + Design (180 tokens)</Option>
+                    </Select>
+                    <p style={{ fontSize: "0.85rem", color: "var(--text-muted)", marginTop: "0.4rem" }}>
+                        {values.reviewType === "instant" && "⚡ Instant AI CV generation with no manual review."}
+                        {values.reviewType === "manager" && "🧠 A professional will review and enhance your CV for 24-hour delivery."}
+                        {values.reviewType === "hr_plus" && "📋 HR+ includes ATS checks and recruiter phrasing guidance."}
+                        {values.reviewType === "priority" && "🚀 Priority delivery within 6 hours by our fast-track team."}
+                        {values.reviewType === "expert" && "🏆 Expert package: senior HR + visual design polish and 2 revisions."}
+                    </p>
+                </div>
+
+                {/* ✨ Additional Services */}
+                <div className={styles.section}>
+                    <h3 className={styles.sectionTitle}>✨ Additional Services</h3>
+                    <div className={styles.extrasList}>
+                        {EXTRA_OPTIONS.map((opt) => {
+                            // some services require manager or higher
+                            const managerOnly = [
+                                "keywords",
+                                "atsCheck",
+                                "jobAdaptation",
+                                "achievements",
+                                "skillsGap",
+                                "multiLocale",
+                                "portfolioLayout",
+                            ].includes(opt.name);
+
+                            // priority or expert unlock additional services
+                            const isDisabled = managerOnly && !["manager", "hr_plus", "priority", "expert"].includes(values.reviewType);
+
+                            return (
+                                <label key={opt.name} className={`${styles.extraItem} ${isDisabled ? styles.disabled : ""}`}>
+                                    <input
+                                        type="checkbox"
+                                        disabled={isDisabled}
+                                        checked={values.extras.includes(opt.name)}
+                                        onChange={(e) => {
+                                            if (e.target.checked) setFieldValue("extras", [...values.extras, opt.name]);
+                                            else setFieldValue("extras", values.extras.filter((x) => x !== opt.name));
+                                        }}
+                                    />
+                                    <span>{opt.label}</span>
+                                    <span className={styles.badge}>+{opt.cost}</span>
+                                    {isDisabled && <span className={styles.lockHint}>🔒 Available with Manager/HR+ or higher</span>}
+                                </label>
+                            );
+                        })}
+                    </div>
+                </div>
+
+                {/* 🎨 Appearance */}
+                <div className={styles.section}>
+                    <div className={styles.premiumNotice}>💎 Selecting custom font or color adds +5 tokens each. Default choices are free.</div>
+                    <h3 className={styles.sectionTitle}>🎨 Appearance Settings</h3>
+                    <div className={styles.selectGrid}>
+                        <div className={styles.formGroup}>
+                            <label className={styles.label}>Font Style</label>
+                            <Select value={values.fontStyle} onChange={(_, v) => setFieldValue("fontStyle", v)} className={styles.inputBase}>
+                                <Option value="Default">Default (Helvetica)</Option>
+                                <Option value="Roboto">Roboto</Option>
+                                <Option value="Lora">Lora (Serif)</Option>
+                                <Option value="Merriweather">Merriweather (Serif)</Option>
+                                <Option value="Inter">Inter</Option>
+                                <Option value="Montserrat">Montserrat</Option>
+                                <Option value="Source Sans 3">Source Sans 3</Option>
+                                <Option value="Courier">Courier</Option>
+                                <Option value="Times-Roman">Times New Roman</Option>
+                            </Select>
+                        </div>
+                        <div className={styles.formGroup}>
+                            <label className={styles.label}>Primary Color</label>
+                            <Select value={values.themeColor} onChange={(_, v) => setFieldValue("themeColor", v)} className={styles.inputBase}>
+                                <Option value="Default">Default Indigo</Option>
+                                <Option value="#111827">Charcoal</Option>
+                                <Option value="#0ea5a4">Teal</Option>
+                                <Option value="#ef4444">Vibrant Red</Option>
+                                <Option value="#f97316">Orange</Option>
+                                <Option value="#f59e0b">Amber</Option>
+                                <Option value="#84cc16">Lime</Option>
+                                <Option value="#06b6d4">Cyan</Option>
+                                <Option value="#7c3aed">Electric Purple</Option>
+                                <Option value="#e11d48">Pink</Option>
+                                <Option value="#0ea5a4">Mint Teal</Option>
+                                <Option value="#2563eb">Blue Classic</Option>
+                            </Select>
+                        </div>
+                    </div>
+                </div>
+
+                {/* 💳 Summary */}
+                <div className={styles.section}>
+                    <h3 className={styles.sectionTitle}>💳 Summary</h3>
+                    <p className={styles.tokenSummary}>Total tokens: <strong>{totalTokens}</strong></p>
+                </div>
+
+                {/* Actions */}
+                <div className={styles.actions}>
+                    <ButtonUI type="button" color="secondary" textColor="backgroundLight" variant="soft" hoverEffect="shadow" onClick={() => setValues(mockCVData)}>
+                        Fill with Mock Data
+                    </ButtonUI>
+
+                    <ButtonUI type="submit" color="primary" textColor="backgroundLight" variant="solid" hoverEffect="glow" loading={loading}>
+                        Submit Request
+                    </ButtonUI>
+                </div>
+            </Form>
+        );
+    }
 
 export default ManualGeneratorCV;

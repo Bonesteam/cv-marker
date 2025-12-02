@@ -1,6 +1,8 @@
 import { PageSchema } from "@/components/constructor/page-render/types";
 import { COMPANY_NAME } from "@/resources/constants";
 
+// ==== UPDATED ORDER WITH SECTIONS REARRANGED (CONTACT STILL AT BOTTOM) ====
+
 const schema: PageSchema = {
   meta: {
     title: `${COMPANY_NAME} — Instant CVs or Expert Review`,
@@ -24,7 +26,7 @@ const schema: PageSchema = {
   },
 
   blocks: [
-    // --- HERO SECTION ---
+    // --- HERO FIRST ---
     {
       type: "custom",
       component: "HeroSection",
@@ -35,7 +37,19 @@ const schema: PageSchema = {
       image: "image1",
     },
 
-    // --- WHY CHOOSE US --- (moved up for credibility early)
+    // --- HIGHLIGHT STRIP moved earlier for visual break ---
+    {
+      type: "custom",
+      component: "HighlightStrip",
+      messages: [
+        "50+ Modern Templates",
+        "Instant Download in Seconds",
+        "GDPR-Compliant Security",
+        "Optional Expert Review",
+      ],
+    },
+
+    // --- WHY CHOOSE US ---
     {
       type: "custom",
       component: "ValuesIcons",
@@ -49,7 +63,7 @@ const schema: PageSchema = {
       ],
     },
 
-    // --- STATS STRIP (earlier for trust proof) ---
+    // --- STATS earlier stays here ---
     {
       type: "custom",
       component: "StatsStrip",
@@ -74,7 +88,16 @@ const schema: PageSchema = {
       },
     },
 
-    // --- HOW IT WORKS ---
+    // --- VIDEO NOW PLACED BEFORE TIMELINE ---
+    {
+      type: "custom",
+      component: "VideoDemo",
+      title: "See How It Works in Action",
+      description: "Watch how easily you can create your CV and how our experts help refine it.",
+      video: "CVMakerDemo",
+    },
+
+    // --- TIMELINE AFTER VIDEO ---
     {
       type: "custom",
       component: "Timeline",
@@ -87,28 +110,7 @@ const schema: PageSchema = {
       ],
     },
 
-    // --- VIDEO DEMO (after process, so user visualizes it) ---
-    {
-      type: "custom",
-      component: "VideoDemo",
-      title: "See How It Works in Action",
-      description: "Watch how easily you can create your CV and how our experts help refine it.",
-      video: "CVMakerDemo",
-    },
-
-    // --- HIGHLIGHT STRIP (reused after demo for emphasis) ---
-    {
-      type: "custom",
-      component: "HighlightStrip",
-      messages: [
-        "50+ Modern Templates",
-        "Instant Download in Seconds",
-        "GDPR-Compliant Security",
-        "Optional Expert Review",
-      ],
-    },
-
-    // --- PRICING CARDS (mid-page, after trust built) ---
+    // --- PRICING SECTION moved earlier than testimonials ---
     {
       type: "grid",
       columns: 2,
@@ -184,7 +186,7 @@ const schema: PageSchema = {
       ],
     },
 
-    // --- TESTIMONIALS (after pricing for social proof) ---
+    // --- TESTIMONIALS ---
     {
       type: "custom",
       component: "TestimonialsSlider",
@@ -210,7 +212,7 @@ const schema: PageSchema = {
       ],
     },
 
-    // --- CTA (moved below testimonials for conversion) ---
+    // --- CTA ---
     {
       type: "section",
       align: "center",
@@ -255,7 +257,7 @@ const schema: PageSchema = {
       ],
     },
 
-    // --- CONTACT (final section) ---
+    // --- CONTACT (ALWAYS AT BOTTOM) ---
     {
       type: "custom",
       component: "ContactForm",
@@ -266,6 +268,3 @@ const schema: PageSchema = {
 };
 
 export default schema;
-
-
-

@@ -14,6 +14,13 @@
   }
 }
 
+/* make the info block fill column height when used inside a section */
+.infoBlock {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
 .icon {
   font-size: 2.5rem;
   margin-bottom: 1rem;
@@ -23,6 +30,8 @@
   margin-bottom: 1rem;
   border-radius: 1rem;
   overflow: hidden;
+  /* allow image area to expand and keep aspect by Media component */
+  flex: 1 1 auto;
 }
 
 .title {
