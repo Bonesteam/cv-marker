@@ -1,37 +1,56 @@
 .ordersSection {
   margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .title {
-  font-size: 1.6rem;
-  font-weight: 700;
-  margin-bottom: 1rem;
+  font-size: 2rem;
+  font-weight: 800;
+  margin-bottom: 2rem;
   color: var(--text-primary);
+  text-align: center;
 }
 
+/* LIST */
 .ordersList {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 1.5rem;
-  /* allow orders list to scroll if it grows too large inside the main column */
-  max-height: calc(100vh - 18rem);
-  overflow: auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2rem;
+  max-height: calc(100vh - 15rem);
+  padding: 1rem;
+  overflow-y: auto;
+
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-color) transparent;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 10px;
+  }
 }
 
+/* CARD */
 .orderCard {
+  width: 520px;
   background: var(--surface-color);
   border: 1px solid var(--border-color);
-  border-radius: 0.75rem;
-  padding: 1.25rem;
-  box-shadow: 0 4px 10px var(--shadow-color);
+  border-radius: 1.2rem;
+  padding: 2rem;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  gap: 1.2rem;
+  box-shadow: 0 10px 28px rgba(0,0,0,0.08);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
 
   &:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
+    transform: translateY(-6px);
+    box-shadow: 0 16px 40px rgba(0,0,0,0.12);
   }
 }
 
@@ -42,61 +61,101 @@
 }
 
 .orderId {
-  font-weight: 600;
-  color: var(--secondary-color);
-  background: var(--quaternary-color);
-  padding: 0.25rem 0.6rem;
-  border-radius: 6px;
-  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  background: var(--surface-muted);
+  padding: 0.45rem 0.9rem;
+  border-radius: 8px;
+  font-size: 1.1rem;
 }
 
 .charge {
-  font-weight: 600;
-  color: var(--error-color);
-  background: rgba(239, 68, 68, 0.12);
-  padding: 0.25rem 0.6rem;
-  border-radius: 6px;
-  font-size: 0.9rem;
+  font-weight: 700;
+  color: #b80000;
+  background: rgba(255, 0, 0, 0.18);
+  padding: 0.45rem 0.9rem;
+  border-radius: 8px;
+  font-size: 1.1rem;
 }
 
-.email {
-  color: var(--text-secondary);
-  font-weight: 500;
-}
+/* CONTENT */
+.orderContent {
+  display: flex;
+  justify-content: space-between;
+  gap: 2rem;
+  margin-top: 1rem;
 
-.date {
-  color: var(--text-muted);
-  font-size: 0.85rem;
+  .left {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    .email {
+      color: var(--text-primary);
+      font-size: 1.2rem;
+      font-weight: 600;
+    }
+
+    .date {
+      color: var(--text-secondary);
+      font-size: 1rem;
+    }
+  }
+
+  .right {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    text-align: right;
+
+    .reviewType, .status, .pages {
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+
+    .completed {
+      color: #16a34a; /* green */
+      font-weight: 600;
+    }
+
+    .pending {
+      color: #f59e0b; /* yellow */
+      font-weight: 600;
+    }
+  }
 }
 
 .downloadBtn {
-  margin-top: auto;
-  display: inline-flex;
+  margin-top: 1.2rem;
+  display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.4rem;
-  padding: 0.6rem 1rem;
-  background: linear-gradient(135deg, var(--secondary-color), var(--tertiary-color));
-  color: var(--text-accent);
+  gap: 0.6rem;
+  padding: 0.9rem 1rem;
+  background: var(--secondary-color);
+  color: #ffffff;
   border: none;
-  border-radius: 6px;
-  font-weight: 500;
+  border-radius: 0.9rem;
+  font-weight: 700;
+  font-size: 1.05rem;
   cursor: pointer;
-  transition: background 0.2s ease;
+  transition: 0.25s ease;
 
   &:hover {
-    background: linear-gradient(135deg, var(--button-hover), var(--secondary-color));
+    background: var(--button-hover);
+    transform: translateY(-2px);
   }
 
   svg {
-    font-size: 1rem;
+    font-size: 1.2rem;
   }
 }
 
 .emptyState {
   text-align: center;
   padding: 3rem 2rem;
-  border-radius: 0.75rem;
+  border-radius: 1rem;
   background: var(--surface-muted);
   border: 2px dashed var(--border-color);
   display: flex;
@@ -105,11 +164,12 @@
   gap: 1rem;
 
   .emptyIcon {
-    font-size: 2rem;
+    font-size: 2.5rem;
     color: var(--text-muted);
   }
 
   p {
     color: var(--text-secondary);
+    font-size: 1.2rem;
   }
 }
