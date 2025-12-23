@@ -11,94 +11,112 @@ import styles from "./TemplatesPage.module.scss";
 import { media as mediaMap } from "@/resources/media";
 
 function resolveMedia(key?: string) {
-    if (!key) return undefined;
-    const v = (mediaMap as Record<string, unknown>)[key];
-    if (!v && process.env.NODE_ENV !== "production") {
-        console.warn(`⚠️ Media not found: ${key}`);
-    }
-    return v as any;
+  if (!key) return undefined;
+  return (mediaMap as Record<string, unknown>)[key] as any;
 }
 
-const Page = () => {
-    return (
-        <div className={styles.container}>
-            <div className={styles.headerRow}>
-                <div className={styles.intro}>
-                    <Text
-                        title="Examples of CV"
-                        description={`Check out our CV templates. Each example can be viewed directly on the website in PDF format with test data or downloaded for your own use.`}
-                        titleLevel={1}
-                        centerTitle={false}
-                        centerDescription={false}
-                    />
-                </div>
-            </div>
+const TemplatesPage = () => {
+  return (
+    <div className={styles.wrapper}>
+      <div className={styles.container}>
 
-            <div className={styles.section}>
-                <div className={styles.aligned}>
-                    <HighlightStrip
-                        messages={["ATS-friendly CVs 🚀", "Polished by HR experts 👩‍💼", "Templates for every industry 📑"]}
-                    />
-                </div>
-            </div>
+        {/* HERO / INTRO */}
+        <section className={`${styles.section} ${styles.intro}`}>
+          <Text
+            title="Professional CV Templates"
+            description="Modern CV examples designed like real documents. Clean, readable, and optimized for recruiters and ATS systems."
+            titleLevel={1}
+          />
+        </section>
 
-            <div className={styles.section}>
-                <ExamplesGrid />
-            </div>
+        <div className={styles.divider} />
 
-            <div className={styles.section}>
-                <div className={styles.aligned}>
-                    <InfoBlock
-                        title="Why Use Our CV Templates?"
-                        description="Designed by HR experts to help you stand out. Each template is ATS-optimized and ready to use or customize."
-                        bullets={["Recruiter-approved layouts", "ATS-optimized formatting", "Easy to edit and customize"]}
-                        align="center"
-                        image={resolveMedia("image2")}
-                    />
-                </div>
-            </div>
+        {/* CV EXAMPLES */}
+        <section className={styles.section}>
+          <ExamplesGrid />
+        </section>
 
-            <div className={styles.section}>
-                <div className={styles.aligned}>
-                    <ValuesIcons
-                        title="Optional Extras"
-                        description="Add a cover letter, LinkedIn summary or optimization report to boost your application."
-                        values={[
-                            { icon: "✉️", title: "Cover Letter", text: "Personalized letter for the role." },
-                            { icon: "🔍", title: "Keyword Optimization", text: "Match ATS and job descriptions." },
-                            { icon: "🏆", title: "Achievements Boost", text: "Rewrite achievements with measurable impact." },
-                        ]}
-                    />
-                </div>
-            </div>
+        <div className={styles.divider} />
 
-            <div className={styles.section}>
-                <div className={styles.aligned}>
-                    <ValuesIcons
-                        title="Key Benefits"
-                        description="When using our CV templates you get:"
-                        values={[
-                            { icon: "⚡", title: "Speed", text: "Generate a CV in minutes" },
-                            { icon: "📑", title: "ATS Safe", text: "Pass recruiter filters" },
-                            { icon: "🎨", title: "Designs", text: "Modern templates for many industries" },
-                        ]}
-                    />
-                </div>
-            </div>
+        {/* HIGHLIGHTS */}
+        <section className={styles.section}>
+          <HighlightStrip
+            messages={[
+              "Paper-style CV layouts 📄",
+              "ATS-friendly structure 🚀",
+              "Reviewed by HR experts 👩‍💼",
+            ]}
+          />
+        </section>
 
-            <div className={styles.section}>
-                <div className={styles.aligned}>
-                    <FAQ
-                        items={[
-                            { question: "Can I download the CV examples?", answer: "Yes, each template is available as PDF with sample data." },
-                            { question: "Are the CVs ATS-friendly?", answer: "Yes — designed to pass applicant tracking systems." },
-                            { question: "Can I customize the CV?", answer: "Yes — edit text, layout, and design as needed." },
-                        ]}
-                    />
-                </div>
-            </div>
-        </div>
-    );
+        {/* WHY */}
+        <section className={styles.section}>
+          <div className={styles.aligned}>
+            <InfoBlock
+              title="Why These CV Templates Work"
+              description="Each template follows real CV structure — no flashy design, only what recruiters expect."
+              bullets={[
+                "Clean document-style layout",
+                "Readable typography hierarchy",
+                "Safe formatting for ATS systems",
+              ]}
+              align="center"
+              image={resolveMedia("image2")}
+            />
+          </div>
+        </section>
+
+        {/* KEY BENEFITS */}
+        <section className={styles.section}>
+          <ValuesIcons
+            title="Key Benefits"
+            description="What you get with every template:"
+            values={[
+              { icon: "📄", title: "Real CV Look", text: "Feels like a professional document" },
+              { icon: "⚡", title: "Fast Editing", text: "Easy to customize and export" },
+              { icon: "🤖", title: "ATS Safe", text: "Optimized for applicant tracking systems" },
+            ]}
+          />
+        </section>
+
+        {/* OPTIONAL EXTRAS */}
+        <section className={styles.section}>
+          <ValuesIcons
+            title="Optional Extras"
+            description="Boost your application even more"
+            values={[
+              { icon: "✉️", title: "Cover Letter", text: "Perfectly matched to your CV" },
+              { icon: "🔍", title: "Keyword Optimization", text: "Beat automated filters" },
+              { icon: "🏆", title: "Achievements Boost", text: "Stronger, measurable results" },
+            ]}
+          />
+        </section>
+
+        <div className={styles.divider} />
+
+        {/* FAQ */}
+        <section className={styles.section}>
+          <FAQ
+            items={[
+              {
+                question: "Can I download the CV templates?",
+                answer: "Yes, every example can be downloaded as a PDF with sample data.",
+              },
+              {
+                question: "Are the templates ATS-friendly?",
+                answer: "Yes. Layouts are optimized to pass applicant tracking systems.",
+              },
+              {
+                question: "Can I customize the CV?",
+                answer: "Absolutely. You can edit text, structure, and styling.",
+              },
+            ]}
+          />
+        </section>
+
+      </div>
+    </div>
+  );
 };
 
-export default Page;
+export default TemplatesPage;

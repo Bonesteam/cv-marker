@@ -7,6 +7,7 @@ import Footer from "@/components/layout/footer/Footer";
 import ProtectedRoute from "@/components/features/protected-route/ProtectedRoute";
 import {currentFont} from "@/resources/styles-config";
 import ProvidersWrapper from "@/components/providers/ProvidersWrapper";
+import ClientGuards from "@/components/providers/ClientGuards";
 
 function Layout({children}: { children: React.ReactNode }) {
     return (
@@ -18,6 +19,7 @@ function Layout({children}: { children: React.ReactNode }) {
             <style>{`:root { --font-family: ${currentFont.css}; }`}</style>
         </head>
         <body>
+        <ClientGuards />
         <ProvidersWrapper>
             <Header />
             <ProtectedRoute>

@@ -52,6 +52,10 @@ const Media: React.FC<MediaProps> = ({
                         muted={muted}
                         className={styles.video}
                         style={{ objectFit }}
+                        // suppress hydration mismatch warnings when attributes
+                        // (autoplay/muted) may be controlled by the browser or
+                        // differ between server and client render.
+                        suppressHydrationWarning
                     />
                 )
             )}

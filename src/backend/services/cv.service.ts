@@ -36,6 +36,25 @@ Work Experience: ${b.workExperience}
 Education: ${b.education}
 Skills: ${b.skills}
 `;
+// attach modern style instructions when needed
+const buildSimplePromptWithStyle = (b: any, email: string) => buildSimplePrompt(b, email) + (String(b.cvStyle || '').toLowerCase() === 'modern' ? modernStyleInstructions(b) : '');
+
+// Additional explicit instructions for the 'Modern' CV style (produce HTML/CSS)
+const modernStyleInstructions = (b: any) => `
+If the user requested CV Style: Modern, OUTPUT A COMPLETE, STANDALONE HTML DOCUMENT that implements the following visual design (match the attached example):
+
+- Two-column layout: left sidebar (fixed width ~280px) with light-blue background, rounded corners; right content column for main CV content.
+- Left sidebar must include: circular photo (if provided), a small pill badge showing "industry · experienceLevel" (for example: IT · Senior), contact email and phone, and a vertical "SKILLS" list with bullet or stacked tags.
+- Right column must include: large name at top-left, then section blocks: SUMMARY, EXPERIENCE, EDUCATION. Section headings are uppercase, small, blue, with a thin horizontal accent line under the heading.
+- Typography & colors: use a clean sans font (Inter, Roboto, or system sans), main text color #111827, accent color use ` + (b.customColor || b.themeColor || "#2563eb") + ` (blue). Sidebar background use a very light tint of the accent (e.g. #e8f0ff).
+- Photo: show circular crop (120px) with subtle border; if no photo is provided, omit the img element but keep the spacing.
+- Work Experience: each role uses job title, company, dates on one line and bullet points for achievements below.
+- Preserve whitespace and line breaks; use semantic HTML (header, section, ul/li) and inline CSS so the HTML is self-contained.
+
+OUTPUT REQUIREMENTS:
+- Return ONLY the final HTML document (including <!doctype html> and <html> ... </html>), with inline CSS in a <style> block. Do NOT include any commentary or extra text.
+- Use the provided fields (Name, Email, Phone, Summary, Work Experience, Education, Skills, Industry, Experience Level) to fill content. Use the accent color variable above.
+`;
 
 const buildDetailedPrompt = (b: any, email: string) => `
 Create a detailed recruiter-friendly CV in English.
@@ -59,6 +78,9 @@ Work Experience: ${b.workExperience}
 Education: ${b.education}
 Skills: ${b.skills}
 `;
+const buildDetailedPromptWithStyle = (b: any, email: string) => buildDetailedPrompt(b, email) + (String(b.cvStyle || '').toLowerCase() === 'modern' ? modernStyleInstructions(b) : '');
+
+// Append Modern style instructions when requested
 
 // ---------- EXTRA PROMPTS ----------
 const buildExtraPrompts = {
@@ -201,7 +223,9 @@ export const cvService = {
         // 🧠 Генерація CV
         const requiresManualReview = ["manager", "hr_plus", "priority", "expert"];
         const isManager = requiresManualReview.includes(body.reviewType);
-        const mainPrompt = isManager ? buildDetailedPrompt(body, email) : buildSimplePrompt(body, email);
+        const mainPrompt = isManager
+            ? buildDetailedPromptWithStyle(body, email)
+            : buildSimplePromptWithStyle(body, email);
 
         const mainRes = await openai.chat.completions.create({
             model: "gpt-4o-mini",

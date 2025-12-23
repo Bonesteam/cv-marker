@@ -40,6 +40,11 @@ const VideoDemo: React.FC<Props> = ({ title, description, video }) => {
     >
       <div
         ref={ref}
+        // suppress hydration warning for this block because intersection observer
+        // may toggle classes immediately on client mount and that can differ
+        // from the server render. This silences the console warning while
+        // keeping correct behavior.
+        suppressHydrationWarning
         className={`${styles.fadeBlock} ${isVisible ? styles.visible : ""}`}
       >
         <div className={styles.videoWrapper}>
