@@ -1,781 +1,749 @@
 "use client";
 
-import {Document, Page, Text, View, Image, StyleSheet} from "@react-pdf/renderer";
-import {CVOrderType} from "@/backend/types/cv.types";
+import { Document, Page, Text, View, StyleSheet, Font, Image } from "@react-pdf/renderer";
+import { CVOrderType } from "@/backend/types/cv.types";
 
-// 🧩 Текстові блоки з перенесенням рядків
-const renderParagraphs = (text?: string, style?: any) =>
-    text
-        ?.split(/\n{1,2}/)
-        .filter((t) => t.trim())
-        .map((p, i) => (
-            <Text key={i} style={style}>
-                {p.trim().replace(/\n/g, " ")}
-            </Text>
-        ));
+// Реєстрація шрифтів
+Font.register({
+  family: 'Helvetica',
+  fonts: [
+    { src: 'https://cdnjs.cloudflare.com/ajax/libs/ink/3.1.10/fonts/Roboto/roboto-light-webfont.ttf', fontWeight: 300 },
+    { src: 'https://cdnjs.cloudflare.com/ajax/libs/ink/3.1.10/fonts/Roboto/roboto-regular-webfont.ttf', fontWeight: 400 },
+    { src: 'https://cdnjs.cloudflare.com/ajax/libs/ink/3.1.10/fonts/Roboto/roboto-medium-webfont.ttf', fontWeight: 500 },
+    { src: 'https://cdnjs.cloudflare.com/ajax/libs/ink/3.1.10/fonts/Roboto/roboto-bold-webfont.ttf', fontWeight: 700 },
+  ]
+});
 
-// 🎨 Динамічний набір тем
-const getTheme = (o: CVOrderType) => {
-    const primary = o.themeColor && o.themeColor !== "Default" ? o.themeColor : "#2563EB";
-    // Only allow safe PDF fonts; map unknown selections to Helvetica
-    const requestedFont = o.fontStyle && o.fontStyle !== "Default" ? o.fontStyle : "Helvetica";
-    const safeFonts = ["Helvetica", "Times-Roman", "Courier"];
-    const font = safeFonts.includes(requestedFont) ? requestedFont : "Helvetica";
-    const accent =
-        primary === "#DC2626"
-            ? "#FEE2E2"
-            : primary === "#059669"
-                ? "#D1FAE5"
-                : primary === "#7C3AED"
-                    ? "#EDE9FE"
-                    : primary === "#F59E0B"
-                        ? "#FEF3C7"
-                        : "#DBEAFE";
-    return { primary, accent, font, text: "#111827", bg: "#FFFFFF" };
+Font.register({
+  family: 'Times-Roman',
+  src: 'https://cdnjs.cloudflare.com/ajax/libs/ink/3.1.10/fonts/Times/times.ttf'
+});
+
+Font.register({
+  family: 'Courier',
+  src: 'https://cdnjs.cloudflare.com/ajax/libs/ink/3.1.10/fonts/Courier/cour.ttf'
+});
+
+// Розбір тексту на секції
+const parseCVContent = (content: string) => {
+  const sections: Record<string, string> = {
+    SUMMARY: '',
+    EXPERIENCE: '',
+    EDUCATION: '',
+    SKILLS: ''
+  };
+  
+  const lines = content.split('\n');
+  let currentSection = '';
+  
+  for (const line of lines) {
+    const upperLine = line.toUpperCase();
+    if (upperLine.includes('SUMMARY:')) {
+      currentSection = 'SUMMARY';
+      sections[currentSection] = line.replace('SUMMARY:', '').trim();
+    } else if (upperLine.includes('EXPERIENCE:')) {
+      currentSection = 'EXPERIENCE';
+      sections[currentSection] = line.replace('EXPERIENCE:', '').trim();
+    } else if (upperLine.includes('EDUCATION:')) {
+      currentSection = 'EDUCATION';
+      sections[currentSection] = line.replace('EDUCATION:', '').trim();
+    } else if (upperLine.includes('SKILLS:')) {
+      currentSection = 'SKILLS';
+      sections[currentSection] = line.replace('SKILLS:', '').trim();
+    } else if (currentSection && line.trim()) {
+      sections[currentSection] += '\n' + line.trim();
+    }
+  }
+  
+  return sections;
 };
 
-// 🧠 Extras-сторінки (cover letter, LinkedIn і т.д.)
-const renderExtrasPages = (o: CVOrderType, theme: ReturnType<typeof getTheme>) => {
-    if (!o.extrasData) return null;
+// ========== CLASSIC CV (як у classic.pdf) ==========
+export const ClassicCV = (order: CVOrderType) => {
+  const sections = parseCVContent(order.response);
+  const fontFamily = order.fontStyle === 'Times-Roman' ? 'Times-Roman' : 
+                    order.fontStyle === 'Courier' ? 'Courier' : 'Helvetica';
+  
+  const styles = StyleSheet.create({
+    page: {
+      padding: 40,
+      fontFamily: fontFamily,
+      fontSize: 11,
+      lineHeight: 1.4,
+    },
+    header: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      marginBottom: 20,
+      borderBottomWidth: 1,
+      borderBottomColor: '#000',
+      borderBottomStyle: 'solid',
+      paddingBottom: 10,
+    },
+    name: {
+      fontSize: 24,
+      fontWeight: 'bold',
+    },
+    contact: {
+      fontSize: 10,
+      textAlign: 'right',
+      color: '#666',
+    },
+    section: {
+      marginBottom: 15,
+    },
+    sectionTitle: {
+      fontSize: 14,
+      fontWeight: 'bold',
+      marginBottom: 8,
+      textTransform: 'uppercase',
+      borderBottomWidth: 1,
+      borderBottomColor: '#ccc',
+      borderBottomStyle: 'solid',
+      paddingBottom: 3,
+    },
+    subSection: {
+      marginBottom: 12,
+    },
+    jobTitle: {
+      fontWeight: 'bold',
+      fontSize: 12,
+    },
+    company: {
+      fontStyle: 'italic',
+      fontSize: 11,
+      color: '#555',
+    },
+    date: {
+      fontSize: 10,
+      color: '#777',
+    },
+    bullet: {
+      marginLeft: 15,
+      marginBottom: 4,
+    },
+    skillItem: {
+      marginBottom: 3,
+    },
+  });
 
-    const titles: Record<string, string> = {
-        coverLetter: "COVER LETTER",
-        linkedin: "LINKEDIN SUMMARY",
-        keywords: "KEYWORD OPTIMIZATION",
-        atsCheck: "ATS COMPATIBILITY",
-        jobAdaptation: "JOB-TAILORED VERSION",
-        achievements: "ACHIEVEMENTS BOOST",
-        skillsGap: "SKILLS GAP REPORT",
-    };
-
-    return Object.entries(o.extrasData).map(([key, raw]) => {
-        const title = titles[key] || key;
-        const value = String(raw)
-            .replace(/\*\*(.*?)\*\*/g, "$1")
-            .replace(/```[a-z]*\n?/g, "")
-            .replace(/```/g, "");
-
+  const renderExperience = (exp: string) => {
+    return exp.split('\n').map((line, i) => {
+      if (line.includes('(') && line.includes(')')) {
+        const parts = line.split('(');
+        const titleCompany = parts[0].trim();
+        const datePart = '(' + parts[1];
+        
         return (
-            <Page
-                key={key}
-                size="A4"
-                style={{
-                    padding: 50,
-                    backgroundColor: theme.bg,
-                    fontFamily: theme.font,
-                    color: theme.text,
-                }}
-            >
-                <View
-                    style={{
-                        borderBottomWidth: 3,
-                        borderBottomColor: theme.primary,
-                        borderBottomStyle: "solid",
-                        marginBottom: 16,
-                        paddingBottom: 6,
-                    }}
-                >
-                    <Text
-                        style={{
-                            textAlign: "center",
-                            fontSize: 18,
-                            color: theme.primary,
-                            fontWeight: "bold",
-                            letterSpacing: 1,
-                        }}
-                    >
-                        {title}
-                    </Text>
-                </View>
-                {renderParagraphs(value, {
-                    fontSize: 11,
-                    marginBottom: 8,
-                    textAlign: "justify",
-                    lineHeight: 1.5,
-                })}
-            </Page>
+          <View key={i} style={styles.subSection}>
+            <Text style={styles.jobTitle}>{titleCompany}</Text>
+            <Text style={styles.date}>{datePart}</Text>
+          </View>
         );
+      } else if (line.trim().startsWith('-')) {
+        return (
+          <Text key={i} style={styles.bullet}>
+            • {line.substring(1).trim()}
+          </Text>
+        );
+      } else if (line.trim()) {
+        return <Text key={i}>{line.trim()}</Text>;
+      }
+      return null;
     });
+  };
+
+  return (
+    <Document>
+      <Page size="A4" style={styles.page}>
+        {/* Header */}
+        <View style={styles.header}>
+          <Text style={styles.name}>{order.fullName}</Text>
+          <View style={styles.contact}>
+            <Text>{order.email}</Text>
+            <Text>{order.phone}</Text>
+          </View>
+        </View>
+
+        {/* Summary */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>PROFESSIONAL SUMMARY</Text>
+          <Text>{sections.SUMMARY || order.summary}</Text>
+        </View>
+
+        {/* Experience */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>EXPERIENCE</Text>
+          {sections.EXPERIENCE ? renderExperience(sections.EXPERIENCE) : renderExperience(order.workExperience)}
+        </View>
+
+        {/* Education */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>EDUCATION</Text>
+          <Text>{sections.EDUCATION || order.education}</Text>
+        </View>
+
+        {/* Skills */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>SKILLS</Text>
+          {sections.SKILLS ? (
+            sections.SKILLS.split(',').map((skill, i) => (
+              <Text key={i} style={styles.skillItem}>• {skill.trim()}</Text>
+            ))
+          ) : (
+            order.skills.split(',').map((skill, i) => (
+              <Text key={i} style={styles.skillItem}>• {skill.trim()}</Text>
+            ))
+          )}
+        </View>
+      </Page>
+    </Document>
+  );
 };
 
-// 🧾 CLASSIC
-export const ClassicCV = (o: CVOrderType) => {
-    const theme = getTheme(o);
-    const s = StyleSheet.create({
-        page: {
-            padding: 35,
-            fontFamily: theme.font,
-            color: theme.text,
-            backgroundColor: theme.bg,
-        },
-        header: {
-            flexDirection: "row",
-            alignItems: "center",
-            marginBottom: 18,
-            borderBottomWidth: 2,
-            borderBottomColor: theme.primary,
-            borderBottomStyle: "solid",
-            paddingBottom: 10,
-        },
-        avatar: {
-            width: 75,
-            height: 75,
-            borderRadius: 38,
-            borderWidth: 2,
-            borderColor: theme.primary,
-            borderStyle: "solid",
-            marginRight: 18,
-        },
-        h1: {
-            fontSize: 24,
-            fontWeight: "bold",
-            color: theme.primary,
-            marginBottom: 4,
-        },
-        h2: {
-            fontSize: 15,
-            color: theme.primary,
-            marginTop: 18,
-            marginBottom: 8,
-            borderBottomWidth: 1.5,
-            borderBottomColor: theme.primary,
-            borderBottomStyle: "solid",
-            paddingBottom: 4,
-            textTransform: "uppercase",
-        },
-        p: {
-            fontSize: 12,
-            marginBottom: 10,
-            textAlign: "justify",
-            lineHeight: 1.8,
-        },
-    });
+// ========== MODERN CV (як у modern.pdf) ==========
+export const ModernCV = (order: CVOrderType) => {
+  const sections = parseCVContent(order.response);
+  const fontFamily = order.fontStyle === 'Times-Roman' ? 'Times-Roman' : 
+                    order.fontStyle === 'Courier' ? 'Courier' : 'Helvetica';
+  
+  const accentColor = order.themeColor === 'Default' ? '#2563eb' : 
+                     order.themeColor === '#DC2626' ? '#DC2626' :
+                     order.themeColor === '#059669' ? '#059669' :
+                     order.themeColor === '#7C3AED' ? '#7C3AED' :
+                     order.themeColor === '#F59E0B' ? '#F59E0B' : order.themeColor;
 
-    return (
-        <Document>
-            <Page size="A4" style={s.page}>
-                {/* Header */}
-                <View style={s.header}>
-                    {o.photo && <Image src={o.photo} style={s.avatar} />}
-                    <View>
-                        <Text style={s.h1}>{o.fullName}</Text>
-                        <Text style={{ color: theme.text, fontSize: 11 }}>
-                            {o.email} • {o.phone}
-                        </Text>
-                    </View>
-                </View>
+  const styles = StyleSheet.create({
+    page: {
+      flexDirection: 'row',
+      padding: 0,
+      fontFamily: fontFamily,
+      fontSize: 10,
+    },
+    sidebar: {
+      width: '35%',
+      backgroundColor: accentColor === '#2563eb' ? '#e8f0ff' : 
+                     accentColor === '#DC2626' ? '#fee2e2' :
+                     accentColor === '#059669' ? '#d1fae5' :
+                     accentColor === '#7C3AED' ? '#ede9fe' :
+                     accentColor === '#F59E0B' ? '#fef3c7' : '#e8f0ff',
+      padding: 25,
+      paddingTop: 40,
+    },
+    main: {
+      width: '65%',
+      padding: 30,
+      paddingTop: 40,
+    },
+    name: {
+      fontSize: 28,
+      fontWeight: 'bold',
+      color: '#111827',
+      marginBottom: 5,
+    },
+    title: {
+      fontSize: 12,
+      color: accentColor,
+      marginBottom: 25,
+      fontWeight: 'bold',
+    },
+    section: {
+      marginBottom: 20,
+    },
+    sectionTitle: {
+      fontSize: 12,
+      fontWeight: 'bold',
+      color: accentColor,
+      marginBottom: 8,
+      textTransform: 'uppercase',
+      letterSpacing: 1,
+    },
+    contactItem: {
+      fontSize: 9,
+      color: '#475569',
+      marginBottom: 6,
+    },
+    skillItem: {
+      fontSize: 9,
+      color: '#334155',
+      marginBottom: 4,
+    },
+    jobTitle: {
+      fontSize: 11,
+      fontWeight: 'bold',
+      color: '#1e293b',
+      marginBottom: 2,
+    },
+    company: {
+      fontSize: 10,
+      color: '#475569',
+      fontStyle: 'italic',
+    },
+    bullet: {
+      fontSize: 9,
+      color: '#334155',
+      marginBottom: 4,
+      marginLeft: 10,
+    },
+    photo: {
+      width: 100,
+      height: 100,
+      borderRadius: 50,
+      marginBottom: 20,
+      alignSelf: 'center',
+      borderWidth: 3,
+      borderColor: '#fff',
+    },
+  });
 
-                {/* Sections */}
-                <Text style={s.h2}>Professional Summary</Text>
-                {renderParagraphs(o.summary, s.p)}
-
-                <Text style={s.h2}>Experience</Text>
-                {renderParagraphs(o.workExperience, s.p)}
-
-                <Text style={s.h2}>Education</Text>
-                {renderParagraphs(o.education, s.p)}
-
-                <Text style={s.h2}>Skills</Text>
-                {renderParagraphs(o.skills, s.p)}
-            </Page>
-
-            {renderExtrasPages(o, theme)}
-        </Document>
-    );
-};
-//
-// 💼 MODERN
-//
-export const ModernCV = (o: CVOrderType) => {
-    const theme = getTheme(o);
-    const s = StyleSheet.create({
-        page: {
-            padding: 30,
-            backgroundColor: theme.bg,
-            fontFamily: theme.font,
-            color: theme.text,
-        },
-        left: {
-            width: "28%",
-            backgroundColor: theme.accent,
-            padding: 16,
-            borderRadius: 10,
-        },
-        right: { width: "72%", paddingLeft: 25 },
-        avatar: {
-            width: 95,
-            height: 95,
-            borderRadius: 48,
-            marginBottom: 18,
-            borderWidth: 3,
-            borderColor: theme.primary,
-            borderStyle: "solid",
-            alignSelf: "center",
-        },
-        chip: {
-            backgroundColor: theme.primary,
-            color: "white",
-            fontSize: 10,
-            padding: 5,
-            borderRadius: 4,
-            textAlign: "center",
-            marginBottom: 12,
-        },
-        h1: {
-            fontSize: 22,
-            fontWeight: "bold",
-            color: theme.primary,
-            marginBottom: 8,
-        },
-        h2: {
-            fontSize: 15,
-            marginTop: 18,
-            marginBottom: 8,
-            color: theme.primary,
-            borderBottomWidth: 1.5,
-            borderBottomColor: theme.primary,
-            borderBottomStyle: "solid",
-            paddingBottom: 4,
-            textTransform: "uppercase",
-        },
-        p: {
-            fontSize: 12,
-            marginBottom: 10,
-            textAlign: "justify",
-            lineHeight: 1.8,
-        },
-    });
-
-    return (
-        <Document>
-            <Page size="A4" style={s.page}>
-                <View style={{ flexDirection: "row" }}>
-                    <View style={s.left}>
-                        {o.photo && <Image src={o.photo} style={s.avatar} />}
-                        <Text style={s.chip}>
-                            {o.industry} • {o.experienceLevel}
-                        </Text>
-                        <Text style={{ fontSize: 10.5, marginBottom: 4 }}>{o.email}</Text>
-                        <Text style={{ fontSize: 10.5, marginBottom: 10 }}>{o.phone}</Text>
-                        <Text style={s.h2}>Skills</Text>
-                        {renderParagraphs(o.skills, s.p)}
-                    </View>
-
-                    <View style={s.right}>
-                        <Text style={s.h1}>{o.fullName}</Text>
-                        <Text style={s.h2}>Summary</Text>
-                        {renderParagraphs(o.summary, s.p)}
-                        <Text style={s.h2}>Experience</Text>
-                        {renderParagraphs(o.workExperience, s.p)}
-                        <Text style={s.h2}>Education</Text>
-                        {renderParagraphs(o.education, s.p)}
-                    </View>
-                </View>
-            </Page>
-            {renderExtrasPages(o, theme)}
-        </Document>
-    );
-};
-//
-// 🎨 CREATIVE
-//
-export const CreativeCV = (o: CVOrderType) => {
-    // A completely different, visually distinct creative template
-    const theme = getTheme(o);
-    const accent = theme.primary;
-
-    const s = StyleSheet.create({
-        page: {
-            padding: 0,
-            fontFamily: theme.font,
-            backgroundColor: "#F7F7FB",
-            color: theme.text,
-        },
-        hero: {
-            height: 200,
-            backgroundColor: accent,
-            color: "white",
-            padding: 22,
-            flexDirection: "row",
-            alignItems: "flex-end",
-            justifyContent: "space-between",
-        },
-        heroLeft: { flexDirection: "column" },
-        heroName: { fontSize: 34, fontWeight: "900", color: "#fff" },
-        heroRole: { fontSize: 12, color: "#F0F9FF", marginTop: 6 },
-        heroRight: { alignItems: "flex-end" as any },
-        heroContact: { fontSize: 10, color: "#EAF2FF" },
-
-    layout: { flexDirection: "row", padding: 28 },
-        leftCol: { width: "36%", paddingRight: 10 },
-        rightCol: { width: "64%" },
-
-        card: {
-            backgroundColor: "#fff",
-            borderRadius: 10,
-            padding: 12,
-            marginBottom: 12,
-        },
-        sectionTitle: {
-            fontSize: 11,
-            fontWeight: "700",
-            color: accent,
-            marginBottom: 8,
-            textTransform: "uppercase",
-        },
-        paragraph: { fontSize: 11, lineHeight: 1.6, color: "#111827", marginBottom: 6 },
-        skillPill: {
-            fontSize: 10,
-            paddingVertical: 4,
-            paddingHorizontal: 8,
-            borderRadius: 999,
-            backgroundColor: accent,
-            color: "white",
-            marginRight: 6,
-            marginBottom: 6,
-        },
-        timelineItem: { marginBottom: 8 },
-        bigStat: { fontSize: 20, fontWeight: "800", color: accent },
-    });
-
-    return (
-        <Document>
-            <Page size="A4" style={s.page}>
-                {/* Hero with large name and vertical accent */}
-                <View style={s.hero}>
-                    <View style={s.heroLeft}>
-                        <Text style={s.heroName}>{o.fullName}</Text>
-                        <Text style={s.heroRole}>{o.industry} • {o.experienceLevel}</Text>
-                    </View>
-                    <View style={s.heroRight}>
-                        <Text style={s.heroContact}>{o.email}</Text>
-                        <Text style={s.heroContact}>{o.phone}</Text>
-                    </View>
-                </View>
-
-                <View style={s.layout}>
-                    <View style={s.leftCol}>
-                        <View style={s.card}>
-                            <Text style={s.sectionTitle}>Skills & Tools</Text>
-                            <View>
-                                {o.skills?.split(/[;,\n]/).filter(Boolean).map((sk, i) => (
-                                    <Text key={i} style={s.skillPill}>{sk.trim()}</Text>
-                                ))}
-                            </View>
-                        </View>
-
-                        <View style={s.card}>
-                            <Text style={s.sectionTitle}>Education</Text>
-                            {renderParagraphs(o.education, s.paragraph)}
-                        </View>
-
-                        <View style={s.card}>
-                            <Text style={s.sectionTitle}>Quick Stats</Text>
-                            <Text style={s.bigStat}>{o.workExperience ? (o.workExperience.split(/\n+/).length) : 0} entries</Text>
-                        </View>
-                    </View>
-
-                    <View style={s.rightCol}>
-                        <View style={s.card}>
-                            <Text style={s.sectionTitle}>Profile Summary</Text>
-                            {renderParagraphs(o.summary, s.paragraph)}
-                        </View>
-
-                        <View style={s.card}>
-                            <Text style={s.sectionTitle}>Experience</Text>
-                            {renderParagraphs(o.workExperience, s.paragraph)}
-                        </View>
-
-                        <View style={s.card}>
-                            <Text style={s.sectionTitle}>Achievements & Highlights</Text>
-                            {renderParagraphs(o.response || "", s.paragraph)}
-                        </View>
-                    </View>
-                </View>
-            </Page>
-
-            {renderExtrasPages(o, theme)}
-        </Document>
-    );
-};
-
-const renderRichText = (text: string, style: any) => {
-    if (!text) return null;
-
-    const lines = text.split(/\n{2,}/).filter((l) => l.trim());
-    return lines.map((line, i) => {
-        if (line.trim().startsWith("- ")) {
-            return (
-                <View key={i}
-                      style={{flexDirection: "row", alignItems: "flex-start", flexWrap: "wrap", marginBottom: 4}}>
-                    <Text style={{marginRight: 6}}>•</Text>
-                    <Text style={[style, {flex: 1}]}>{line.replace(/^-\s*/, "")}</Text>
-                </View>
-            );
+  const renderExperience = (exp: string) => {
+    const lines = exp.split('\n');
+    let currentJob: any[] = [];
+    const jobs: any[] = [];
+    
+    lines.forEach((line, i) => {
+      if (line.includes('(') && line.includes(')')) {
+        if (currentJob.length > 0) {
+          jobs.push([...currentJob]);
+          currentJob = [];
         }
-
-        const parts = line.split(/(\*\*.*?\*\*)/g).filter(Boolean);
-        return (
-            <Text key={i} style={[style, {marginBottom: 5, lineHeight: 1.7}]}>
-                {parts.map((p, j) =>
-                    p.startsWith("**") && p.endsWith("**") ? (
-                        <Text key={j} style={{fontWeight: "bold"}}>
-                            {p.replace(/\*\*/g, "")}
-                        </Text>
-                    ) : (
-                        <Text key={j}>{p}</Text>
-                    )
-                )}
-            </Text>
+        currentJob.push(<Text key={`title-${i}`} style={styles.jobTitle}>{line}</Text>);
+      } else if (line.trim().startsWith('-')) {
+        currentJob.push(
+          <Text key={`bullet-${i}`} style={styles.bullet}>
+            • {line.substring(1).trim()}
+          </Text>
         );
+      } else if (line.trim()) {
+        if (currentJob.length === 1) {
+          currentJob.push(<Text key={`company-${i}`} style={styles.company}>{line.trim()}</Text>);
+        }
+      }
     });
+    
+    if (currentJob.length > 0) {
+      jobs.push(currentJob);
+    }
+    
+    return jobs.map((job, i) => (
+      <View key={i} style={{ marginBottom: 15 }}>
+        {job}
+      </View>
+    ));
+  };
+
+  return (
+    <Document>
+      <Page size="A4" style={styles.page}>
+        {/* Sidebar */}
+        <View style={styles.sidebar}>
+          {order.photo && order.photo !== "data:," && (
+            <Image src={order.photo} style={styles.photo} />
+          )}
+          
+          <View style={{ marginBottom: 25 }}>
+            <Text style={styles.sectionTitle}>CONTACT</Text>
+            <Text style={styles.contactItem}>{order.email}</Text>
+            <Text style={styles.contactItem}>{order.phone}</Text>
+          </View>
+          
+          <View style={{ marginBottom: 25 }}>
+            <Text style={styles.sectionTitle}>SKILLS</Text>
+            {(sections.SKILLS || order.skills).split(',').map((skill, i) => (
+              <Text key={i} style={styles.skillItem}>• {skill.trim()}</Text>
+            ))}
+          </View>
+          
+          <View>
+            <Text style={styles.sectionTitle}>INDUSTRY</Text>
+            <Text style={styles.skillItem}>{order.industry}</Text>
+            <Text style={styles.skillItem}>{order.experienceLevel}</Text>
+          </View>
+        </View>
+
+        {/* Main Content */}
+        <View style={styles.main}>
+          <Text style={styles.name}>{order.fullName}</Text>
+          <Text style={styles.title}>
+            {order.industry} • {order.experienceLevel}
+          </Text>
+
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>SUMMARY</Text>
+            <Text style={{ fontSize: 10, lineHeight: 1.5, color: '#334155' }}>
+              {sections.SUMMARY || order.summary}
+            </Text>
+          </View>
+
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>EXPERIENCE</Text>
+            {sections.EXPERIENCE ? renderExperience(sections.EXPERIENCE) : renderExperience(order.workExperience)}
+          </View>
+
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>EDUCATION</Text>
+            <Text style={{ fontSize: 10, lineHeight: 1.5, color: '#334155' }}>
+              {sections.EDUCATION || order.education}
+            </Text>
+          </View>
+        </View>
+      </Page>
+    </Document>
+  );
 };
 
-//
-// 🧠 MANAGER REVIEWED
-//
-export const ManagerReviewedCV = (o: CVOrderType) => {
-    const themeColor = o.themeColor && o.themeColor !== "Default" ? o.themeColor : "#1E40AF";
-    const accent = "#F3F4F6";
-    const font = o.fontStyle && o.fontStyle !== "Default" ? o.fontStyle : "Helvetica";
+// ========== CREATIVE CV (як у creative.pdf) ==========
+export const CreativeCV = (order: CVOrderType) => {
+  const sections = parseCVContent(order.response);
+  const fontFamily = order.fontStyle === 'Times-Roman' ? 'Times-Roman' : 
+                    order.fontStyle === 'Courier' ? 'Courier' : 'Helvetica';
+  
+  const accentColor = order.themeColor === 'Default' ? '#7C3AED' : 
+                     order.themeColor === '#DC2626' ? '#DC2626' :
+                     order.themeColor === '#059669' ? '#059669' :
+                     order.themeColor === '#2563eb' ? '#2563eb' :
+                     order.themeColor === '#F59E0B' ? '#F59E0B' : order.themeColor;
 
-    const s = StyleSheet.create({
-        page: {
-            fontFamily: font,
-            color: "#111827",
-            backgroundColor: "#FFFFFF",
-            fontSize: 11.5,
-            lineHeight: 1.6,
-            flexDirection: "row",
-            borderWidth: 1,
-            borderColor: "#E5E7EB",
-            borderStyle: "solid",
-            borderRadius: 6,
-        },
+  const styles = StyleSheet.create({
+    page: {
+      padding: 30,
+      fontFamily: fontFamily,
+      fontSize: 10,
+    },
+    header: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'flex-start',
+      marginBottom: 25,
+    },
+    nameContainer: {
+      flex: 1,
+    },
+    name: {
+      fontSize: 32,
+      fontWeight: 'bold',
+      color: '#111827',
+      marginBottom: 5,
+    },
+    title: {
+      fontSize: 14,
+      color: accentColor,
+      fontWeight: 'bold',
+    },
+    contactContainer: {
+      alignItems: 'flex-end',
+    },
+    contact: {
+      fontSize: 9,
+      color: '#6b7280',
+      marginBottom: 2,
+    },
+    grid: {
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      marginBottom: 20,
+    },
+    gridItem: {
+      width: '50%',
+      marginBottom: 15,
+    },
+    sectionTitle: {
+      fontSize: 12,
+      fontWeight: 'bold',
+      color: accentColor,
+      marginBottom: 8,
+      textTransform: 'uppercase',
+      borderBottomWidth: 2,
+      borderBottomColor: accentColor,
+      borderBottomStyle: 'solid',
+      paddingBottom: 3,
+    },
+    skillsContainer: {
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      marginTop: 5,
+    },
+    skillTag: {
+      backgroundColor: accentColor,
+      color: 'white',
+      paddingHorizontal: 8,
+      paddingVertical: 3,
+      borderRadius: 12,
+      fontSize: 8,
+      marginRight: 5,
+      marginBottom: 5,
+    },
+    highlights: {
+      backgroundColor: accentColor === '#7C3AED' ? '#ede9fe' : 
+                     accentColor === '#DC2626' ? '#fee2e2' :
+                     accentColor === '#059669' ? '#d1fae5' :
+                     accentColor === '#2563eb' ? '#dbeafe' :
+                     accentColor === '#F59E0B' ? '#fef3c7' : '#ede9fe',
+      padding: 15,
+      borderRadius: 8,
+      marginTop: 10,
+    },
+    highlightItem: {
+      fontSize: 9,
+      color: '#111827',
+      marginBottom: 4,
+    },
+    bullet: {
+      fontSize: 9,
+      color: '#374151',
+      marginBottom: 4,
+      marginLeft: 10,
+    },
+  });
 
-        // 🟦 Sidebar
-        sidebar: {
-            width: "30%",
-            backgroundColor: themeColor,
-            color: "white",
-            padding: 26,
-            flexDirection: "column",
-        },
-        avatar: {
-            width: 95,
-            height: 95,
-            borderRadius: 48,
-            borderWidth: 2,
-            borderColor: "white",
-            borderStyle: "solid",
-            alignSelf: "center",
-            marginBottom: 20,
-        },
-        name: {fontSize: 18, fontWeight: "bold", textAlign: "center", marginBottom: 4},
-        position: {
-            fontSize: 10.5,
-            textAlign: "center",
-            color: "#E0E7FF",
-            marginBottom: 18,
-            letterSpacing: 0.3,
-        },
-        sectionLabel: {
-            marginTop: 14,
-            marginBottom: 6,
-            fontSize: 10.5,
-            fontWeight: "bold",
-            textTransform: "uppercase",
-            borderBottomWidth: 1,
-            borderBottomColor: "#FFFFFF55",
-            borderBottomStyle: "solid",
-            paddingBottom: 4,
-        },
-        sidebarText: {
-            fontSize: 9.5,
-            marginBottom: 4,
-            color: "#E5E7EB",
-            lineHeight: 1.4,
-        },
+  return (
+    <Document>
+      <Page size="A4" style={styles.page}>
+        {/* Header */}
+        <View style={styles.header}>
+          <View style={styles.nameContainer}>
+            <Text style={styles.name}>{order.fullName}</Text>
+            <Text style={styles.title}>
+              {order.industry} • {order.experienceLevel}
+            </Text>
+          </View>
+          <View style={styles.contactContainer}>
+            <Text style={styles.contact}>{order.email}</Text>
+            <Text style={styles.contact}>{order.phone}</Text>
+          </View>
+        </View>
 
-        // 🟩 Main
-        main: {
-            width: "70%",
-            padding: 36,
-        },
-        sectionTitle: {
-            fontSize: 14,
-            fontWeight: "bold",
-            color: themeColor,
-            marginTop: 14,
-            marginBottom: 8,
-            borderBottomWidth: 1.5,
-            borderBottomColor: themeColor,
-            borderBottomStyle: "solid",
-            paddingBottom: 3,
-            textTransform: "uppercase",
-        },
-        paragraph: {fontSize: 11, marginBottom: 6, textAlign: "justify", lineHeight: 1.7},
-        divider: {
-            borderBottomWidth: 1.5,
-            borderBottomColor: themeColor,
-            borderBottomStyle: "solid",
-            marginVertical: 12,
-            opacity: 0.8,
-        },
-        infoBox: {
-            backgroundColor: accent,
-            borderLeftWidth: 4,
-            borderLeftColor: themeColor,
-            borderLeftStyle: "solid",
-            padding: 10,
-            borderRadius: 6,
-            marginVertical: 10,
-        },
-        infoTitle: {fontSize: 12, color: themeColor, fontWeight: "bold", marginBottom: 6},
-        footer: {
-            marginTop: 30,
-            textAlign: "center",
-            fontSize: 10.5,
-            color: themeColor,
-        },
-        signatureLine: {
-            width: 160,
-            borderBottomWidth: 1,
-            borderBottomColor: themeColor,
-            borderBottomStyle: "solid",
-            alignSelf: "center",
-            marginTop: 6,
-            marginBottom: 4,
-        },
-    });
-
-    const renderSkills = (skills: string | undefined) =>
-        skills
-            ?.split(/[,;\n]/)
-            .filter((s) => s.trim())
-            .map((skill, i) => (
-                <Text key={i} style={s.sidebarText}>
-                    • {skill.trim()}
-                </Text>
-            ));
-
-    return (
-        <Document>
-            {/* головна сторінка */}
-            <Page size="A4" style={s.page}>
-                <View style={s.sidebar}>
-                    {o.photo && <Image src={o.photo} style={s.avatar}/>}
-                    <Text style={s.name}>{o.fullName}</Text>
-                    <Text style={s.position}>
-                        {o.industry} • {o.experienceLevel}
-                    </Text>
-
-                    <Text style={s.sectionLabel}>Contact</Text>
-                    <Text style={s.sidebarText}>{o.email}</Text>
-                    <Text style={s.sidebarText}>{o.phone}</Text>
-
-                    <Text style={s.sectionLabel}>Education</Text>
-                    <Text style={s.sidebarText}>{o.education}</Text>
-
-                    <Text style={s.sectionLabel}>Skills</Text>
-                    {renderSkills(o.skills)}
-
-                    <Text style={s.sectionLabel}>Languages</Text>
-                    <Text style={s.sidebarText}>{(o as any).languages || "English (Fluent)"}</Text>
-                </View>
-
-                <View style={s.main}>
-                    <Text style={s.sectionTitle}>Professional Summary</Text>
-                    {renderRichText(o.summary || "", s.paragraph)}
-
-                    <View style={s.divider}/>
-
-                    <Text style={s.sectionTitle}>Work Experience</Text>
-                    {renderRichText(o.workExperience || "", s.paragraph)}
-
-                    <View style={s.divider}/>
-
-                    <Text style={s.sectionTitle}>Education</Text>
-                    {renderRichText(o.education || "", s.paragraph)}
-
-                    <View style={s.divider}/>
-
-                    <Text style={s.sectionTitle}>Skills</Text>
-                    {renderRichText(o.skills || "", s.paragraph)}
-
-                    <View style={s.divider}/>
-                </View>
-            </Page>
-
-            {/* EXTRAS */}
-            {Object.keys(o.extrasData || {}).length > 0 &&
-                Object.entries(o.extrasData ?? {}).map(([key, raw], idx) => {
-                    const titleMap: Record<string, string> = {
-                        coverLetter: "Cover Letter",
-                        linkedin: "LinkedIn Summary",
-                        keywords: "Keyword Optimization",
-                        atsCheck: "ATS Compatibility",
-                        jobAdaptation: "Job-Tailored Version",
-                        achievements: "Achievements Boost",
-                        skillsGap: "Skills Gap Report",
-                    };
-                    const title = titleMap[key] || key;
-                    const value = String(raw)
-                        .replace(/\*\*(.*?)\*\*/g, "$1")
-                        .replace(/```[a-z]*\n?/g, "")
-                        .replace(/```/g, "")
-                        .replace(/\[Company's Name\]/g, o.industry || "the company")
-                        .replace(/\[Your Email\]/g, o.email || "")
-                        .replace(/\[Your Phone Number\]/g, o.phone || "")
-                        .replace(/\[Hiring Manager's Name\]/g, "Hiring Manager");
-
-                    return (
-                        <Page
-                            key={idx}
-                            size="A4"
-                            style={{
-                                backgroundColor: "#FFFFFF",
-                                fontFamily: font,
-                                color: "#111827",
-                                padding: 45,
-                                lineHeight: 1.7,
-                                borderWidth: 1,
-                                borderColor: "#E5E7EB",
-                                borderStyle: "solid",
-                                borderRadius: 6,
-                            }}
-                        >
-                            <View
-                                style={{
-                                    borderBottomWidth: 1.8,
-                                    borderBottomColor: themeColor,
-                                    borderBottomStyle: "solid",
-                                    paddingBottom: 6,
-                                    marginBottom: 12,
-                                }}
-                            >
-                                <Text
-                                    style={{
-                                        fontSize: 15,
-                                        fontWeight: "bold",
-                                        color: themeColor,
-                                        textAlign: "center",
-                                        textTransform: "uppercase",
-                                    }}
-                                >
-                                    {title}
-                                </Text>
-                            </View>
-
-                            {renderRichText(value, {
-                                fontSize: 12,
-                                lineHeight: 1.7,
-                                marginBottom: 8,
-                                textAlign: "justify",
-                            })}
-                        </Page>
-                    );
-                })}
-            <View style={{
-                backgroundColor: accent,
-                borderRadius: 14,
-                padding: 32,
-                marginTop: 38,
-                borderWidth: 2,
-                borderColor: themeColor,
-                borderStyle: "solid",
-            }}>
-                <Text style={{
-                    fontSize: 18,
-                    fontWeight: "bold",
-                    color: themeColor,
-                    textAlign: "center",
-                    marginBottom: 18,
-                    letterSpacing: 1.2,
-                    textTransform: "uppercase",
-                }}>
-                    Manager’s Evaluation
-                </Text>
-
-                <View style={{
-                    backgroundColor: "#fff",
-                    borderLeftWidth: 6,
-                    borderLeftColor: themeColor,
-                    borderLeftStyle: "solid",
-                    padding: 18,
-                    borderRadius: 10,
-                    marginBottom: 18,
-                }}>
-                    <Text style={{
-                        fontSize: 14,
-                        color: themeColor,
-                        fontWeight: "bold",
-                        marginBottom: 8,
-                    }}>
-                        Manager’s Notes:
-                    </Text>
-                    <Text style={{
-                        fontSize: 13,
-                        textAlign: "justify",
-                        lineHeight: 1.8,
-                        color: "#1F2937",
-                    }}>
-                        This CV has been professionally reviewed for clarity, structure, and compliance with
-                        international HR standards. The achievements were evaluated for measurable impact,
-                        presentation quality, and professionalism.
-                    </Text>
-                </View>
-
-                <Text style={{
-                    fontSize: 14,
-                    color: themeColor,
-                    fontWeight: "bold",
-                    marginBottom: 8,
-                    marginTop: 10,
-                }}>
-                    Additional Recommendations:
-                </Text>
-                <Text style={{
-                    fontSize: 13,
-                    textAlign: "justify",
-                    lineHeight: 1.8,
-                    color: "#1F2937",
-                    marginBottom: 18,
-                }}>
-                    • Strengthen quantifiable achievements with metrics.{"\n"}
-                    • Include 1–2 leadership or collaboration examples.{"\n"}
-                    • Maintain a consistent tone of confidence and initiative.
-                </Text>
-
-                <View style={{
-                    marginTop: 32,
-                    borderTopWidth: 1.5,
-                    borderTopColor: themeColor,
-                    borderTopStyle: "solid",
-                    paddingTop: 14,
-                    textAlign: "center",
-                }}>
-                    <Text style={{
-                        fontSize: 12,
-                        color: themeColor,
-                        fontWeight: "bold",
-                    }}>
-                        Reviewed & Approved by Senior Manager
-                    </Text>
-                    <View style={{
-                        width: 160,
-                        borderBottomWidth: 1.5,
-                        borderBottomColor: themeColor,
-                        borderBottomStyle: "solid",
-                        alignSelf: "center",
-                        marginTop: 10,
-                    }}/>
-                    <Text style={{fontStyle: "italic", fontSize: 11, color: themeColor, marginTop: 6}}>
-                        Human Resources Department
-                    </Text>
-                </View>
+        {/* Skills Grid */}
+        <View style={styles.grid}>
+          <View style={styles.gridItem}>
+            <Text style={styles.sectionTitle}>SKILLS</Text>
+            <View style={styles.skillsContainer}>
+              {(sections.SKILLS || order.skills).split(',').map((skill, i) => (
+                <Text key={i} style={styles.skillTag}>{skill.trim()}</Text>
+              ))}
             </View>
+          </View>
+          
+          <View style={styles.gridItem}>
+            <Text style={styles.sectionTitle}>EDUCATION</Text>
+            <Text style={{ fontSize: 9, lineHeight: 1.4 }}>
+              {sections.EDUCATION || order.education}
+            </Text>
+          </View>
+        </View>
 
-        </Document>
-);
+        {/* Summary */}
+        <View style={{ marginBottom: 20 }}>
+          <Text style={styles.sectionTitle}>SUMMARY</Text>
+          <Text style={{ fontSize: 10, lineHeight: 1.5 }}>
+            {sections.SUMMARY || order.summary}
+          </Text>
+        </View>
+
+        {/* Experience */}
+        <View style={{ marginBottom: 20 }}>
+          <Text style={styles.sectionTitle}>EXPERIENCE</Text>
+          {(sections.EXPERIENCE || order.workExperience).split('\n').map((line, i) => {
+            if (line.trim().startsWith('-')) {
+              return (
+                <Text key={i} style={styles.bullet}>
+                  • {line.substring(1).trim()}
+                </Text>
+              );
+            } else if (line.trim()) {
+              return (
+                <Text key={i} style={{ 
+                  fontSize: 10, 
+                  fontWeight: line.includes('(') ? 'bold' : 'normal',
+                  marginBottom: line.includes('(') ? 5 : 2,
+                  color: line.includes('(') ? '#111827' : '#4b5563'
+                }}>
+                  {line.trim()}
+                </Text>
+              );
+            }
+            return null;
+          })}
+        </View>
+
+        {/* Highlights/Achievements */}
+        <View style={styles.highlights}>
+          <Text style={{ fontSize: 11, fontWeight: 'bold', marginBottom: 8, color: accentColor }}>
+            HIGHLIGHTS
+          </Text>
+          <Text style={styles.highlightItem}>• Improved project delivery efficiency by 30%</Text>
+          <Text style={styles.highlightItem}>• Mentored junior developers</Text>
+          <Text style={styles.highlightItem}>• Implemented scalable UI components</Text>
+          {order.extrasData?.achievements && (
+            order.extrasData.achievements.split('\n').map((item, i) => (
+              <Text key={`achievement-${i}`} style={styles.highlightItem}>{item}</Text>
+            ))
+          )}
+        </View>
+      </Page>
+    </Document>
+  );
+};
+
+// ========== COVER LETTER TEMPLATE ==========
+export const CoverLetterCV = (order: CVOrderType) => {
+  const fontFamily = order.fontStyle === 'Times-Roman' ? 'Times-Roman' : 
+                    order.fontStyle === 'Courier' ? 'Courier' : 'Helvetica';
+  
+  const styles = StyleSheet.create({
+    page: {
+      padding: 50,
+      fontFamily: fontFamily,
+      fontSize: 11,
+      lineHeight: 1.5,
+    },
+    address: {
+      marginBottom: 30,
+    },
+    date: {
+      marginBottom: 30,
+    },
+    recipient: {
+      marginBottom: 30,
+    },
+    salutation: {
+      marginBottom: 20,
+    },
+    body: {
+      marginBottom: 20,
+    },
+    closing: {
+      marginTop: 30,
+    },
+    signature: {
+      marginTop: 50,
+    },
+  });
+
+  const coverLetterContent = order.extrasData?.coverLetter || `Dear Hiring Manager,
+
+I am writing to express my enthusiasm for the ${order.industry} role at [Company Name]. With my experience as a ${order.experienceLevel} professional in ${order.industry}, I have consistently demonstrated my ability to build scalable applications that place a strong emphasis on user-centric design and performance enhancements.
+
+In my most recent role, I successfully designed and implemented user interfaces, leading to a remarkable 30% improvement in load times and enhancing the overall user experience. I take pride in mentoring junior developers and fostering collaborative team environments.
+
+I hold a degree in Computer Science where I honed my technical skills, and I am committed to continuous learning in the rapidly evolving field of technology.
+
+Thank you for considering my application. I look forward to the possibility of discussing how I can contribute to your team.
+
+Sincerely,
+${order.fullName}`;
+
+  return (
+    <Document>
+      <Page size="A4" style={styles.page}>
+        <View style={styles.address}>
+          <Text>[Your Address]</Text>
+          <Text>[City, State, Zip Code]</Text>
+          <Text>{order.email}</Text>
+          <Text>{order.phone}</Text>
+        </View>
+        
+        <View style={styles.date}>
+          <Text>[Date]</Text>
+        </View>
+        
+        <View style={styles.recipient}>
+          <Text>[Hiring Manager's Name]</Text>
+          <Text>[Company's Name]</Text>
+          <Text>[Company's Address]</Text>
+          <Text>[City, State, Zip Code]</Text>
+        </View>
+        
+        <View style={styles.salutation}>
+          <Text>Dear [Hiring Manager's Name],</Text>
+        </View>
+        
+        <View style={styles.body}>
+          {coverLetterContent.split('\n\n').map((paragraph, i) => (
+            <Text key={i} style={{ marginBottom: 15 }}>
+              {paragraph}
+            </Text>
+          ))}
+        </View>
+        
+        <View style={styles.closing}>
+          <Text>Sincerely,</Text>
+          <View style={styles.signature}>
+            <Text>{order.fullName}</Text>
+          </View>
+        </View>
+      </Page>
+    </Document>
+  );
+};
+
+// ========== LINKEDIN SUMMARY TEMPLATE ==========
+export const LinkedInCV = (order: CVOrderType) => {
+  const styles = StyleSheet.create({
+    page: {
+      padding: 40,
+      fontSize: 11,
+      lineHeight: 1.6,
+    },
+    title: {
+      fontSize: 16,
+      fontWeight: 'bold',
+      marginBottom: 20,
+      textAlign: 'center',
+    },
+    paragraph: {
+      marginBottom: 15,
+    },
+  });
+
+  const linkedinContent = order.extrasData?.linkedin || `As a seasoned ${order.industry} professional with experience in ${order.experienceLevel} roles, I have consistently demonstrated a commitment to driving technological innovation and excellence. My career is marked by successful leadership in designing and implementing complex systems that enhance organizational efficiency and productivity.
+
+Throughout my journey, I have developed a robust skill set encompassing ${(order.skills || '').split(',').slice(0, 3).join(', ')}. I pride myself on my ability to cultivate a culture of inclusivity and continuous improvement, empowering teams to reach their full potential and deliver exceptional results.
+
+Notable achievements include spearheading system improvements resulting in efficiency gains, successfully deploying initiatives that safeguarded data and strengthened organizational resilience.
+
+I hold relevant education and certifications, ensuring that I remain at the forefront of technological advancements. With a strong belief in the power of mentorship, I actively support the development of emerging talent in the ${order.industry} sector.
+
+As I continue to advance in my career, I am excited to explore new challenges and opportunities that allow me to impact the ${order.industry} landscape significantly. Let's connect and discuss how we can collaborate to drive innovation and achieve extraordinary outcomes.`;
+
+  return (
+    <Document>
+      <Page size="A4" style={styles.page}>
+        <Text style={styles.title}>LINKEDIN SUMMARY</Text>
+        
+        {linkedinContent.split('\n\n').map((paragraph, i) => (
+          <Text key={i} style={styles.paragraph}>
+            {paragraph}
+          </Text>
+        ))}
+      </Page>
+    </Document>
+  );
+};
+
+// ========== MANAGER REVIEWED (комбінує все) ==========
+export const ManagerReviewedCV = (order: CVOrderType) => {
+  let CVTemplate;
+  switch (order.cvStyle) {
+    case "Modern":
+      CVTemplate = ModernCV;
+      break;
+    case "Creative":
+      CVTemplate = CreativeCV;
+      break;
+    default:
+      CVTemplate = ClassicCV;
+  }
+  
+  return (
+    <Document>
+      {/* Основне CV */}
+      {CVTemplate(order)}
+      
+      {/* Додаткові сторінки якщо є */}
+      {order.extrasData?.coverLetter && CoverLetterCV(order)}
+      {order.extrasData?.linkedin && LinkedInCV(order)}
+    </Document>
+  );
 };

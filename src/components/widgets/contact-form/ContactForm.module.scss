@@ -1,58 +1,93 @@
 .contactWrapper {
   display: flex;
   justify-content: center;
-  align-items: center;
-  padding: 2.5rem 1rem;
-  background: #ffffff; // світлий фон для контрасту
+  padding: 3rem 1rem;
+  background: #f8fafc;
 }
 
 .contactCard {
-  width: 100%;
-  max-width: 720px;
-  background: #ffffff;
-  border-radius: 18px;
-  padding: 2rem 2rem;
-  box-shadow: 0 8px 30px rgba(15, 23, 42, 0.1);
-  border: 1px solid #e2e8f0;
   position: relative;
+  width: 100%;
+  max-width: 760px;
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 2.6rem 2.4rem;
+  border: 1px solid #e5e7eb;
 
+  box-shadow:
+    0 10px 30px rgba(15, 23, 42, 0.08),
+    0 2px 8px rgba(15, 23, 42, 0.04);
+
+  /* subtle paper grain */
   &::before {
     content: "";
     position: absolute;
     inset: 0;
-    background: repeating-linear-gradient(
-      to bottom,
-      transparent,
-      transparent 25px,
-      rgba(148, 163, 184, 0.1) 26px
+    background-image: radial-gradient(
+      rgba(15, 23, 42, 0.03) 0.5px,
+      transparent 0.5px
     );
+    background-size: 6px 6px;
+    opacity: 0.25;
     border-radius: inherit;
     pointer-events: none;
+  }
+
+  /* CV left accent */
+  &::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 24px;
+    bottom: 24px;
+    width: 4px;
+    background: linear-gradient(
+      to bottom,
+      #0f172a,
+      #475569
+    );
+    border-radius: 4px;
   }
 }
 
 .paperHeader {
+  position: relative;
   text-align: center;
-  margin-bottom: 2rem;
+  margin-bottom: 2.2rem;
+  padding-bottom: 1.2rem;
+
+  border-bottom: 1px solid #e5e7eb;
 
   h2 {
-    font-size: 1.8rem;
+    font-size: 1.9rem;
     font-weight: 700;
     color: #0f172a;
-    margin-bottom: 0.5rem;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.4rem;
   }
 
   p {
-    color: #475569;
     font-size: 1rem;
+    color: #64748b;
     line-height: 1.6;
+  }
+
+  /* page number vibe */
+  &::after {
+    content: "CV / CONTACT";
+    position: absolute;
+    right: 0;
+    bottom: -14px;
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    color: #94a3b8;
   }
 }
 
 .form {
   display: flex;
   flex-direction: column;
-  gap: 1.2rem;
+  gap: 1.25rem;
 
   .row {
     display: grid;
@@ -66,17 +101,20 @@
 
   input,
   textarea {
-    border-radius: 12px !important;
     font-family: "Inter", sans-serif;
   }
 }
 
 .successMsg {
   text-align: center;
-  background: #dcfce7;
-  color: #166534;
-  padding: 1.2rem;
-  border-radius: 12px;
+  padding: 1.4rem;
+  border-radius: 14px;
   font-weight: 600;
-  box-shadow: 0 0 10px rgba(22, 101, 52, 0.1);
+  color: #065f46;
+  background: linear-gradient(
+    180deg,
+    #ecfdf5,
+    #d1fae5
+  );
+  box-shadow: 0 6px 16px rgba(6, 95, 70, 0.12);
 }
