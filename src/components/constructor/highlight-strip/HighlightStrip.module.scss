@@ -46,6 +46,15 @@
   box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
 }
 
+/* Нахил ліворуч і праворуч */
+.item-left {
+  transform: rotate(-5deg);
+}
+
+.item-right {
+  transform: rotate(5deg);
+}
+
 @keyframes scrollLeft {
   from {
     transform: translateX(0);

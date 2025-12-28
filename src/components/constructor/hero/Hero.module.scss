@@ -19,33 +19,90 @@
   }
 }
 
+/* ================= IMAGE ================= */
+
 .imageContainer {
   flex: 1.1;
+  height: 100%;
+  position: relative;
+  border-radius: 24px;
+  perspective: 1200px;
+  overflow: visible;
+}
+
+/* 🟨 лист паперу ззаду */
+.imageContainer::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: #ffffff;
+  border-radius: 24px;
+  z-index: 0;
+
+  transform: translateX(-12px) translateY(12px) rotateZ(-2deg);
+  opacity: 0;
+
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+  transition: transform 0.6s ease, opacity 0.6s ease;
+}
+
+/* 🖼 справжнє фото */
+.imageInner {
+  width: 100%;
   height: 100%;
   background-size: cover;
   background-position: center;
   border-radius: 24px;
   position: relative;
-  overflow: hidden;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+  z-index: 1;
 
-  &::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(
-      120deg,
-      rgba(255, 255, 255, 0.3) 0%,
-      rgba(0, 0, 0, 0.25) 100%
-    );
-    mix-blend-mode: overlay;
+  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.35);
+  transform-style: preserve-3d;
+  transition: transform 0.6s ease, box-shadow 0.6s ease;
+}
+
+/* 🌫 твій градієнт поверх фото */
+.imageInner::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    120deg,
+    rgba(255, 255, 255, 0.3) 0%,
+    rgba(0, 0, 0, 0.25) 100%
+  );
+  mix-blend-mode: overlay;
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+/* 🎯 hover-ефект */
+.imageContainer:hover .imageInner {
+  transform: rotateY(-14deg) rotateZ(1.5deg) translateX(18px);
+  box-shadow: 0 40px 90px rgba(0, 0, 0, 0.4);
+}
+
+.imageContainer:hover::before {
+  opacity: 1;
+  transform: translateX(-30px) translateY(30px) rotateZ(-4deg);
+}
+
+/* 📱 mobile — вимикаємо 3D */
+@media (max-width: 992px) {
+  .imageContainer {
+    perspective: none;
   }
 
-  @media (max-width: 992px) {
-    width: 100%;
-    height: 45vh;
+  .imageContainer::before {
+    display: none;
+  }
+
+  .imageContainer:hover .imageInner {
+    transform: none;
   }
 }
+
+/* ================= CONTENT ================= */
 
 .content {
   flex: 1;

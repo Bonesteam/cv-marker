@@ -35,14 +35,20 @@ const HeroSection: React.FC<HeroSectionProps> = ({
 
   return (
     <section className={styles.hero}>
+      {/* IMAGE */}
       <motion.div
         className={styles.imageContainer}
-        style={{ backgroundImage: bgUrl ? `url(${bgUrl})` : "none" }}
         initial={{ opacity: 0, scale: 1.1 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 1.2, ease: "easeOut" }}
-      />
+      >
+        <div
+          className={styles.imageInner}
+          style={{ backgroundImage: bgUrl ? `url(${bgUrl})` : "none" }}
+        />
+      </motion.div>
 
+      {/* CONTENT */}
       <motion.div
         className={styles.content}
         initial={{ opacity: 0, y: 60 }}
@@ -103,6 +109,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({
               </ButtonUI>
             </motion.a>
           )}
+
           {secondaryCta && (
             <motion.a
               href={secondaryCta.link}

@@ -109,6 +109,19 @@ Whether you’re applying today or refining for your dream role, ${COMPANY_NAME}
             },
         },
 
+         {
+            type: "section",
+            align: "center",
+            left: {
+                type: "text",
+                title: "What Makes Us Different",
+                description: `${COMPANY_NAME} bridges the gap between technology and expertise.  
+Choose instant AI generation or let a human professional polish your CV for maximum impact.`,
+                centerTitle: true,
+                centerDescription: true,
+            },
+        },
+
         // 🔹 Our Values
         {
             type: "custom",
@@ -121,19 +134,7 @@ Whether you’re applying today or refining for your dream role, ${COMPANY_NAME}
             ],
         },
 
-        // 🔹 What Makes Us Different
-        {
-            type: "section",
-            align: "center",
-            left: {
-                type: "text",
-                title: "What Makes Us Different",
-                description: `${COMPANY_NAME} bridges the gap between technology and expertise.  
-Choose instant AI generation or let a human professional polish your CV for maximum impact.`,
-                centerTitle: true,
-                centerDescription: true,
-            },
-        },
+        
 
         // 🔹 Meet the Team
         {
