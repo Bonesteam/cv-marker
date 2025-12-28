@@ -30,14 +30,30 @@
   overflow: visible;
 }
 
-/* 🟨 лист паперу ззаду */
+/* 🟨 ЛИСТ ПАПЕРУ ЗЗАДУ */
 .imageContainer::before {
   content: "";
   position: absolute;
   inset: 0;
-  background: #ffffff;
   border-radius: 24px;
   z-index: 0;
+
+  /* 📄 ІМІТАЦІЯ ТЕКСТУ */
+  background:
+    /* header line */
+    linear-gradient(#e5e5e5 0 0) top 28px left 28px / 60% 10px no-repeat,
+
+    /* text lines */
+    repeating-linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.08),
+      rgba(0, 0, 0, 0.08) 2px,
+      transparent 2px,
+      transparent 14px
+    ) top 60px left 28px / calc(100% - 56px) calc(100% - 88px) no-repeat,
+
+    /* paper base */
+    #ffffff;
 
   transform: translateX(-12px) translateY(12px) rotateZ(-2deg);
   opacity: 0;
@@ -46,7 +62,7 @@
   transition: transform 0.6s ease, opacity 0.6s ease;
 }
 
-/* 🖼 справжнє фото */
+/* 🖼 СПРАВЖНЄ ФОТО */
 .imageInner {
   width: 100%;
   height: 100%;
@@ -61,7 +77,7 @@
   transition: transform 0.6s ease, box-shadow 0.6s ease;
 }
 
-/* 🌫 твій градієнт поверх фото */
+/* 🌫 ГРАДІЄНТ ПОВЕРХ ФОТО */
 .imageInner::after {
   content: "";
   position: absolute;
@@ -76,7 +92,7 @@
   pointer-events: none;
 }
 
-/* 🎯 hover-ефект */
+/* 🎯 HOVER */
 .imageContainer:hover .imageInner {
   transform: rotateY(-14deg) rotateZ(1.5deg) translateX(18px);
   box-shadow: 0 40px 90px rgba(0, 0, 0, 0.4);
@@ -87,7 +103,7 @@
   transform: translateX(-30px) translateY(30px) rotateZ(-4deg);
 }
 
-/* 📱 mobile — вимикаємо 3D */
+/* 📱 MOBILE */
 @media (max-width: 992px) {
   .imageContainer {
     perspective: none;
