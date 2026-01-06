@@ -3,12 +3,38 @@
   top: 0;
   z-index: 100;
   width: 100%;
-  background-color: transparent; /* start transparent for modern look */
+  background-color: transparent;
   box-shadow: none;
   transition: background-color 0.28s ease, box-shadow 0.28s ease, transform 0.28s ease;
   will-change: transform;
+  backdrop-filter: blur(0px);
+}
 
-  /* subtle glass effect by default */
+/* Для варианта headerStyles.type === 'sticky' */
+.sticky {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  width: 100%;
+  background-color: transparent;
+  box-shadow: none;
+  transition: background-color 0.28s ease, box-shadow 0.28s ease, transform 0.28s ease;
+  will-change: transform;
+  backdrop-filter: blur(0px);
+}
+
+/* Для варианта headerStyles.type === 'sticky-rounded' */
+.stickyRounded {
+  position: sticky;
+  top: 12px;
+  z-index: 100;
+  width: calc(100% - 24px);
+  margin: 0 auto;
+  background-color: transparent;
+  border-radius: 12px;
+  box-shadow: none;
+  transition: background-color 0.28s ease, box-shadow 0.28s ease, transform 0.28s ease;
+  will-change: transform;
   backdrop-filter: blur(0px);
 }
 

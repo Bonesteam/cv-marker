@@ -29,9 +29,26 @@ export const footerContent = {
             title: "Navigate",
             links: [
                 {label: "About Us", href: "/about-us"},
+                {label: "Process", href: "/get-started"},
                 {label: "Pricing", href: "/pricing"},
-                {label: "Faq", href: "/faq"},
                 {label: "Get Started", href: "/get-started"},
+                {label: "Templates", href: "/templates"},
+            ],
+        },
+        {
+            title: "Services",
+            links: [
+                {label: "CV Builder", href: "/templates"},
+                {label: "Resume Review", href: "/services"},
+                {label: "Cover Letters", href: "/services"},
+            ],
+        },
+        {
+            title: "Resources",
+            links: [
+                {label: "Help & FAQ", href: "/faq"},
+                {label: "Examples", href: "/"},
+                {label: "Blog", href: "/"},
             ],
         },
         {

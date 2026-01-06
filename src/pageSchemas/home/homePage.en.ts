@@ -186,6 +186,18 @@ const schema: PageSchema = {
       ],
     },
 
+    {
+  type: "custom",
+  component: "HighlightStrip",
+  messages: [
+    "GDPR Compliant",
+    "Trusted by HR Professionals",
+    "EU Data Protection Standards",
+    "Secure CV Storage"
+  ],
+},
+
+
     // --- TESTIMONIALS ---
     {
       type: "custom",
@@ -256,6 +268,38 @@ const schema: PageSchema = {
         },
       ],
     },
+   
+
+
+    {
+      type: "custom",
+      component: "ValuesIcons",
+      title: "Who Is This Service For?",
+      description: `${COMPANY_NAME} is designed for professionals at every stage of their career.`,
+      values: [
+        {
+          icon: "🎓",
+          title: "Students & Graduates",
+          text: "Create a strong first CV even with limited work experience."
+        },
+        {
+          icon: "💼",
+          title: "Working Professionals",
+          text: "Upgrade your CV to match mid-level or senior roles."
+        },
+        {
+          icon: "🔁",
+          title: "Career Switchers",
+          text: "Highlight transferable skills and reposition your profile."
+        },
+        {
+          icon: "🌍",
+          title: "International Job Seekers",
+          text: "ATS-friendly CVs tailored for global recruiters."
+        }
+      ],
+    },
+
 
     // --- CONTACT (ALWAYS AT BOTTOM) ---
     {

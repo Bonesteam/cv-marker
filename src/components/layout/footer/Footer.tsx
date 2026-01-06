@@ -167,6 +167,22 @@ const Footer: React.FC = () => {
                                 ))}
                             </div>
                         ))}
+                        {/* Контактная колонка для columns-layout */}
+                        {(contact?.email || contact?.phone) && (
+                            <div className={styles["footer__column"]}>
+                                <div className={styles["footer__column-title"]}>Contact</div>
+                                {contact.email && (
+                                    <a className={styles["footer__link"]} href={`mailto:${contact.email}`}>
+                                        {contact.email}
+                                    </a>
+                                )}
+                                {contact.phone && (
+                                    <a className={styles["footer__link"]} href={`tel:${contact.phone}`}>
+                                        {contact.phone}
+                                    </a>
+                                )}
+                            </div>
+                        )}
                         {legal && (
                             <div className={styles["footer__column"]}>
                                 <div className={styles["footer__column-title"]}>Company</div>
@@ -235,6 +251,27 @@ const Footer: React.FC = () => {
                                 </div>
                             </div>
                         ))}
+                        {/* Контактный столбец */}
+                        {(contact?.email || contact?.phone || contact?.address) && (
+                            <div className={styles["footer__mega-col"]}>
+                                <div className={styles["footer__column-title"]}>Contact</div>
+                                <div className={styles["footer__contact"]}>
+                                    {contact.email && (
+                                        <a className={styles["footer__link"]} href={`mailto:${contact.email}`}>
+                                            {contact.email}
+                                        </a>
+                                    )}
+                                    {contact.phone && (
+                                        <a className={styles["footer__link"]} href={`tel:${contact.phone}`}>
+                                            {contact.phone}
+                                        </a>
+                                    )}
+                                    {contact.address && (
+                                        <div className={styles["footer__legal-address"]}>{contact.address}</div>
+                                    )}
+                                </div>
+                            </div>
+                        )}
                         {legal && (
                             <div className={styles["footer__mega-col"]}>
                                 <div className={styles["footer__column-title"]}>Company</div>
@@ -267,6 +304,8 @@ const Footer: React.FC = () => {
                             <div className={styles["footer__column-title"]}>{legal.companyName}</div>
                             {legal.companyNumber && <div>Company number {legal.companyNumber}</div>}
                             {legal.address && <div>{legal.address}</div>}
+                            
+                            
                         </div>
 
                         {/* Contact */}
